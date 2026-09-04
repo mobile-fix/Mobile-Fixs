@@ -1,0 +1,395 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// MyMobiFix — Prisma schema
+//
+// Provider: PostgreSQL. The schema avoids Prisma `enum` and native array types,
+// The schema deliberately avoids Prisma `enum` and native array types so the
+// exact same models migrate to PostgreSQL by changing only the datasource block:
+//     provider = "postgresql"
+//     url      = env("DATABASE_URL")
+// Enum-like columns are plain `String` validated at the application boundary by
+// the constants + Zod schemas in src/lib/constants.ts and src/lib/validation.ts.
+//
+// Money: every monetary column is a whole-rupee `Int` (INR repair pricing has no
+// practical sub-rupee component). Conversion to a gateway minor unit happens only
+// at the payment boundary — see toMinorUnits() in src/lib/money.ts.
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Staff / authentication ──────────────────────────────────────────────────
+
+/// Staff accounts that can sign in to the admin dashboard.
+/// Customers never authenticate — they track repairs via reference + phone.
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  /// OWNER | MANAGER | TECHNICIAN — see ROLES in src/lib/constants.ts
+  role         String    @default("TECHNICIAN")
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions         Session[]
+  statusChanges    RepairStatusHistory[]
+  assignedBookings Booking[]             @relation("AssignedTechnician")
+
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+/// Server-side session records. The browser only holds a signed JWT whose `jti`
+/// points here, so sessions can be revoked server-side (logout, deactivated
+/// staff, password change) without waiting for the token to expire.
+model Session {
+  id        String    @id @default(cuid())
+  tokenId   String    @unique
+  userId    String
+  userAgent String?
+  ipAddress String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+// ── Customers ───────────────────────────────────────────────────────────────
+
+model Customer {
+  id               String   @id @default(cuid())
+  fullName         String
+  /// Normalised to digits-only national format; the natural key for repair lookup.
+  phone            String   @unique
+  email            String?
+  addressLine      String?
+  city             String?
+  state            String?
+  postalCode       String?
+  /// PHONE | EMAIL | WHATSAPP
+  preferredContact String   @default("PHONE")
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  bookings Booking[]
+  reviews  Review[]
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("customers")
+}
+
+// ── Device catalogue ────────────────────────────────────────────────────────
+
+model DeviceBrand {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  /// Key into the inline SVG logo registry (src/components/icons/BrandMark.tsx).
+  logoKey   String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  models DeviceModel[]
+
+  @@index([isActive, sortOrder])
+  @@map("device_brands")
+}
+
+model DeviceModel {
+  id          String   @id @default(cuid())
+  brandId     String
+  name        String
+  slug        String
+  releaseYear Int?
+  /// BUDGET | MID | FLAGSHIP — drives the fallback price multiplier when a model
+  /// has no explicit RepairPrice row for a service.
+  tier        String   @default("MID")
+  /// Optional search helper, e.g. "SM-S921B, S24".
+  aliases     String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  brand    DeviceBrand   @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  prices   RepairPrice[]
+  bookings Booking[]
+
+  @@unique([brandId, slug])
+  @@index([brandId, isActive])
+  @@index([name])
+  @@map("device_models")
+}
+
+model RepairService {
+  id                     String   @id @default(cuid())
+  name                   String   @unique
+  slug                   String   @unique
+  shortDescription       String
+  description            String
+  /// JSON-encoded string[] of common symptoms. Parsed by parseList() in src/lib/json.ts.
+  symptoms               String   @default("[]")
+  /// Key into the inline SVG icon registry (src/components/icons/ServiceIcon.tsx).
+  iconKey                String   @default("wrench")
+  defaultDurationMinutes Int      @default(60)
+  defaultWarrantyMonths  Int      @default(6)
+  sortOrder              Int      @default(0)
+  isActive               Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  prices       RepairPrice[]
+  bookingItems BookingItem[]
+
+  @@index([isActive, sortOrder])
+  @@map("repair_services")
+}
+
+/// The single source of truth for what a repair costs. One row per
+/// (model x service x part grade), so an admin can price a premium OEM screen
+/// differently from a standard aftermarket one without any code change.
+model RepairPrice {
+  id              String   @id @default(cuid())
+  modelId         String
+  serviceId       String
+  /// ORIGINAL | PREMIUM | STANDARD
+  partGrade       String   @default("PREMIUM")
+  price           Int
+  /// Optional strike-through "was" price for promotions. Must exceed `price`.
+  compareAtPrice  Int?
+  durationMinutes Int
+  warrantyMonths  Int
+  isAvailable     Boolean  @default(true)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  model        DeviceModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  service      RepairService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  bookingItems BookingItem[]
+
+  @@unique([modelId, serviceId, partGrade])
+  @@index([serviceId, isAvailable])
+  @@index([modelId, isAvailable])
+  @@map("repair_prices")
+}
+
+// ── Bookings ────────────────────────────────────────────────────────────────
+
+model Booking {
+  id         String  @id @default(cuid())
+  /// Human-facing repair ID shown to the customer, e.g. "MMF-7K4Q2M".
+  reference  String  @unique
+  customerId String
+  modelId    String?
+
+  /// Snapshots taken at booking time. The catalogue may be renamed or a model
+  /// retired years later; a past repair record must still read as it was sold.
+  deviceBrandName String
+  deviceModelName String
+
+  /// STORE_VISIT | PICKUP_DELIVERY | AT_HOME
+  serviceType String
+  /// See STATUS_FLOW in src/lib/constants.ts
+  status      String @default("BOOKING_RECEIVED")
+
+  addressLine String?
+  city        String?
+  postalCode  String?
+
+  imei               String?
+  problemDescription String?
+  /// PHONE | EMAIL | WHATSAPP
+  preferredContact   String  @default("PHONE")
+
+  subtotal                 Int @default(0)
+  discount                 Int @default(0)
+  /// Doorstep/pickup convenience fee; zero for store visits.
+  serviceFee               Int @default(0)
+  total                    Int @default(0)
+  estimatedDurationMinutes Int @default(0)
+
+  assignedTechnicianId String?
+  internalNotes        String?
+  completedAt          DateTime?
+  cancelledAt          DateTime?
+  cancellationReason   String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  customer   Customer     @relation(fields: [customerId], references: [id])
+  model      DeviceModel? @relation(fields: [modelId], references: [id], onDelete: SetNull)
+  technician User?        @relation("AssignedTechnician", fields: [assignedTechnicianId], references: [id], onDelete: SetNull)
+
+  items         BookingItem[]
+  statusHistory RepairStatusHistory[]
+  appointment   Appointment?
+  payments      Payment[]
+  review        Review?
+
+  @@index([status])
+  @@index([customerId])
+  @@index([createdAt])
+  @@index([status, createdAt])
+  @@index([assignedTechnicianId])
+  @@map("bookings")
+}
+
+/// A booking can bundle several repairs (e.g. screen + battery in one visit).
+model BookingItem {
+  id            String  @id @default(cuid())
+  bookingId     String
+  serviceId     String?
+  repairPriceId String?
+
+  /// Snapshots — see the note on Booking.
+  serviceName     String
+  partGrade       String
+  unitPrice       Int
+  quantity        Int    @default(1)
+  lineTotal       Int
+  durationMinutes Int
+  warrantyMonths  Int
+
+  createdAt DateTime @default(now())
+
+  booking     Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service     RepairService? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  repairPrice RepairPrice?   @relation(fields: [repairPriceId], references: [id], onDelete: SetNull)
+
+  @@index([bookingId])
+  @@index([serviceId])
+  @@map("booking_items")
+}
+
+/// Append-only audit trail powering the public repair tracker and admin history.
+model RepairStatusHistory {
+  id          String   @id @default(cuid())
+  bookingId   String
+  fromStatus  String?
+  toStatus    String
+  note        String?
+  changedById String?
+  /// True when the event should be visible on the public tracking page.
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  changedBy User?   @relation(fields: [changedById], references: [id], onDelete: SetNull)
+
+  @@index([bookingId, createdAt])
+  @@map("repair_status_history")
+}
+
+/// Authoritative scheduling record — scheduling lives here and nowhere else, so
+/// "today's appointments" is one indexed range scan and there is no duplicated
+/// date column on Booking to drift out of sync.
+model Appointment {
+  id              String    @id @default(cuid())
+  bookingId       String    @unique
+  scheduledFor    DateTime
+  /// Display label for the chosen window, e.g. "10:00 AM – 12:00 PM".
+  slotLabel       String
+  /// SCHEDULED | RESCHEDULED | COMPLETED | CANCELLED | NO_SHOW
+  status          String    @default("SCHEDULED")
+  rescheduledFrom DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([scheduledFor])
+  @@index([status, scheduledFor])
+  @@map("appointments")
+}
+
+model Payment {
+  id          String    @id @default(cuid())
+  bookingId   String
+  amount      Int
+  currency    String    @default("INR")
+  /// CASH | CARD | UPI | ONLINE
+  method      String    @default("CASH")
+  /// PENDING | PAID | FAILED | REFUNDED
+  status      String    @default("PENDING")
+  provider    String?
+  providerRef String?
+  paidAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+  @@index([status])
+  @@map("payments")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  bookingId   String?  @unique
+  customerId  String?
+  authorName  String
+  rating      Int
+  title       String?
+  body        String
+  deviceLabel String?
+  /// Only true for reviews attached to a genuinely completed booking.
+  isVerified  Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  booking  Booking?  @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  @@index([isPublished, createdAt])
+  @@index([rating])
+  @@map("reviews")
+}
+
+// ── Support ─────────────────────────────────────────────────────────────────
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  /// NEW | READ | RESOLVED
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@map("contact_messages")
+}
+
+/// Business settings an admin can change without a deploy (service fees,
+/// booking window, slot definitions). Values are JSON-encoded strings.
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}

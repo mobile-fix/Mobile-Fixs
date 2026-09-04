@@ -1,0 +1,544 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MyMobiFix Design System
+   ───────────────────────────────────────────────────────────────────────────
+   Direction: "Soft UI Evolution" — trustworthy navy, premium gold, generous
+   space and layered soft shadows. Depth is used to establish hierarchy, never
+   for decoration.
+
+   Colour architecture:
+     1. Static palette scales live in @theme (brand / accent / semantic).
+     2. Semantic role tokens (canvas, surface, ink, line…) are CSS custom
+        properties defined once for light and once for dark.
+     3. Components only ever reference role tokens, so the whole product themes
+        from ~24 declarations rather than from per-component overrides.
+
+   Contrast: every foreground/background pairing below meets WCAG 2.2 AA
+   (4.5:1 body, 3:1 large text and UI boundaries) in both themes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  --font-display: var(--font-outfit), "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, monospace;
+
+  /* ── Brand: trust navy ───────────────────────────────────────────────── */
+  --color-brand-50: #eef3fb;
+  --color-brand-100: #d8e3f6;
+  --color-brand-200: #b6caed;
+  --color-brand-300: #86a8e0;
+  --color-brand-400: #5480cd;
+  --color-brand-500: #3260b6;
+  --color-brand-600: #274d97;
+  --color-brand-700: #1e3a8a;
+  --color-brand-800: #1a2f6b;
+  --color-brand-900: #16244f;
+  --color-brand-950: #0f172a;
+
+  /* ── Accent: premium gold (primary CTA) ──────────────────────────────── */
+  --color-accent-50: #fdf9e9;
+  --color-accent-100: #fbf0c4;
+  --color-accent-200: #f7e08d;
+  --color-accent-300: #f2ca4d;
+  --color-accent-400: #ecb31f;
+  --color-accent-500: #ca8a04;
+  --color-accent-600: #a76d03;
+  --color-accent-700: #7f5106;
+  --color-accent-800: #69420d;
+  --color-accent-900: #593811;
+  --color-accent-950: #331d05;
+
+  /* ── Semantic status ─────────────────────────────────────────────────── */
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-900: #064e3b;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-900: #78350f;
+
+  --color-danger-50: #fff1f2;
+  --color-danger-100: #ffe4e6;
+  --color-danger-500: #f43f5e;
+  --color-danger-600: #e11d48;
+  --color-danger-700: #be123c;
+  --color-danger-900: #881337;
+
+  --color-info-50: #f0f9ff;
+  --color-info-100: #e0f2fe;
+  --color-info-500: #0ea5e9;
+  --color-info-600: #0284c7;
+  --color-info-700: #0369a1;
+  --color-info-900: #0c4a6e;
+
+  /* ── Role tokens (theme-swappable) ───────────────────────────────────── */
+  --color-canvas: var(--role-canvas);
+  --color-surface: var(--role-surface);
+  --color-raised: var(--role-raised);
+  --color-sunken: var(--role-sunken);
+  --color-ink: var(--role-ink);
+  --color-ink-muted: var(--role-ink-muted);
+  --color-ink-subtle: var(--role-ink-subtle);
+  --color-ink-inverse: var(--role-ink-inverse);
+  --color-line: var(--role-line);
+  --color-line-strong: var(--role-line-strong);
+  --color-overlay: var(--role-overlay);
+
+  /* ── Radii ───────────────────────────────────────────────────────────── */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* ── Soft-UI shadow ladder ───────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(15 23 42 / 0.07), 0 1px 2px -1px rgb(15 23 42 / 0.05);
+  --shadow-md: 0 4px 14px -4px rgb(15 23 42 / 0.1), 0 2px 6px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 12px 32px -8px rgb(15 23 42 / 0.14), 0 4px 12px -4px rgb(15 23 42 / 0.07);
+  --shadow-xl: 0 24px 56px -16px rgb(15 23 42 / 0.2), 0 8px 20px -8px rgb(15 23 42 / 0.09);
+  --shadow-glow: 0 12px 40px -12px rgb(202 138 4 / 0.45);
+
+  /* ── Motion ──────────────────────────────────────────────────────────── */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Layered z-index scale ───────────────────────────────────────────── */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-header: 20;
+  --z-dropdown: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+}
+
+/* ── Light theme (default) ─────────────────────────────────────────────── */
+:root {
+  --role-canvas: #f9fafb;
+  --role-surface: #ffffff;
+  --role-raised: #ffffff;
+  --role-sunken: #eef2f9;
+  --role-ink: #0f172a;
+  --role-ink-muted: #475569;
+  --role-ink-subtle: #64748b;
+  --role-ink-inverse: #ffffff;
+  --role-line: #e2e8f0;
+  --role-line-strong: #cbd5e1;
+  --role-overlay: rgb(15 23 42 / 0.55);
+  color-scheme: light;
+}
+
+/* ── Dark theme ────────────────────────────────────────────────────────── */
+.dark {
+  --role-canvas: #070b14;
+  --role-surface: #0f1626;
+  --role-raised: #17203a;
+  --role-sunken: #0b1120;
+  --role-ink: #f1f5f9;
+  --role-ink-muted: #b4c2d7;
+  --role-ink-subtle: #8ea0ba;
+  --role-ink-inverse: #0f172a;
+  --role-line: #24304a;
+  --role-line-strong: #35456a;
+  --role-overlay: rgb(2 6 16 / 0.72);
+  color-scheme: dark;
+}
+
+/* Shadows need more spread and less opacity on dark surfaces to stay readable. */
+.dark {
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 16px -4px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 14px 36px -10px rgb(0 0 0 / 0.6);
+  --shadow-xl: 0 28px 64px -18px rgb(0 0 0 / 0.7);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Base
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  * {
+    border-color: var(--role-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Keeps anchor targets clear of the sticky header. */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--role-canvas);
+    color: var(--role-ink);
+    font-family: var(--font-sans);
+    /* 16px minimum on mobile — never smaller for body copy. */
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.022em;
+    line-height: 1.15;
+    text-wrap: balance;
+    color: var(--role-ink);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One consistent, high-contrast focus ring across the entire product. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  .dark :focus-visible {
+    outline-color: var(--color-accent-300);
+  }
+
+  /* Remove the ring for pointer users but keep it for keyboard users. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-200);
+    color: var(--color-brand-950);
+  }
+
+  /* Native form controls follow the theme rather than the OS default. */
+  input, textarea, select {
+    font: inherit;
+    color: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--role-ink-subtle);
+    opacity: 1;
+  }
+
+  /* Hide the number spinners that make price inputs awkward to use. */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  img, svg, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Skip link — visible only once focused. */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100%;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-brand-950);
+    color: #ffffff;
+    font-weight: 600;
+    transition: top 150ms var(--ease-out-soft);
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Utilities
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Page gutter used by every section, so column edges align down the page. */
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-page { padding-inline: 2rem; }
+  }
+  @media (min-width: 1280px) {
+    .container-page { padding-inline: 2.5rem; }
+  }
+
+  .container-wide {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 90rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-wide { padding-inline: 2rem; }
+  }
+
+  /* Body copy capped at a comfortable 65–75 character measure. */
+  .measure { max-width: 68ch; }
+  .measure-tight { max-width: 46ch; }
+
+  .text-gradient-brand {
+    background-image: linear-gradient(115deg, var(--color-brand-700), var(--color-brand-400) 55%, var(--color-accent-400));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .surface-card {
+    background-color: var(--role-surface);
+    border: 1px solid var(--role-line);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Layout-stable hover: shadow and border change, geometry does not. */
+  .card-interactive {
+    transition:
+      box-shadow 200ms var(--ease-out-soft),
+      border-color 200ms var(--ease-out-soft),
+      background-color 200ms var(--ease-out-soft);
+  }
+  .card-interactive:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-brand-300);
+  }
+  .dark .card-interactive:hover {
+    border-color: var(--color-brand-500);
+  }
+
+  .grid-texture {
+    background-image:
+      linear-gradient(to right, rgb(148 163 184 / 0.16) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(148 163 184 / 0.16) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* Wide tables and diagrams scroll inside their own box, never the page. */
+  .scroll-x {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Motion
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes mmf-fade-up {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes mmf-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mmf-scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes mmf-slide-up {
+  from { transform: translate3d(0, 100%, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes mmf-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes mmf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/**
+ * Marquee.
+ *
+ * The track holds the logo list twice, so translating it by exactly -50% lands
+ * the second copy precisely where the first started — the loop restarts with no
+ * visible jump. Pure CSS on `transform` only, so it runs on the compositor and
+ * costs no JavaScript and no layout work per frame.
+ */
+@keyframes mmf-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/**
+ * Hero entrance.
+ *
+ * Deliberately CSS rather than a JS `initial={{ opacity: 0 }}`: the headline and
+ * the hero navbar are above-the-fold *content*, and a JS-driven start state
+ * would ship server HTML with `opacity: 0` — leaving the hero blank whenever
+ * JavaScript is slow, blocked or mid-hydration, and making the LCP element
+ * start invisible.
+ *
+ * `backwards` fill supplies the from-state only while the animation is pending,
+ * so the element's resting style is fully visible. If animations never run, the
+ * content is simply there.
+ */
+@keyframes mmf-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+@keyframes mmf-pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgb(16 185 129 / 0.5); }
+  70% { box-shadow: 0 0 0 10px rgb(16 185 129 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(16 185 129 / 0); }
+}
+
+@layer utilities {
+  .animate-fade-up { animation: mmf-fade-up 480ms var(--ease-out-soft) both; }
+  .animate-fade-in { animation: mmf-fade-in 300ms var(--ease-out-soft) both; }
+  .animate-scale-in { animation: mmf-scale-in 200ms var(--ease-out-soft) both; }
+  .animate-slide-up { animation: mmf-slide-up 260ms var(--ease-out-soft) both; }
+  .animate-spin-slow { animation: mmf-spin 900ms linear infinite; }
+  .animate-pulse-ring { animation: mmf-pulse-ring 2s ease-out infinite; }
+
+  .hero-enter {
+    animation: mmf-hero-in 700ms var(--ease-out-soft) backwards;
+  }
+  .hero-enter-delayed {
+    animation: mmf-hero-in 600ms var(--ease-out-soft) 250ms backwards;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: mmf-marquee var(--marquee-duration, 40s) linear infinite;
+    /* Promote to its own layer so the scroll never repaints the page behind it. */
+    will-change: transform;
+  }
+  /* Pause under the pointer so a logo can actually be looked at. */
+  .marquee-viewport:hover .marquee-track,
+  .marquee-viewport:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Skeleton shimmer built from role tokens so it themes automatically. */
+  .skeleton {
+    background-image: linear-gradient(
+      90deg,
+      var(--role-sunken) 0%,
+      color-mix(in oklab, var(--role-sunken) 55%, var(--role-surface)) 50%,
+      var(--role-sunken) 100%
+    );
+    background-size: 200% 100%;
+    animation: mmf-shimmer 1.4s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Honour the user's motion preference: keep state changes, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    /* Delays must be cleared too. An entrance animation with `backwards` fill
+       holds its from-state for the whole delay, so a surviving delay would keep
+       content at opacity 0 even after the duration was collapsed. */
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton { animation: none; }
+
+  /*
+   * Collapsing an animation to 0.01ms is not the same as removing it: the
+   * animation still exists, and anything that stops its clock advancing —
+   * a backgrounded tab, a throttled renderer — leaves it pinned at its first
+   * keyframe. For an entrance that starts at `opacity: 0` under a `backwards`
+   * fill, that means permanently invisible content.
+   *
+   * So for reduced motion these are switched off entirely and reset to their
+   * resting style, which is what the preference actually asks for: the content,
+   * present and still.
+   */
+  .hero-enter,
+  .hero-enter-delayed {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Print — customers print booking confirmations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #ffffff; color: #000000; }
+  .surface-card { box-shadow: none; border: 1px solid #cbd5e1; }
+}
