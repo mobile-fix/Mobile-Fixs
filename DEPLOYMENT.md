@@ -177,13 +177,14 @@ no longer valid. Either point it at the Render database's **External** connectio
 string, or run Postgres locally:
 
 ```bash
-docker run --name mymobifix-db -e POSTGRES_PASSWORD=devpassword -e POSTGRES_DB=mymobifix -p 5432:5432 -d postgres:16
+# Port 5432 was already in use on this machine, so the running container uses 55432.
+docker run --name mymobifix-db -e POSTGRES_PASSWORD=verifypass -e POSTGRES_DB=mymobifix -p 55432:5432 -d postgres:16
 ```
 
 Then set in `.env`:
 
 ```
-DATABASE_URL="postgresql://postgres:devpassword@localhost:5432/mymobifix?schema=public"
+DATABASE_URL="postgresql://postgres:verifypass@localhost:55432/mymobifix?schema=public"
 ```
 
 ```bash
