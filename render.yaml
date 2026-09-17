@@ -46,12 +46,12 @@ services:
         generateValue: true
 
       - key: NODE_VERSION
-        value: "20"
+        value: "22" # Node 20 reached end-of-life in April 2026
 
       # Next.js inlines NEXT_PUBLIC_* at build time, so these must be present
       # during the build, not just at runtime.
       # Replace with the custom domain once DNS is verified — it backs canonical
-      # URLs, the sitemap and the CSRF origin check.
+      # URLs, the sitemap and Open Graph tags.
       - key: NEXT_PUBLIC_SITE_URL
         value: https://mymobifix.onrender.com
 

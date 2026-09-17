@@ -4,13 +4,13 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Icon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Alert, Card, SectionHeading } from "@/components/ui/primitives";
-import { USES_DEMO_DATA, siteConfig } from "@/lib/config";
+import { USES_DEMO_DATA, siteConfig, whatsappChatHref } from "@/lib/config";
 import { getPublicStats } from "@/server/services/analytics.service";
 
 export const metadata: Metadata = {
   title: "About Us — Repair Done Transparently",
   description:
-    "Why MyMobiFix exists: pricing published in the open, certified technicians, graded parts you choose yourself, and a repair you can track end to end.",
+    "Why MyMobiFix exists: certified technicians, graded parts you choose yourself, a repair you can track end to end, and a real person on WhatsApp.",
   alternates: { canonical: "/about" },
 };
 
@@ -18,9 +18,9 @@ export const revalidate = 600;
 
 const VALUES: Array<{ icon: IconName; title: string; body: string }> = [
   {
-    icon: "tag",
-    title: "Price it in public",
-    body: "Our entire price book is on the open web, searchable and indexable. If a business will not tell you what something costs until you hand over your phone number, that tells you something.",
+    icon: "whatsapp",
+    title: "Be easy to reach",
+    body: "Message us on WhatsApp from anywhere with your phone model and a photo of the damage. A technician replies, not a bot, and you agree the cost before anything is opened.",
   },
   {
     icon: "eye",
@@ -30,7 +30,7 @@ const VALUES: Array<{ icon: IconName; title: string; body: string }> = [
   {
     icon: "package",
     title: "Grade parts honestly",
-    body: "Original, premium and standard parts are all legitimate choices at different budgets. We explain the real difference in quality and warranty, price each one separately, and let you pick.",
+    body: "Original, premium and standard parts are all legitimate choices at different budgets. We explain the real difference in quality and warranty, and let you pick.",
   },
   {
     icon: "shield-check",
@@ -63,7 +63,7 @@ export default async function AboutPage() {
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
             {siteConfig.name} exists because phone repair has a trust problem, not a technical one.
-            The skills are widely available. What is rare is being told the price up front, seeing
+            The skills are widely available. What is rare is agreeing the cost before work starts, seeing
             which part actually went into your device, and being able to check on progress without
             chasing anyone.
           </p>
@@ -77,7 +77,7 @@ export default async function AboutPage() {
               value: stats.averageRating ? `${stats.averageRating}/5` : "—",
               label: `Average rating from ${stats.reviewCount} reviews`,
             },
-            { value: `${stats.modelsSupported}`, label: "Device models priced" },
+            { value: `${stats.modelsSupported}`, label: "Device models supported" },
             { value: `${stats.brandsSupported}`, label: "Brands supported" },
           ].map((item) => (
             <Card key={item.label} className="p-5">
@@ -200,7 +200,7 @@ export default async function AboutPage() {
               </h2>
               <p className="measure mt-2 leading-relaxed text-ink-muted">
                 Manufacturing a new smartphone accounts for the large majority of its lifetime carbon
-                footprint. Replacing a ₹3,000 battery instead of a ₹60,000 handset is the single
+                footprint. Replacing a worn battery instead of a whole new handset is the single
                 biggest thing most people can do about their device footprint. Every cell, display
                 and board we remove goes to a certified e-waste processor rather than to landfill.
               </p>
@@ -217,14 +217,20 @@ export default async function AboutPage() {
         <section className="mt-16 text-center">
           <h2 className="font-display text-2xl font-bold text-ink">Ready when you are</h2>
           <p className="measure mx-auto mt-2 text-ink-muted">
-            Get an exact price in under a minute, or talk to a human first — both work.
+            Book a repair online, or message a technician on WhatsApp first — both work.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <ButtonLink href="/book" size="lg" iconRight="arrow-right">
               Book a repair
             </ButtonLink>
-            <ButtonLink href="/contact" variant="outline" size="lg" iconLeft="message">
-              Talk to us
+            <ButtonLink
+              href={whatsappChatHref()}
+              external
+              variant="outline"
+              size="lg"
+              iconLeft="whatsapp"
+            >
+              Chat on WhatsApp
             </ButtonLink>
           </div>
         </section>

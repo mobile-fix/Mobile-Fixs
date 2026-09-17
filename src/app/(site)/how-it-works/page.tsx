@@ -5,13 +5,12 @@ import { Icon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card, SectionHeading } from "@/components/ui/primitives";
 import { SERVICE_TYPES, SERVICE_TYPE_META, STATUS_FLOW, STATUS_META } from "@/lib/constants";
-import { formatMoney } from "@/lib/money";
 import { siteConfig } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "How It Works — From Broken Phone to Fixed in 4 Steps",
   description:
-    "How a MyMobiFix repair works: choose your device, see the price, book a store visit, pickup or at-home slot, then track every stage until your phone is back.",
+    "How a MyMobiFix repair works: choose your device and repair, book a store visit, pickup or at-home slot, then track every stage until your phone is back.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -37,9 +36,9 @@ const STEPS: Array<{
     number: "02",
     title: "Select your repair",
     icon: "wrench",
-    body: "Pick the fault. You immediately see the exact price for your device, how long the repair takes and how long it is covered — plus your choice of original, premium or standard parts.",
+    body: "Pick the fault. You see how long the repair takes and how long it is covered, plus your choice of original, premium or standard parts. For the cost, message us on WhatsApp.",
     detail: [
-      "Real prices, not a “request a quote” form",
+      "Cost agreed with you before any work starts",
       "Compare part grades side by side before deciding",
       "Add up to four repairs to a single visit",
     ],
@@ -100,7 +99,7 @@ export default function HowItWorksPage() {
             How it works
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
-            Four steps, no surprises, and a real price agreed before anyone opens your device. Here
+            Four steps, no surprises, and the cost agreed with you before anyone opens your device. Here
             is exactly what happens from the moment you land on this site.
           </p>
         </header>
@@ -164,11 +163,6 @@ export default function HowItWorksPage() {
                   <h3 className="mt-4 font-display text-lg font-bold text-ink">{meta.label}</h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-muted">
                     {meta.description}
-                  </p>
-                  <p className="mt-4 border-t border-line pt-4 text-sm font-semibold text-ink">
-                    {meta.defaultFee === 0
-                      ? "No convenience fee"
-                      : `${formatMoney(meta.defaultFee)} convenience fee`}
                   </p>
                 </Card>
               );

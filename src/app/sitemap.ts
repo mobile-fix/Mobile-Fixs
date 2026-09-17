@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/lib/config";
-import { listBrands, listServices } from "@/server/services/catalog.service";
+import { listServices } from "@/server/services/catalog.service";
 
 /**
  * Sitemap.
@@ -17,7 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: `${base}/services`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/pricing`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/how-it-works`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/track`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
@@ -29,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const [services, brands] = await Promise.all([listServices(), listBrands()]);
+    const services = await listServices();
 
     const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
       url: `${base}/services/${service.slug}`,
@@ -38,16 +37,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    // Brand-filtered pricing views are real, indexable landing pages for
-    // "iPhone repair price"-style searches.
-    const brandRoutes: MetadataRoute.Sitemap = brands.map((brand) => ({
-      url: `${base}/pricing?brand=${brand.slug}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.6,
-    }));
 
-    return [...staticRoutes, ...serviceRoutes, ...brandRoutes];
+    return [...staticRoutes, ...serviceRoutes];
   } catch {
     // A database hiccup should degrade the sitemap, not fail the request.
     return staticRoutes;

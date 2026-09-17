@@ -21,7 +21,12 @@ export async function POST(request: Request) {
     const input = await parseJsonBody(request, createBookingSchema);
     const booking = await createBooking(input);
 
-    return jsonOk({ booking }, { status: 201 });
+    // The customer only needs the repair ID to reach the confirmation page. The
+    // full record (prices, internal notes) stays with staff.
+    return jsonOk(
+      { booking: { reference: booking.reference, status: booking.status } },
+      { status: 201 },
+    );
   } catch (error) {
     return jsonError(error);
   }

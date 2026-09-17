@@ -9,7 +9,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Book a Repair",
   description:
-    "Book a phone repair in six steps: choose your device and fault, see the exact price, pick how you want it repaired, and confirm your slot.",
+    "Book a phone repair in six steps: choose your device and fault, pick how you want it repaired, and confirm your slot.",
   alternates: { canonical: "/book" },
   // A booking form has no search value and its URLs are user-specific.
   robots: { index: false, follow: true },
@@ -26,7 +26,7 @@ export default function BookPage() {
             Book your repair
           </h1>
           <p className="mt-3 text-lg text-ink-muted">
-            Six short steps. You will see the exact price before you confirm, and nothing is charged
+            Six short steps. We confirm the cost with you before any work, and nothing is charged
             until the repair is done.
           </p>
           <p className="mt-3 flex items-center gap-2 text-sm text-ink-subtle">

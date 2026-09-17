@@ -30,8 +30,6 @@ export type RepairOption = {
   partGrade: PartGrade;
   partGradeLabel: string;
   partGradeDescription: string;
-  price: number;
-  compareAtPrice: number | null;
   durationMinutes: number;
   warrantyMonths: number;
   notes: string | null;
@@ -46,7 +44,6 @@ export type RepairServiceOption = {
   symptoms: string[];
   options: RepairOption[];
   available: boolean;
-  fromPrice: number | null;
   defaultDurationMinutes: number;
   defaultWarrantyMonths: number;
 };
@@ -63,18 +60,15 @@ export type RepairCatalogue = {
   services: RepairServiceOption[];
 };
 
+/** Public quote: repairs, time and warranty only — the API sends no prices. */
 export type QuoteLine = {
   serviceId: string;
   serviceName: string;
   serviceSlug: string;
   partGrade: PartGrade;
   partGradeLabel: string;
-  unitPrice: number;
-  compareAtPrice: number | null;
   durationMinutes: number;
   warrantyMonths: number;
-  isEstimate: boolean;
-  repairPriceId: string | null;
   notes: string | null;
 };
 
@@ -82,13 +76,8 @@ export type Quote = {
   model: { id: string; name: string; slug: string; tier: string };
   brand: { id: string; name: string; slug: string };
   lines: QuoteLine[];
-  subtotal: number;
-  serviceFee: number;
-  discount: number;
-  total: number;
   estimatedDurationMinutes: number;
   warrantyMonths: number;
-  containsEstimate: boolean;
   serviceType: ServiceType;
 };
 

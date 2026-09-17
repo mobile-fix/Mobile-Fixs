@@ -48,3 +48,6 @@ __pycache__/
 
 # Vendored UI/UX Pro Max skill — regenerate with `uipro init --ai claude`
 .claude/skills/
+
+# Locally generated production admin credentials - never commit
+ADMIN-CREDENTIALS.local.txt

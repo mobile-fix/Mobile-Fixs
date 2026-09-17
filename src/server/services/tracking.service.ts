@@ -41,7 +41,6 @@ export type TrackingResult = {
   services: Array<{ name: string; warrantyMonths: number }>;
   serviceType: ServiceType;
   serviceTypeLabel: string;
-  total: number;
   estimatedDurationMinutes: number;
   bookedAt: string;
   completedAt: string | null;
@@ -134,7 +133,6 @@ export async function trackRepair(input: {
     })),
     serviceType: booking.serviceType as ServiceType,
     serviceTypeLabel: SERVICE_TYPE_META[booking.serviceType as ServiceType].label,
-    total: booking.total,
     estimatedDurationMinutes: booking.estimatedDurationMinutes,
     bookedAt: booking.createdAt.toISOString(),
     completedAt: booking.completedAt?.toISOString() ?? null,

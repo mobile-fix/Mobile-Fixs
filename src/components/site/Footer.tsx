@@ -2,7 +2,15 @@ import Link from "next/link";
 
 import { Icon } from "@/components/icons";
 import { Logo } from "./Logo";
-import { contactConfig, siteConfig, telHref, whatsappHref, USES_DEMO_DATA } from "@/lib/config";
+import {
+  contactConfig,
+  siteConfig,
+  telHref,
+  whatsappChatHref,
+  whatsappDisplay,
+  whatsappHref,
+  USES_DEMO_DATA,
+} from "@/lib/config";
 
 /**
  * Site footer.
@@ -20,13 +28,15 @@ const SERVICE_LINKS = [
   { href: "/services", label: "All Services" },
 ];
 
+// Each opens a WhatsApp chat already naming the device, so the customer only
+// has to describe the fault.
 const BRAND_LINKS = [
-  { href: "/pricing?brand=apple", label: "iPhone Repair" },
-  { href: "/pricing?brand=samsung", label: "Samsung Repair" },
-  { href: "/pricing?brand=google", label: "Google Pixel Repair" },
-  { href: "/pricing?brand=oneplus", label: "OnePlus Repair" },
-  { href: "/pricing?brand=xiaomi", label: "Xiaomi Repair" },
-  { href: "/pricing", label: "All Device Prices" },
+  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my iPhone."), label: "iPhone Repair" },
+  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my Samsung phone."), label: "Samsung Repair" },
+  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my Google Pixel."), label: "Google Pixel Repair" },
+  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my OnePlus phone."), label: "OnePlus Repair" },
+  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my Xiaomi phone."), label: "Xiaomi Repair" },
+  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my phone."), label: "Any Other Phone" },
 ];
 
 const COMPANY_LINKS = [
@@ -49,7 +59,7 @@ export function Footer() {
           <div className="lg:col-span-4">
             <Logo />
             <p className="measure-tight mt-4 text-sm leading-relaxed text-ink-muted">
-              Transparent, warranty-backed mobile phone repair. Choose a store visit, doorstep
+              Warranty-backed mobile phone repair. Choose a store visit, doorstep
               pickup or an at-home repair you can watch happen.
             </p>
 
@@ -84,20 +94,20 @@ export function Footer() {
 
             {whatsappHref ? (
               <a
-                href={whatsappHref}
+                href={whatsappChatHref()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-6 inline-flex items-center gap-2 rounded-xl border border-success-100 bg-success-50 px-4 py-2.5 text-sm font-semibold text-success-700 transition-colors hover:bg-success-100 dark:border-success-700 dark:bg-success-900/40 dark:text-success-100"
               >
                 <Icon name="whatsapp" size={17} />
-                Chat on WhatsApp
+                WhatsApp {whatsappDisplay}
                 <Icon name="arrow-up-right" size={14} />
               </a>
             ) : null}
           </div>
 
           <FooterColumn title="Repairs" links={SERVICE_LINKS} className="lg:col-span-3" />
-          <FooterColumn title="By Device" links={BRAND_LINKS} className="lg:col-span-2" />
+          <FooterColumn title="Repair on WhatsApp" links={BRAND_LINKS} className="lg:col-span-2" />
           <FooterColumn title="Company" links={COMPANY_LINKS} className="lg:col-span-3" />
         </div>
       </div>
@@ -131,7 +141,7 @@ export function Footer() {
           <div className="container-page pb-6">
             <p className="rounded-lg border border-warning-100 bg-warning-50 px-4 py-3 text-xs leading-relaxed text-warning-900 dark:border-warning-700 dark:bg-warning-900/30 dark:text-warning-100">
               <strong className="font-semibold">Demonstration deployment.</strong> Reviews, repair
-              counts, prices and contact details on this site are illustrative sample data seeded for
+              counts and contact details on this site are illustrative sample data seeded for
               evaluation, not the records of a trading business. Configure real values through the
               environment variables documented in <code className="font-mono">.env.example</code>.
             </p>
@@ -157,12 +167,23 @@ function FooterColumn({
       <ul className="mt-4 space-y-2.5">
         {links.map((link) => (
           <li key={link.href}>
-            <Link
-              href={link.href}
-              className="text-sm text-ink-muted transition-colors hover:text-brand-700 dark:hover:text-accent-300"
-            >
-              {link.label}
-            </Link>
+            {link.href.startsWith("https://") ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-ink-muted transition-colors hover:text-brand-700 dark:hover:text-accent-300"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                href={link.href}
+                className="text-sm text-ink-muted transition-colors hover:text-brand-700 dark:hover:text-accent-300"
+              >
+                {link.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>

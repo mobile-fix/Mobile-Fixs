@@ -4,28 +4,27 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Icon, serviceIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
-import { Badge, Card, SectionHeading } from "@/components/ui/primitives";
-import { formatDurationRange, formatMoney, formatWarranty } from "@/lib/money";
-import { siteConfig } from "@/lib/config";
+import { Card, SectionHeading } from "@/components/ui/primitives";
+import { formatDurationRange, formatWarranty } from "@/lib/money";
+import { siteConfig, whatsappChatHref } from "@/lib/config";
 import { listServices } from "@/server/services/catalog.service";
-import { getStartingPrices } from "@/server/services/pricing.service";
 
 export const metadata: Metadata = {
   title: "Mobile Repair Services — Screen, Battery, Charging & More",
   description:
-    "Every repair we offer, with starting prices, times and warranty: screen, battery, charging port, camera, speaker, water damage and software repair.",
+    "Every repair we offer, with repair times and warranty: screen, battery, charging port, camera, speaker, water damage and software repair. Ask for a quote on WhatsApp.",
   alternates: { canonical: "/services" },
   openGraph: {
     title: "Mobile Repair Services | MyMobiFix",
     description:
-      "Screen, battery, charging port, camera, speaker and water damage repair — with prices, times and warranty shown up front.",
+      "Screen, battery, charging port, camera, speaker and water damage repair — with repair times and warranty shown up front.",
   },
 };
 
 export const revalidate = 300;
 
 export default async function ServicesPage() {
-  const [services, startingPrices] = await Promise.all([listServices(), getStartingPrices()]);
+  const services = await listServices();
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -60,34 +59,28 @@ export default async function ServicesPage() {
             Mobile repair services
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
-            Every repair we do, with the starting price, how long it takes and how long it is covered
-            — before you talk to anybody. Prices vary by device; use the estimator to get the exact
-            figure for yours.
+            Every repair we do, with how long it takes and how long it is covered. The cost depends
+            on your phone — message us on WhatsApp with your model and the problem, and we will tell
+            you.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink href="/book" size="lg" iconRight="arrow-right">
-              Get an exact price
+            <ButtonLink href={whatsappChatHref()} external size="lg" iconLeft="whatsapp">
+              Get a quote on WhatsApp
             </ButtonLink>
-            <ButtonLink href="/pricing" variant="outline" size="lg" iconLeft="tag">
-              Browse the price list
+            <ButtonLink href="/book" variant="outline" size="lg" iconRight="arrow-right">
+              Book a Repair
             </ButtonLink>
           </div>
         </header>
 
         <ul className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => {
-            const pricing = startingPrices[service.id];
             return (
               <Card as="li" key={service.id} interactive className="group flex flex-col p-6">
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-950/70 dark:text-brand-300">
                     <Icon name={serviceIcon(service.iconKey)} size={23} />
                   </span>
-                  {pricing?.from === 0 ? (
-                    <Badge tone="success" size="sm" icon="sparkles">
-                      Free
-                    </Badge>
-                  ) : null}
                 </div>
 
                 <h2 className="mt-4 font-display text-lg font-bold text-ink">
@@ -123,16 +116,6 @@ export default async function ServicesPage() {
                 ) : null}
 
                 <dl className="mt-auto flex flex-wrap items-baseline gap-x-4 gap-y-1 border-t border-line pt-4 text-xs">
-                  <div>
-                    <dt className="sr-only">Starting price</dt>
-                    <dd className="tabular font-display text-lg font-bold text-ink">
-                      {pricing
-                        ? pricing.from === 0
-                          ? "Free"
-                          : `from ${formatMoney(pricing.from)}`
-                        : "On request"}
-                    </dd>
-                  </div>
                   <div className="flex items-center gap-1.5 text-ink-subtle">
                     <Icon name="clock" size={12} />
                     <dt className="sr-only">Repair time</dt>
@@ -170,7 +153,7 @@ export default async function ServicesPage() {
               {
                 icon: "tag" as const,
                 title: "Quote before work",
-                body: "We never open a device before you have approved the price.",
+                body: "We never open a device before you have approved the cost.",
               },
               {
                 icon: "shield-check" as const,

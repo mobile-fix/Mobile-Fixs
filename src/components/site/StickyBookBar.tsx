@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
-import { telHref } from "@/lib/config";
+import { telHref, whatsappChatHref } from "@/lib/config";
 
 /**
  * Mobile sticky action bar.
@@ -55,6 +55,17 @@ export function StickyBookBar() {
         >
           <Icon name="phone" size={19} />
         </a>
+        <ButtonLink
+          href={whatsappChatHref()}
+          external
+          size="lg"
+          variant="outline"
+          iconLeft="whatsapp"
+          className="shrink-0"
+          aria-label="Chat on WhatsApp (opens in a new tab)"
+        >
+          WhatsApp
+        </ButtonLink>
         <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
           Book a Repair
         </ButtonLink>

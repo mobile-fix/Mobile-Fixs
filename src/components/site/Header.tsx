@@ -8,7 +8,7 @@ import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
-import { contactConfig, telHref } from "@/lib/config";
+import { contactConfig, telHref, whatsappChatHref, whatsappDisplay } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 /**
@@ -23,7 +23,6 @@ import { cn } from "@/lib/utils";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -95,6 +94,15 @@ export function Header() {
             >
               <Icon name="phone" size={13} />
               {contactConfig.phone}
+            </a>
+            <a
+              href={whatsappChatHref()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 font-semibold text-white transition-colors hover:text-accent-300"
+            >
+              <Icon name="whatsapp" size={13} />
+              WhatsApp {whatsappDisplay}
             </a>
             <Link
               href="/track"
@@ -215,6 +223,16 @@ export function Header() {
                 </a>
                 <ThemeToggle />
               </div>
+              <ButtonLink
+                href={whatsappChatHref()}
+                external
+                size="lg"
+                variant="outline"
+                fullWidth
+                iconLeft="whatsapp"
+              >
+                Chat on WhatsApp
+              </ButtonLink>
               <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
                 Book a Repair
               </ButtonLink>

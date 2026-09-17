@@ -33,7 +33,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "MyMobiFix — Mobile Phone Repair with Transparent Pricing & Warranty",
+    default: "MyMobiFix — Mobile Phone Repair with Warranty",
     template: "%s | MyMobiFix",
   },
   description: siteConfig.description,
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: "MyMobiFix — Mobile Phone Repair with Transparent Pricing & Warranty",
+    title: "MyMobiFix — Mobile Phone Repair with Warranty",
     description: siteConfig.description,
   },
   twitter: {

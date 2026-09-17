@@ -227,33 +227,11 @@ export function combineDurations(durations: number[]): number {
   return Math.round((longest! + extra) / 5) * 5;
 }
 
+
 /**
- * "From ₹X" figures for the services and pricing pages — one grouped query
- * instead of N per-service lookups.
+ * All repair options for one model — powers the public repair-selection step.
+ * Deliberately carries no prices: the site does not publish them.
  */
-export async function getStartingPrices(): Promise<
-  Record<string, { from: number; durationMinutes: number; warrantyMonths: number }>
-> {
-  const grouped = await prisma.repairPrice.groupBy({
-    by: ["serviceId"],
-    where: { isAvailable: true },
-    _min: { price: true, durationMinutes: true },
-    _max: { warrantyMonths: true },
-  });
-
-  return Object.fromEntries(
-    grouped.map((row) => [
-      row.serviceId,
-      {
-        from: row._min.price ?? 0,
-        durationMinutes: row._min.durationMinutes ?? 0,
-        warrantyMonths: row._max.warrantyMonths ?? 0,
-      },
-    ]),
-  );
-}
-
-/** All priced options for one model — powers the repair-selection step. */
 export async function getRepairOptionsForModel(modelId: string) {
   const model = await prisma.deviceModel.findUnique({
     where: { id: modelId },
@@ -296,8 +274,6 @@ export async function getRepairOptionsForModel(modelId: string) {
           partGrade: price.partGrade as PartGrade,
           partGradeLabel: PART_GRADE_META[price.partGrade as PartGrade].label,
           partGradeDescription: PART_GRADE_META[price.partGrade as PartGrade].description,
-          price: price.price,
-          compareAtPrice: price.compareAtPrice,
           durationMinutes: price.durationMinutes,
           warrantyMonths: price.warrantyMonths,
           notes: price.notes,
@@ -312,7 +288,6 @@ export async function getRepairOptionsForModel(modelId: string) {
         symptoms: service.symptoms,
         options,
         available: options.length > 0,
-        fromPrice: options.length > 0 ? Math.min(...options.map((o) => o.price)) : null,
         defaultDurationMinutes: service.defaultDurationMinutes,
         defaultWarrantyMonths: service.defaultWarrantyMonths,
       };
@@ -321,3 +296,30 @@ export async function getRepairOptionsForModel(modelId: string) {
 }
 
 export type RepairOptions = Awaited<ReturnType<typeof getRepairOptionsForModel>>;
+
+/**
+ * The quote as the public site may see it: the repairs, time and warranty, with
+ * every monetary field removed. The full quote is still computed server-side
+ * and stored on the booking for staff.
+ */
+export function toPublicQuote(quote: Quote) {
+  return {
+    model: quote.model,
+    brand: quote.brand,
+    lines: quote.lines.map((line) => ({
+      serviceId: line.serviceId,
+      serviceName: line.serviceName,
+      serviceSlug: line.serviceSlug,
+      partGrade: line.partGrade,
+      partGradeLabel: line.partGradeLabel,
+      durationMinutes: line.durationMinutes,
+      warrantyMonths: line.warrantyMonths,
+      notes: line.notes,
+    })),
+    estimatedDurationMinutes: quote.estimatedDurationMinutes,
+    warrantyMonths: quote.warrantyMonths,
+    serviceType: quote.serviceType,
+  };
+}
+
+export type PublicQuote = ReturnType<typeof toPublicQuote>;

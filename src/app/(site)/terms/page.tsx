@@ -6,7 +6,7 @@ import { contactConfig, siteConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
-    "The terms that apply when you book a mobile phone repair with MyMobiFix: quotes and pricing, your device and data, payment, cancellation, liability and warranty.",
+    "The terms that apply when you book a mobile phone repair with MyMobiFix: quotes, your device and data, payment, cancellation, liability and warranty.",
   alternates: { canonical: "/terms" },
 };
 
@@ -17,17 +17,17 @@ export default function TermsPage() {
       updated="1 September 2026"
       intro={`These terms apply when you book a repair with ${siteConfig.name}. They set out what we commit to, what we need from you, and what happens when something does not go to plan.`}
     >
-      <LegalSection heading="1. Quotes and pricing">
+      <LegalSection heading="1. Quotes">
         <p>
-          Prices shown on this website are calculated from our published price book for your specific
-          device, repair and part grade. A quote is an estimate given before diagnosis.
+          We do not publish prices on this website. We give you a quote for your specific device,
+          repair and part grade — on WhatsApp, by phone or after diagnosis — before any work begins.
         </p>
         <LegalList
           items={[
             "Diagnostics are free, whether or not you proceed with a repair.",
-            "If diagnosis shows the fault differs from what was booked, we tell you the revised price and wait for your approval before any work begins.",
+            "If diagnosis shows the fault differs from what was booked, we tell you the revised quote and wait for your approval before any work begins.",
             "You are never charged for work you did not approve.",
-            "Quoted prices include the part, labour and applicable taxes. Doorstep and pickup convenience fees are itemised separately.",
+            "Quotes include the part, labour and applicable taxes. Any doorstep or pickup convenience fee is included in the quote you are given.",
           ]}
         />
       </LegalSection>

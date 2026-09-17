@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Accordion } from "@/components/ui/Disclosure";
 import { ButtonLink } from "@/components/ui/Button";
+import { whatsappChatHref } from "@/lib/config";
 import { Card } from "@/components/ui/primitives";
 import { Icon } from "@/components/icons";
 import { FAQS, FAQ_CATEGORIES, faqStructuredData } from "@/lib/faq";
@@ -105,22 +106,23 @@ export default function FaqPage() {
 
               <Card className="p-5">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-50 text-accent-700 dark:bg-accent-950/60 dark:text-accent-300">
-                  <Icon name="tag" size={19} />
+                  <Icon name="whatsapp" size={19} />
                 </span>
                 <h2 className="mt-3.5 font-display text-base font-bold text-ink">
-                  Want a price first?
+                  Want to know the cost?
                 </h2>
                 <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
-                  Pick your device and fault to see the exact cost — no details needed.
+                  Send your phone model and the problem on WhatsApp and we will tell you.
                 </p>
                 <ButtonLink
-                  href="/book"
+                  href={whatsappChatHref()}
+                  external
                   variant="outline"
                   size="sm"
                   className="mt-4"
-                  iconRight="arrow-right"
+                  iconLeft="whatsapp"
                 >
-                  Get an estimate
+                  Chat on WhatsApp
                 </ButtonLink>
               </Card>
             </div>

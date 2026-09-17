@@ -22,7 +22,7 @@ export type MarqueeLogo = {
 };
 
 /**
- * The device brands we actually carry parts and pricing for — the same eight
+ * The device brands we actually carry parts for — the same eight
  * that lead the seeded catalogue, so the marquee never advertises a brand the
  * booking flow cannot quote.
  */

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 
+import { whatsappChatHref } from "@/lib/config";
 import { LogoMarquee } from "./LogoMarquee";
 
 /**
@@ -66,8 +67,8 @@ export function LandingHero() {
                 of the frame rather than from dimming it. */}
             <p className="font-sans mt-5 max-w-[26rem] text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">
               Screen, battery, charging port and water damage repairs by certified technicians — in
-              our store, at your door, or picked up and delivered. Transparent pricing up front and a
-              warranty on every job.
+              our store, at your door, or picked up and delivered. Message us on WhatsApp from anywhere
+              and get a warranty on every job.
             </p>
 
             <MotionLink
@@ -105,12 +106,14 @@ export function LandingHero() {
             >
               Services
             </Link>
-            <Link
-              href="/pricing"
+            <a
+              href={whatsappChatHref()}
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-3 sm:px-4 py-2 text-[12px] font-semibold text-slate-500 hover:text-[#0a1b33] transition-colors rounded-full"
             >
-              Pricing
-            </Link>
+              WhatsApp
+            </a>
 
             <Link
               href="/contact"

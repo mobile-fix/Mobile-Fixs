@@ -4,7 +4,8 @@ import { Icon, serviceIcon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Badge, Card, SectionHeading, StarRating } from "@/components/ui/primitives";
 import { SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
-import { formatDurationRange, formatMoney, formatWarranty } from "@/lib/money";
+import { whatsappChatHref, whatsappDisplay } from "@/lib/config";
+import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { formatRelative, pluralise } from "@/lib/utils";
 import type { CatalogService } from "@/server/services/catalog.service";
 import type { PublicStats } from "@/server/services/analytics.service";
@@ -59,36 +60,24 @@ export function StatsBand({ stats }: { stats: PublicStats }) {
 
 // ── Services grid ───────────────────────────────────────────────────────────
 
-export function ServicesGrid({
-  services,
-  startingPrices,
-}: {
-  services: CatalogService[];
-  startingPrices: Record<string, { from: number; durationMinutes: number; warrantyMonths: number }>;
-}) {
+export function ServicesGrid({ services }: { services: CatalogService[] }) {
   return (
     <section className="py-20 lg:py-24" aria-labelledby="services-heading">
       <div className="container-page">
         <SectionHeading
           eyebrow="Repairs we do"
-          title={<span id="services-heading">Every common fault, priced up front</span>}
-          description="No “request a quote” forms. Every repair below shows its real starting price, how long it takes and how long it is covered."
+          title={<span id="services-heading">Every common fault, fixed properly</span>}
+          description="Every repair below shows how long it takes and how long it is covered. For the cost on your exact phone, send us a message on WhatsApp."
         />
 
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.slice(0, 9).map((service) => {
-            const pricing = startingPrices[service.id];
             return (
               <Card as="li" key={service.id} interactive className="group flex flex-col p-5">
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-950/70 dark:text-brand-300">
                     <Icon name={serviceIcon(service.iconKey)} size={23} />
                   </span>
-                  {pricing && pricing.from === 0 ? (
-                    <Badge tone="success" size="sm" icon="sparkles">
-                      Free
-                    </Badge>
-                  ) : null}
                 </div>
 
                 <h3 className="mt-4 font-display text-lg font-bold text-ink">
@@ -100,26 +89,18 @@ export function ServicesGrid({
                   {service.shortDescription}
                 </p>
 
-                {pricing ? (
-                  <dl className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1 border-t border-line pt-4 text-xs">
-                    <div>
-                      <dt className="sr-only">Starting price</dt>
-                      <dd className="tabular font-display text-lg font-bold text-ink">
-                        {pricing.from === 0 ? "Free" : `from ${formatMoney(pricing.from)}`}
-                      </dd>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-ink-subtle">
-                      <Icon name="clock" size={12} />
-                      <dt className="sr-only">Time</dt>
-                      <dd>{formatDurationRange(pricing.durationMinutes)}</dd>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-ink-subtle">
-                      <Icon name="shield-check" size={12} />
-                      <dt className="sr-only">Warranty</dt>
-                      <dd>{formatWarranty(pricing.warrantyMonths)}</dd>
-                    </div>
-                  </dl>
-                ) : null}
+                <dl className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1 border-t border-line pt-4 text-xs">
+                  <div className="flex items-center gap-1.5 text-ink-subtle">
+                    <Icon name="clock" size={12} />
+                    <dt className="sr-only">Time</dt>
+                    <dd>{formatDurationRange(service.defaultDurationMinutes)}</dd>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-ink-subtle">
+                    <Icon name="shield-check" size={12} />
+                    <dt className="sr-only">Warranty</dt>
+                    <dd>{formatWarranty(service.defaultWarrantyMonths)}</dd>
+                  </div>
+                </dl>
               </Card>
             );
           })}
@@ -129,8 +110,8 @@ export function ServicesGrid({
           <ButtonLink href="/services" variant="outline" size="lg" iconRight="arrow-right">
             View all {services.length} services
           </ButtonLink>
-          <ButtonLink href="/pricing" variant="ghost" size="lg" iconRight="tag">
-            Browse full price list
+          <ButtonLink href={whatsappChatHref()} external variant="ghost" size="lg" iconLeft="whatsapp">
+            Ask on WhatsApp
           </ButtonLink>
         </div>
       </div>
@@ -152,7 +133,7 @@ const STEPS = [
     number: "02",
     title: "Select your repair",
     description:
-      "See the exact price, repair time and warranty for each fault — plus your choice of original, premium or standard parts.",
+      "See the repair time and warranty for each fault, plus your choice of original, premium or standard parts. Questions? Ask us on WhatsApp.",
     icon: "wrench" as IconName,
   },
   {
@@ -166,7 +147,7 @@ const STEPS = [
     number: "04",
     title: "Get your phone fixed",
     description:
-      "A certified technician does the work and runs a 30-point check. Track every stage online, then pay once you have your device back.",
+      "A certified technician does the work and runs a 30-point check. Track every stage online and pay once you have your device back.",
     icon: "check-circle" as IconName,
   },
 ];
@@ -178,7 +159,7 @@ export function HowItWorks() {
         <SectionHeading
           eyebrow="How it works"
           title={<span id="how-heading">Four steps. No surprises.</span>}
-          description="From broken screen to working phone, with a real price agreed before anyone opens your device."
+          description="From broken screen to working phone, with the cost agreed with you before anyone opens your device."
         />
 
         <ol className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
@@ -226,7 +207,7 @@ export function ServiceOptions() {
         <SectionHeading
           eyebrow="Three ways to get fixed"
           title={<span id="options-heading">Come to us, or we come to you</span>}
-          description="Same technicians, same parts, same warranty. Only the convenience — and the fee — changes."
+          description="Same technicians, same parts, same warranty. Pick whichever suits you."
         />
 
         <ul className="mt-12 grid gap-5 lg:grid-cols-3">
@@ -238,9 +219,6 @@ export function ServiceOptions() {
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-50 text-accent-700 dark:bg-accent-950/60 dark:text-accent-300">
                     <Icon name={meta.iconKey as IconName} size={23} />
                   </span>
-                  <Badge tone={meta.defaultFee === 0 ? "success" : "brand"} size="sm">
-                    {meta.defaultFee === 0 ? "No extra fee" : `+${formatMoney(meta.defaultFee)}`}
-                  </Badge>
                 </div>
 
                 <h3 className="mt-4 font-display text-lg font-bold text-ink">{meta.label}</h3>
@@ -265,9 +243,9 @@ export function ServiceOptions() {
 
 const DIFFERENTIATORS = [
   {
-    icon: "tag" as IconName,
-    title: "The price you see is the price you pay",
-    body: "Our whole price book is public, searchable and itemised. The quote you get online is generated by the same pricing engine that produces your final bill — not a lead-capture estimate.",
+    icon: "whatsapp" as IconName,
+    title: "Talk to a technician on WhatsApp",
+    body: "Send a photo of the damage from anywhere and a real technician replies with what is wrong, what it will cost and how long it takes. You agree the cost before any work starts.",
   },
   {
     icon: "eye" as IconName,
@@ -287,7 +265,7 @@ const DIFFERENTIATORS = [
   {
     icon: "package" as IconName,
     title: "Parts you choose, graded honestly",
-    body: "Original, premium or standard. We tell you exactly what the difference is in quality, warranty and price, then let you decide rather than deciding for you.",
+    body: "Original, premium or standard. We tell you exactly what the difference is in quality and warranty, then let you decide rather than deciding for you.",
   },
   {
     icon: "search" as IconName,
@@ -401,11 +379,11 @@ export function CtaBand() {
 
           <div className="relative">
             <h2 className="mx-auto max-w-2xl font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Get a real price in under a minute
+              Need a repair? Message us on WhatsApp
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/75">
-              No forms, no callbacks, no account. Pick your device, pick the repair, and see exactly
-              what it costs and how long it takes.
+              Send your phone model and the problem to {whatsappDisplay}. We reply with the cost and
+              the time it takes, or book a repair slot online right now.
             </p>
 
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
@@ -413,13 +391,14 @@ export function CtaBand() {
                 Book a Repair
               </ButtonLink>
               <ButtonLink
-                href="/track"
+                href={whatsappChatHref()}
+                external
                 size="xl"
                 variant="outline"
-                iconLeft="search"
+                iconLeft="whatsapp"
                 className="border-white/25 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
               >
-                Track an existing repair
+                Chat on WhatsApp
               </ButtonLink>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { Icon, serviceIcon } from "@/components/icons";
 import { Alert, Badge, EmptyState, Skeleton } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/Button";
 import { api, ApiClientError } from "@/lib/api-client";
-import { formatDurationRange, formatMoney, formatWarranty } from "@/lib/money";
+import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { cn } from "@/lib/utils";
 import type { BasketItem, RepairCatalogue, RepairServiceOption } from "./types";
 import type { PartGrade } from "@/lib/constants";
@@ -14,10 +14,10 @@ import type { PartGrade } from "@/lib/constants";
 /**
  * Repair selection.
  *
- * Each repair shows its real price, time, warranty and availability up front —
- * the opposite of the "request a quote" pattern that makes customers commit
- * before they know the cost. Part-grade options expand inline only for the
- * repair being configured, so the list stays scannable.
+ * Each repair shows its time, warranty and availability. Prices are not shown
+ * on the site — the cost is agreed with the customer after diagnosis or over
+ * WhatsApp. Part-grade options expand inline only for the repair being
+ * configured, so the list stays scannable.
  */
 
 export function RepairSelector({
@@ -127,7 +127,7 @@ export function RepairSelector({
       <EmptyState
         icon="wrench"
         title="No repairs listed for this device"
-        description="We can still help — contact support for a custom quote and we will price it manually."
+        description="We can still help — message us on WhatsApp with your phone model and the problem."
         action={
           <Button variant="outline" onClick={() => window.location.assign("/contact")}>
             Contact support
@@ -154,7 +154,7 @@ export function RepairSelector({
           const isSelected = Boolean(selection);
           const isExpanded = expandedId === service.id;
           // Before selection, preview the grade that clicking "Select" will
-          // actually choose — otherwise the price would jump on selection.
+          // actually choose — otherwise the time and warranty would jump on selection.
           const activeOption =
             service.options.find((option) => option.partGrade === selection?.partGrade) ??
             service.options.find((option) => option.partGrade === "PREMIUM") ??
@@ -191,10 +191,6 @@ export function RepairSelector({
                         <Badge tone="neutral" size="sm">
                           Not available for this device
                         </Badge>
-                      ) : activeOption && activeOption.price === 0 ? (
-                        <Badge tone="success" size="sm" icon="sparkles">
-                          Free
-                        </Badge>
                       ) : null}
                     </div>
 
@@ -229,23 +225,6 @@ export function RepairSelector({
                   </div>
 
                   <div className="flex shrink-0 items-center justify-between gap-4 sm:flex-col sm:items-end sm:gap-2">
-                    <div className="text-right">
-                      {activeOption ? (
-                        <>
-                          <p className="tabular font-display text-xl font-bold text-ink">
-                            {activeOption.price === 0 ? "Free" : formatMoney(activeOption.price)}
-                          </p>
-                          {activeOption.compareAtPrice ? (
-                            <p className="tabular text-xs text-ink-subtle line-through">
-                              {formatMoney(activeOption.compareAtPrice)}
-                            </p>
-                          ) : null}
-                        </>
-                      ) : (
-                        <p className="text-sm text-ink-subtle">Quote on request</p>
-                      )}
-                    </div>
-
                     <Button
                       variant={isSelected ? "secondary" : "outline"}
                       size="sm"
@@ -319,11 +298,8 @@ export function RepairSelector({
                                     />
                                   ) : null}
                                 </span>
-                                <span className="tabular font-display text-base font-bold text-ink">
-                                  {option.price === 0 ? "Free" : formatMoney(option.price)}
-                                </span>
                                 <span className="text-[11px] leading-snug text-ink-subtle">
-                                  {formatWarranty(option.warrantyMonths)}
+                                  {option.partGradeDescription} · {formatWarranty(option.warrantyMonths)}
                                 </span>
                               </label>
                             );

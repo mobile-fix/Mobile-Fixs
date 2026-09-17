@@ -7,10 +7,9 @@ import { Icon, serviceIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Badge, Card } from "@/components/ui/primitives";
 import { PART_GRADES, PART_GRADE_META, SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
-import { formatDurationRange, formatMoney, formatWarranty } from "@/lib/money";
-import { siteConfig } from "@/lib/config";
+import { formatDurationRange, formatWarranty } from "@/lib/money";
+import { siteConfig, whatsappChatHref } from "@/lib/config";
 import { getServiceBySlug, listServices } from "@/server/services/catalog.service";
-import { listPrices } from "@/server/services/catalog.service";
 import { NotFoundError } from "@/lib/errors";
 
 
@@ -31,7 +30,7 @@ export async function generateMetadata({
   try {
     const service = await getServiceBySlug(slug);
     return {
-      title: `${service.name} — Price, Time & Warranty`,
+      title: `${service.name} — Repair Time & Warranty`,
       description: `${service.shortDescription} ${service.description.slice(0, 110)}…`.slice(0, 158),
       alternates: { canonical: `/services/${service.slug}` },
       openGraph: {
@@ -60,24 +59,13 @@ export default async function ServiceDetailPage({
     throw error;
   }
 
-  const [allServices, priceSample] = await Promise.all([
-    listServices(),
-    listPrices({ serviceSlug: slug, page: 1, pageSize: 12 }),
-  ]);
+  const allServices = await listServices();
 
   // getServiceBySlug already decodes the JSON symptom list.
   const symptoms = service.symptoms;
   const relatedServices = allServices.filter((entry) => entry.slug !== slug).slice(0, 4);
 
-  const prices = priceSample.items.map((item) => item.price).filter((price) => price > 0);
-  const fromPrice = prices.length > 0 ? Math.min(...prices) : null;
-
-  // A representative sample of devices, cheapest first, so the page shows real
-  // numbers rather than a vague "prices vary".
-  const samples = [...priceSample.items]
-    .filter((item) => item.partGrade === "PREMIUM")
-    .sort((a, b) => a.price - b.price)
-    .slice(0, 8);
+  const whatsappHref = whatsappChatHref(`Hi MyMobiFix, I need ${service.name.toLowerCase()} for my phone. My phone model is: `);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -88,16 +76,6 @@ export default async function ServiceDetailPage({
     url: `${siteConfig.url}/services/${service.slug}`,
     provider: { "@type": "LocalBusiness", name: siteConfig.name, url: siteConfig.url },
     areaServed: { "@type": "Country", name: "India" },
-    ...(fromPrice
-      ? {
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "INR",
-            price: fromPrice,
-            availability: "https://schema.org/InStock",
-          },
-        }
-      : {}),
   };
 
   return (
@@ -188,71 +166,6 @@ export default async function ServiceDetailPage({
               </ul>
             </section>
 
-            {/* Sample prices */}
-            {samples.length > 0 ? (
-              <section className="mt-12" aria-labelledby="prices-heading">
-                <h2 id="prices-heading" className="font-display text-xl font-bold text-ink">
-                  {service.name} prices by device
-                </h2>
-                <p className="mt-2 text-ink-muted">
-                  Premium-grade pricing on a sample of devices. Search the full price list for yours.
-                </p>
-
-                <div className="scroll-x mt-5 rounded-xl border border-line">
-                  <table className="w-full min-w-[34rem] text-sm">
-                    <caption className="sr-only">
-                      {service.name} prices for a sample of devices
-                    </caption>
-                    <thead>
-                      <tr className="border-b border-line bg-sunken text-left">
-                        <th scope="col" className="px-4 py-3 font-semibold text-ink">
-                          Device
-                        </th>
-                        <th scope="col" className="px-4 py-3 font-semibold text-ink">
-                          Time
-                        </th>
-                        <th scope="col" className="px-4 py-3 font-semibold text-ink">
-                          Warranty
-                        </th>
-                        <th scope="col" className="px-4 py-3 text-right font-semibold text-ink">
-                          Price
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-line">
-                      {samples.map((item) => (
-                        <tr key={item.id} className="transition-colors hover:bg-sunken">
-                          <th scope="row" className="px-4 py-3 text-left font-medium text-ink">
-                            {item.brandName} {item.modelName}
-                          </th>
-                          <td className="px-4 py-3 text-ink-muted">
-                            {formatDurationRange(item.durationMinutes)}
-                          </td>
-                          <td className="px-4 py-3 text-ink-muted">
-                            {formatWarranty(item.warrantyMonths)}
-                          </td>
-                          <td className="tabular px-4 py-3 text-right font-bold text-ink">
-                            {item.price === 0 ? "Free" : formatMoney(item.price)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <p className="mt-3 text-sm text-ink-subtle">
-                  Showing {samples.length} of {priceSample.total} priced combinations.{" "}
-                  <Link
-                    href={`/pricing?service=${service.slug}`}
-                    className="font-semibold text-brand-700 underline underline-offset-4 dark:text-accent-300"
-                  >
-                    See all {service.name.toLowerCase()} prices
-                  </Link>
-                  .
-                </p>
-              </section>
-            ) : null}
-
             {/* Service options */}
             <section className="mt-12" aria-labelledby="options-heading">
               <h2 id="options-heading" className="font-display text-xl font-bold text-ink">
@@ -270,11 +183,6 @@ export default async function ServiceDetailPage({
                       <p className="mt-1 text-sm leading-relaxed text-ink-muted">
                         {meta.description}
                       </p>
-                      <p className="mt-2.5 text-xs font-semibold text-brand-700 dark:text-accent-300">
-                        {meta.defaultFee === 0
-                          ? "No extra fee"
-                          : `+${formatMoney(meta.defaultFee)} convenience fee`}
-                      </p>
                     </li>
                   );
                 })}
@@ -290,12 +198,8 @@ export default async function ServiceDetailPage({
                   <p className="text-xs font-bold uppercase tracking-wide text-ink-subtle">
                     {service.name}
                   </p>
-                  <p className="tabular mt-1 font-display text-3xl font-bold text-ink">
-                    {fromPrice === null
-                      ? "On request"
-                      : fromPrice === 0
-                        ? "Free"
-                        : `from ${formatMoney(fromPrice)}`}
+                  <p className="mt-1 font-display text-xl font-bold text-ink">
+                    Get a quote on WhatsApp
                   </p>
                 </div>
 
@@ -325,15 +229,25 @@ export default async function ServiceDetailPage({
                     </dt>
                     <dd>
                       <Badge tone="success" size="sm">
-                        {priceSample.total > 0 ? "Bookable now" : "Enquire"}
+                        Bookable now
                       </Badge>
                     </dd>
                   </div>
                 </dl>
 
                 <div className="border-t border-line p-5">
-                  <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
-                    Get your exact price
+                  <ButtonLink href={whatsappHref} external size="lg" fullWidth iconLeft="whatsapp">
+                    Chat on WhatsApp
+                  </ButtonLink>
+                  <ButtonLink
+                    href="/book"
+                    variant="outline"
+                    size="lg"
+                    fullWidth
+                    iconRight="arrow-right"
+                    className="mt-2.5"
+                  >
+                    Book a Repair
                   </ButtonLink>
                   <p className="mt-2.5 text-center text-xs text-ink-subtle">
                     Free diagnostics · Pay after the repair

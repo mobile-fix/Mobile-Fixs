@@ -408,36 +408,3 @@ export function Divider({ className, label }: { className?: string; label?: stri
   return <hr className={cn("border-0 border-t border-line", className)} />;
 }
 
-// ── Price display ───────────────────────────────────────────────────────────
-
-export function PriceTag({
-  price,
-  compareAt,
-  isEstimate,
-  size = "md",
-  className,
-}: {
-  price: string;
-  compareAt?: string | null;
-  isEstimate?: boolean;
-  size?: "sm" | "md" | "lg";
-  className?: string;
-}) {
-  const sizeClass =
-    size === "lg" ? "text-3xl" : size === "sm" ? "text-base" : "text-xl";
-
-  return (
-    <span className={cn("inline-flex flex-wrap items-baseline gap-2", className)}>
-      {isEstimate ? (
-        <span className="text-xs font-semibold uppercase tracking-wide text-ink-subtle">from</span>
-      ) : null}
-      <span className={cn("tabular font-display font-bold text-ink", sizeClass)}>{price}</span>
-      {compareAt ? (
-        <>
-          <span className="tabular text-sm text-ink-subtle line-through">{compareAt}</span>
-          <span className="sr-only">reduced from {compareAt}</span>
-        </>
-      ) : null}
-    </span>
-  );
-}

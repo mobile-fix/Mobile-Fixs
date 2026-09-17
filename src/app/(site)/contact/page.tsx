@@ -10,7 +10,7 @@ import { contactConfig, integrations, telHref, whatsappHref } from "@/lib/config
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with MyMobiFix. Call, message on WhatsApp or send an enquiry about a repair, a price for an unlisted device, or a warranty claim.",
+    "Get in touch with MyMobiFix. Call or message us on WhatsApp from anywhere about a repair quote, an unlisted device, or a warranty claim.",
   alternates: { canonical: "/contact" },
 };
 
@@ -25,7 +25,7 @@ export default function ContactPage() {
             Contact us
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
-            Questions about a repair, a device we have not priced, or a warranty claim — here is
+            Questions about a repair, the cost of fixing your phone, or a warranty claim — here is
             every way to reach us.
           </p>
         </header>

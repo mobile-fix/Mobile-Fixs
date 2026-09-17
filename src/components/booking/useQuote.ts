@@ -9,9 +9,9 @@ import type { BasketItem, Quote } from "./types";
 /**
  * Live quote.
  *
- * Re-prices whenever the device, basket or service type changes. Requests are
+ * Refreshes whenever the device, basket or service type changes. Requests are
  * debounced and the previous one aborted, and the last successful quote is kept
- * on screen while a new one loads — so the price never flashes to empty and the
+ * on screen while a new one loads — so the summary never flashes to empty and the
  * layout never jumps.
  */
 export function useQuote({
@@ -57,7 +57,7 @@ export function useQuote({
           setError(
             cause instanceof ApiClientError
               ? cause.message
-              : "We could not calculate a price. Please try again.",
+              : "We could not load your repair summary. Please try again.",
           );
         })
         .finally(() => {

@@ -92,11 +92,25 @@ async function seedStaff() {
   const password = process.env.SEED_ADMIN_PASSWORD ?? "ChangeMe!2024";
   const name = process.env.SEED_ADMIN_NAME ?? "MyMobiFix Admin";
 
+  if (!SEED_DEMO_DATA && password === "ChangeMe!2024") {
+    console.warn(
+      "  WARNING: the owner account is using the default password published in the README.\n" +
+        "           Set SEED_ADMIN_PASSWORD before seeding any database the public can reach.",
+    );
+  }
+
+  // The manager and technician accounts exist to demonstrate the role model.
+  // Their passwords are published in the README, so on a real deployment they
+  // would be working logins to the dashboard — create them for demos only.
   const roster = [
     { email, name, role: "OWNER", password },
-    { email: "manager@mymobifix.com", name: "Priyanka Deshmukh", role: "MANAGER", password: "Manager!2024" },
-    { email: "tech1@mymobifix.com", name: "Imran Sheikh", role: "TECHNICIAN", password: "Technician!2024" },
-    { email: "tech2@mymobifix.com", name: "Ravi Kumar", role: "TECHNICIAN", password: "Technician!2024" },
+    ...(SEED_DEMO_DATA
+      ? [
+          { email: "manager@mymobifix.com", name: "Priyanka Deshmukh", role: "MANAGER", password: "Manager!2024" },
+          { email: "tech1@mymobifix.com", name: "Imran Sheikh", role: "TECHNICIAN", password: "Technician!2024" },
+          { email: "tech2@mymobifix.com", name: "Ravi Kumar", role: "TECHNICIAN", password: "Technician!2024" },
+        ]
+      : []),
   ];
 
   const users = [];

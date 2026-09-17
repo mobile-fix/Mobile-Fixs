@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Icon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
-import { Alert, Badge, Card } from "@/components/ui/primitives";
+import { Alert, Card } from "@/components/ui/primitives";
 import { Checkbox, Field, Input, OptionCard, Select, Textarea, describedBy } from "@/components/ui/form";
 import { useToast } from "@/components/ui/Toast";
 import { api, ApiClientError } from "@/lib/api-client";
@@ -17,7 +17,6 @@ import {
   type ContactMethod,
   type ServiceType,
 } from "@/lib/constants";
-import { formatMoney } from "@/lib/money";
 import { createBookingSchema } from "@/lib/validation";
 import { cn, formatDate } from "@/lib/utils";
 import type { FieldErrors } from "@/lib/errors";
@@ -367,11 +366,6 @@ export function BookingWizard() {
                     icon={meta.iconKey as never}
                     title={meta.label}
                     description={meta.description}
-                    badge={
-                      <Badge tone={meta.defaultFee === 0 ? "success" : "brand"} size="sm">
-                        {meta.defaultFee === 0 ? "No extra fee" : `+${formatMoney(meta.defaultFee)}`}
-                      </Badge>
-                    }
                     meta={
                       <span className="flex items-center gap-1.5 text-xs font-semibold text-brand-700 dark:text-accent-300">
                         <Icon name="sparkles" size={13} />
@@ -622,9 +616,7 @@ export function BookingWizard() {
                   quote
                     ? quote.lines.map(
                         (line) =>
-                          `${line.serviceName} · ${line.partGradeLabel} · ${
-                            line.unitPrice === 0 ? "Free" : formatMoney(line.unitPrice)
-                          }`,
+                          `${line.serviceName} · ${line.partGradeLabel}`,
                       )
                     : ["—"]
                 }
@@ -632,12 +624,7 @@ export function BookingWizard() {
               <ReviewRow
                 title="Service type"
                 onEdit={() => setStep(3)}
-                lines={[
-                  SERVICE_TYPE_META[serviceType].label,
-                  SERVICE_TYPE_META[serviceType].defaultFee === 0
-                    ? "No convenience fee"
-                    : `Convenience fee ${formatMoney(SERVICE_TYPE_META[serviceType].defaultFee)}`,
-                ]}
+                lines={[SERVICE_TYPE_META[serviceType].label]}
               />
               <ReviewRow
                 title="Appointment"
@@ -683,7 +670,7 @@ export function BookingWizard() {
                     setFormError(null);
                   }}
                   label="I accept the repair terms"
-                  description="I understand the price shown is an estimate confirmed after diagnosis, that I approve any change before work begins, and that I pay only once the repair is complete."
+                  description="I understand the cost is confirmed with me after diagnosis, that I approve it before work begins, and that I pay only once the repair is complete."
                 />
               </Card>
 

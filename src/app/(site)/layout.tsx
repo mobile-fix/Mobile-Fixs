@@ -1,6 +1,7 @@
 import { Footer } from "@/components/site/Footer";
 import { Header } from "@/components/site/Header";
 import { StickyBookBar } from "@/components/site/StickyBookBar";
+import { WhatsAppButton } from "@/components/site/WhatsAppButton";
 import { contactConfig, siteConfig } from "@/lib/config";
 
 /**
@@ -19,7 +20,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     url: siteConfig.url,
     telephone: contactConfig.phone,
     email: contactConfig.email,
-    priceRange: "₹₹",
     address: {
       "@type": "PostalAddress",
       streetAddress: contactConfig.address,
@@ -61,6 +61,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       <StickyBookBar />
+      <WhatsAppButton />
     </>
   );
 }

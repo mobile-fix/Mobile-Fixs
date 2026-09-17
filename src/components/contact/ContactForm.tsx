@@ -20,7 +20,7 @@ import type { FieldErrors } from "@/lib/errors";
 
 const SUBJECTS = [
   "General enquiry",
-  "Price for an unlisted device",
+  "Repair quote",
   "Question about an existing repair",
   "Warranty claim",
   "Corporate or bulk repair",
@@ -236,7 +236,7 @@ export function ContactForm() {
               errors.message,
               "Include your device model and repair ID if your question is about an existing booking.",
             )}
-            placeholder="I have a Galaxy S22 Ultra with a cracked screen. It is not in your price list — what would a replacement cost?"
+            placeholder="I have a Galaxy S22 Ultra with a cracked screen. What would a replacement cost?"
           />
         </Field>
 

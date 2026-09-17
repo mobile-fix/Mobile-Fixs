@@ -8,7 +8,7 @@ import { Alert, Badge, Card } from "@/components/ui/primitives";
 import { CopyButton } from "@/components/site/CopyButton";
 import { PrintButton } from "@/components/site/PrintButton";
 import { SERVICE_TYPE_META } from "@/lib/constants";
-import { formatDuration, formatMoney, formatWarranty } from "@/lib/money";
+import { formatDuration, formatWarranty } from "@/lib/money";
 import { formatDate, formatPhone } from "@/lib/utils";
 import { contactConfig, telHref, whatsappHref } from "@/lib/config";
 import { getBookingByReference } from "@/server/services/booking.service";
@@ -56,7 +56,7 @@ export default async function ConfirmationPage({
     {
       icon: "diagnostic" as const,
       title: "Free diagnosis before any work",
-      body: "We confirm the fault and the final price with you. Nothing is opened until you approve it.",
+      body: "We confirm the fault and the cost with you. Nothing is opened until you approve it.",
     },
     {
       icon: "search" as const,
@@ -150,46 +150,15 @@ export default async function ConfirmationPage({
                       {item.partGradeLabel} · {formatWarranty(item.warrantyMonths)}
                     </p>
                   </div>
-                  <p className="tabular shrink-0 font-semibold text-ink">
-                    {item.lineTotal === 0 ? "Free" : formatMoney(item.lineTotal)}
-                  </p>
                 </li>
               ))}
             </ul>
           </div>
 
-          <dl className="space-y-2 border-t border-line px-6 py-5 text-sm">
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">Subtotal</dt>
-              <dd className="tabular font-semibold text-ink">
-                {formatMoney(booking.pricing.subtotal)}
-              </dd>
-            </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{serviceMeta.label} fee</dt>
-              <dd className="tabular font-semibold text-ink">
-                {booking.pricing.serviceFee === 0 ? "₹0" : formatMoney(booking.pricing.serviceFee)}
-              </dd>
-            </div>
-            {booking.pricing.discount > 0 ? (
-              <div className="flex justify-between gap-4">
-                <dt className="text-success-700 dark:text-success-500">Discount</dt>
-                <dd className="tabular font-semibold text-success-700 dark:text-success-500">
-                  −{formatMoney(booking.pricing.discount)}
-                </dd>
-              </div>
-            ) : null}
-          </dl>
-
           <div className="flex items-center justify-between gap-4 border-t border-line bg-sunken px-6 py-5">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-ink-subtle">
-                Estimated total
-              </p>
-              <p className="tabular font-display text-3xl font-bold text-ink">
-                {formatMoney(booking.pricing.total)}
-              </p>
-            </div>
+            <p className="text-sm text-ink-muted">
+              Cost confirmed with you after a free diagnosis.
+            </p>
             <Badge tone="success" icon="lock">
               Payable after repair
             </Badge>
@@ -197,9 +166,8 @@ export default async function ConfirmationPage({
         </Card>
 
         <Alert tone="info" className="mt-6">
-          This is an estimate. If the diagnosis reveals something different, we tell you the revised
-          price and you decide before any work starts. You are never charged for a repair you did not
-          approve.
+          We tell you the cost after diagnosis and you decide before any work starts. You are never
+          charged for a repair you did not approve. Questions? Message us on WhatsApp.
         </Alert>
 
         {/* Next steps */}

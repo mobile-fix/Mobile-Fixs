@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@/components/ui"],
   },
+  // Prices are no longer published. Old links and search results for the price
+  // list land on Contact, where the WhatsApp number is. Temporary (307) so the
+  // page can return without search engines having dropped it for good.
+  async redirects() {
+    return [{ source: "/pricing", destination: "/contact", permanent: false }];
+  },
   async headers() {
     const csp = [
       "default-src 'self'",

@@ -18,15 +18,15 @@ export const siteConfig = {
   url: fallback(process.env.NEXT_PUBLIC_SITE_URL, "http://localhost:3000"),
   tagline: "Your Phone Broken? We Will Fix It.",
   description:
-    "Fast, transparent mobile phone repair. Certified technicians, quality parts, upfront pricing and a warranty on every repair — in store or at your door.",
+    "Fast mobile phone repair by certified technicians, with quality parts and a warranty on every repair — in store or at your door. Chat with us on WhatsApp from anywhere.",
   currency: fallback(process.env.NEXT_PUBLIC_CURRENCY, "INR"),
   locale: "en-IN",
 } as const;
 
 export const contactConfig = {
-  phone: fallback(process.env.NEXT_PUBLIC_SUPPORT_PHONE, "+91 00000 00000"),
+  phone: fallback(process.env.NEXT_PUBLIC_SUPPORT_PHONE, "+91 93156 02220"),
   email: fallback(process.env.NEXT_PUBLIC_SUPPORT_EMAIL, "support@mymobifix.com"),
-  whatsapp: fallback(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, "910000000000"),
+  whatsapp: fallback(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, "919315602220"),
   hours: fallback(process.env.NEXT_PUBLIC_BUSINESS_HOURS, "Mon–Sat, 9:00 AM – 8:00 PM IST"),
   address: fallback(
     process.env.NEXT_PUBLIC_BUSINESS_ADDRESS,
@@ -41,13 +41,29 @@ export const whatsappHref = contactConfig.whatsapp
   ? `https://wa.me/${contactConfig.whatsapp.replace(/\D/g, "")}`
   : "";
 
+/** WhatsApp number formatted for display, e.g. "+91 93156 02220". */
+export const whatsappDisplay = (() => {
+  const digits = contactConfig.whatsapp.replace(/\D/g, "");
+  return digits.length === 12 && digits.startsWith("91")
+    ? `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`
+    : `+${digits}`;
+})();
+
+/**
+ * A wa.me link with a pre-filled message. Prices are not published on the site,
+ * so every "what will it cost?" path ends in a WhatsApp chat instead.
+ */
+export function whatsappChatHref(message = "Hi MyMobiFix, I need help repairing my phone.") {
+  return `${whatsappHref}?text=${encodeURIComponent(message)}`;
+}
+
 /**
  * Integration availability. The UI reads these to decide between a live
  * integration and an honest "not configured" state — we never fake a service.
  */
 export const integrations = {
   maps: Boolean(fallback(process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_URL, "")),
-  whatsapp: Boolean(fallback(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, "")),
+  whatsapp: Boolean(contactConfig.whatsapp),
   analytics: Boolean(fallback(process.env.NEXT_PUBLIC_ANALYTICS_ID, "")),
 } as const;
 

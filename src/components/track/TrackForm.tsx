@@ -9,7 +9,7 @@ import { Alert, Badge, Card, StatusBadge } from "@/components/ui/primitives";
 import { Field, Input, describedBy } from "@/components/ui/form";
 import { api, ApiClientError } from "@/lib/api-client";
 import { STATUS_META, type RepairStatus } from "@/lib/constants";
-import { formatDuration, formatMoney, formatWarranty } from "@/lib/money";
+import { formatDuration, formatWarranty } from "@/lib/money";
 import { cn, formatDate, formatDateTime, formatRelative } from "@/lib/utils";
 import type { FieldErrors } from "@/lib/errors";
 import { contactConfig, telHref } from "@/lib/config";
@@ -292,13 +292,10 @@ function TrackingResultView({ result }: { result: TrackingResult }) {
             </div>
             <div>
               <dt className="text-xs font-bold uppercase tracking-wide text-ink-subtle">
-                {result.completedAt ? "Total paid" : "Estimated total"}
+                Booked
               </dt>
-              <dd className="tabular mt-1 text-sm font-semibold text-ink">
-                {formatMoney(result.total)}
-              </dd>
-              <dd className="mt-0.5 text-xs text-ink-subtle">
-                Booked {formatRelative(result.bookedAt)}
+              <dd className="mt-1 text-sm font-semibold text-ink">
+                {formatRelative(result.bookedAt)}
               </dd>
             </div>
           </dl>
