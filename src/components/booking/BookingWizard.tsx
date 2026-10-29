@@ -508,7 +508,7 @@ export function BookingWizard() {
                         onChange={(event) => setField("city", event.target.value)}
                         hasError={Boolean(errors["customer.city"])}
                         aria-describedby={describedBy("city", errors["customer.city"])}
-                        placeholder="Gurugram"
+                        placeholder="New Delhi"
                       />
                     </Field>
 

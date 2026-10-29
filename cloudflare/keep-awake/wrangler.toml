@@ -1,0 +1,18 @@
+# Cloudflare Worker that keeps the free Render server awake.
+# Deploy from this folder with `npx wrangler deploy`, or paste worker.js into
+# the Cloudflare dashboard and add the cron trigger there. See DEPLOYMENT.md,
+# "Free hosting: Cloudflare".
+
+name = "mymobifix-keep-awake"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+# Every 10 minutes (UTC). Render stops a free server after 15 idle minutes.
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+PING_URL = "https://www.mymobifix.com/api/ping"
+
+[observability]
+enabled = true
