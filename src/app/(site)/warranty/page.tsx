@@ -4,13 +4,14 @@ import { LegalList, LegalPage, LegalSection } from "@/components/site/LegalPage"
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/primitives";
 import { PART_GRADES, PART_GRADE_META } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Warranty Policy",
+export const metadata: Metadata = pageMetadata({
+  title: "Phone Repair Warranty Policy",
   description:
     "What the MyMobiFix repair warranty covers, how long it lasts for each part grade, what is excluded, and how to make a claim.",
-  alternates: { canonical: "/warranty" },
-};
+  path: "/warranty",
+});
 
 export default function WarrantyPage() {
   return (

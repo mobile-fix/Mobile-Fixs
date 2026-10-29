@@ -20,7 +20,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       { name: "Book a repair", url: "/book", description: "Start a new repair booking" },
       { name: "Track a repair", url: "/track", description: "Check the status of a repair" },
-      { name: "Repair prices", url: "/pricing", description: "Search the price list" },
+      { name: "Our services", url: "/services", description: "Browse every repair we offer" },
     ],
   };
 }

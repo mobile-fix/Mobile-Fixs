@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Icon } from "@/components/icons";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert, Card } from "@/components/ui/primitives";
 import { Checkbox, Field, Input, OptionCard, Select, Textarea, describedBy } from "@/components/ui/form";
 import { useToast } from "@/components/ui/Toast";
+import { track } from "@/lib/analytics";
 import { api, ApiClientError } from "@/lib/api-client";
 import {
   CONTACT_METHODS,
@@ -77,7 +78,6 @@ const EMPTY_CUSTOMER: CustomerForm = {
 };
 
 export function BookingWizard() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
 
@@ -269,8 +269,15 @@ export function BookingWizard() {
 
       const data = await api.post<{ booking: { reference: string } }>("/api/bookings", payload);
 
-      toast.success("Booking confirmed", `Your repair ID is ${data.booking.reference}.`);
-      router.push(`/book/confirmation/${data.booking.reference}`);
+      // Fired here rather than on the confirmation page so a reload of that
+      // page cannot count the same booking twice.
+      await track({ name: "booking_submitted", service: `${model!.brandName} ${model!.name}` });
+
+      // A full page load, not router.push: the confirmation URL contains the
+      // repair reference, and ad tags already running on this page would
+      // otherwise report the client-side navigation to it. The confirmation
+      // page loads no tags of its own (see isPrivatePath).
+      window.location.assign(`/book/confirmation/${data.booking.reference}`);
     } catch (cause) {
       const message =
         cause instanceof ApiClientError

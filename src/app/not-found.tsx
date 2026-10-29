@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 /** 404. Offers the routes people actually want rather than a dead end. */
 export default function NotFound() {
   const suggestions = [
-    { href: "/book", label: "Book a repair", description: "Get a price and pick a slot", icon: "calendar" as const },
-    { href: "/pricing", label: "Repair prices", description: "Search every device and service", icon: "tag" as const },
+    { href: "/book", label: "Book a repair", description: "Pick a device and a time slot", icon: "calendar" as const },
+    { href: "/services", label: "Our services", description: "Every repair we offer", icon: "wrench" as const },
     { href: "/track", label: "Track a repair", description: "Check where your device is", icon: "search" as const },
     { href: "/contact", label: "Contact us", description: "Ask us anything", icon: "message" as const },
   ];

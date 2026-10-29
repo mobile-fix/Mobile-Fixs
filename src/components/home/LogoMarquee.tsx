@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { cn } from "@/lib/utils";
 
 /**
@@ -9,7 +11,8 @@ import { cn } from "@/lib/utils";
  *    rAF loop, no re-render — the component ships zero client bytes.
  *  - The list is rendered twice and the track translates by exactly -50%, so the
  *    second copy lands where the first began and the loop is invisible.
- *  - Only the first copy is exposed to assistive technology; the duplicate is
+ *  - Only the first copy is exposed to assistive technology (and links to the
+ *    brand's /repair page); the duplicate is
  *    `aria-hidden`, otherwise every brand would be announced twice.
  *  - `prefers-reduced-motion` halts the animation via the global media query.
  */
@@ -17,6 +20,8 @@ import { cn } from "@/lib/utils";
 export type MarqueeLogo = {
   src: string;
   alt: string;
+  /** Catalogue slug; the first copy links to /repair/<slug>. */
+  slug: string;
   /** Tailwind gradient stops revealed behind the logo on hover. */
   gradient: { from: string; to: string };
 };
@@ -27,14 +32,14 @@ export type MarqueeLogo = {
  * booking flow cannot quote.
  */
 export const REPAIR_BRANDS: MarqueeLogo[] = [
-  { src: "/logos/apple.svg", alt: "Apple", gradient: { from: "#64748b", to: "#0f172a" } },
-  { src: "/logos/samsung.svg", alt: "Samsung", gradient: { from: "#1e3a8a", to: "#3260b6" } },
-  { src: "/logos/google.svg", alt: "Google", gradient: { from: "#0ea5e9", to: "#0369a1" } },
-  { src: "/logos/oneplus.svg", alt: "OnePlus", gradient: { from: "#f43f5e", to: "#be123c" } },
-  { src: "/logos/xiaomi.svg", alt: "Xiaomi", gradient: { from: "#f59e0b", to: "#b45309" } },
-  { src: "/logos/oppo.svg", alt: "Oppo", gradient: { from: "#10b981", to: "#047857" } },
-  { src: "/logos/vivo.svg", alt: "Vivo", gradient: { from: "#3260b6", to: "#16244f" } },
-  { src: "/logos/realme.svg", alt: "Realme", gradient: { from: "#ecb31f", to: "#a76d03" } },
+  { src: "/logos/apple.svg", slug: "apple", alt: "Apple", gradient: { from: "#64748b", to: "#0f172a" } },
+  { src: "/logos/samsung.svg", slug: "samsung", alt: "Samsung", gradient: { from: "#1e3a8a", to: "#3260b6" } },
+  { src: "/logos/google.svg", slug: "google", alt: "Google", gradient: { from: "#0ea5e9", to: "#0369a1" } },
+  { src: "/logos/oneplus.svg", slug: "oneplus", alt: "OnePlus", gradient: { from: "#f43f5e", to: "#be123c" } },
+  { src: "/logos/xiaomi.svg", slug: "xiaomi", alt: "Xiaomi", gradient: { from: "#f59e0b", to: "#b45309" } },
+  { src: "/logos/oppo.svg", slug: "oppo", alt: "Oppo", gradient: { from: "#10b981", to: "#047857" } },
+  { src: "/logos/vivo.svg", slug: "vivo", alt: "Vivo", gradient: { from: "#3260b6", to: "#16244f" } },
+  { src: "/logos/realme.svg", slug: "realme", alt: "Realme", gradient: { from: "#ecb31f", to: "#a76d03" } },
 ];
 
 export function LogoMarquee({
@@ -76,11 +81,11 @@ export function LogoMarquee({
 }
 
 function LogoCard({ logo, duplicate }: { logo: MarqueeLogo; duplicate?: boolean }) {
-  return (
-    <div
-      aria-hidden={duplicate || undefined}
-      className="group relative h-24 w-40 shrink-0 flex items-center justify-center rounded-full bg-white border border-slate-200/60 shadow-sm hover:border-slate-300 transition-all overflow-hidden"
-    >
+  const cardClasses =
+    "group relative h-24 w-40 shrink-0 flex items-center justify-center rounded-full bg-white border border-slate-200/60 shadow-sm hover:border-slate-300 transition-all overflow-hidden";
+
+  const inner = (
+    <>
       {/* Brand wash — scaled up and invisible until hover, then settles to fill. */}
       <div
         aria-hidden="true"
@@ -92,7 +97,7 @@ function LogoCard({ logo, duplicate }: { logo: MarqueeLogo; duplicate?: boolean 
 
       <img
         src={logo.src}
-        alt={duplicate ? "" : `${logo.alt} — devices we repair`}
+        alt={duplicate ? "" : `${logo.alt} phone repair`}
         width={220}
         height={48}
         loading="lazy"
@@ -100,6 +105,25 @@ function LogoCard({ logo, duplicate }: { logo: MarqueeLogo; duplicate?: boolean 
         draggable={false}
         className="relative z-10 h-6 w-auto max-w-[70%] object-contain opacity-80 transition-all duration-500 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
       />
-    </div>
+    </>
+  );
+
+  // The duplicate pass is aria-hidden, so it must not hold focusable links:
+  // only the first copy links through to the brand's landing page.
+  if (duplicate) {
+    return (
+      <div aria-hidden="true" className={cardClasses}>
+        {inner}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={`/repair/${logo.slug}`}
+      className={cn(cardClasses, "focus-visible:outline-2 focus-visible:outline-offset-2")}
+    >
+      {inner}
+    </Link>
   );
 }

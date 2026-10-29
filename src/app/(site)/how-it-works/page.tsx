@@ -5,14 +5,14 @@ import { Icon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card, SectionHeading } from "@/components/ui/primitives";
 import { SERVICE_TYPES, SERVICE_TYPE_META, STATUS_FLOW, STATUS_META } from "@/lib/constants";
-import { siteConfig } from "@/lib/config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "How It Works — From Broken Phone to Fixed in 4 Steps",
+export const metadata: Metadata = pageMetadata({
+  title: "How Doorstep Phone Repair Works — Book, Repair, Track",
   description:
-    "How a MyMobiFix repair works: choose your device and repair, book a store visit, pickup or at-home slot, then track every stage until your phone is back.",
-  alternates: { canonical: "/how-it-works" },
-};
+    "How a MyMobiFix repair works: choose your phone and fault, book a store visit, pickup or at-home slot, then track every stage until your phone is back.",
+  path: "/how-it-works",
+});
 
 const STEPS: Array<{
   number: string;
@@ -67,30 +67,11 @@ const STEPS: Array<{
   },
 ];
 
+// No HowTo structured data: Google retired HowTo rich results in 2023, and the
+// breadcrumb trail plus the site-wide business entity already describe the page.
 export default function HowItWorksPage() {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    name: "How to book a mobile phone repair with MyMobiFix",
-    description:
-      "Four steps from a broken phone to a repaired one: choose your device, select the repair, book an appointment, and get it fixed.",
-    totalTime: "PT2H",
-    step: STEPS.map((step, index) => ({
-      "@type": "HowToStep",
-      position: index + 1,
-      name: step.title,
-      text: step.body,
-      url: `${siteConfig.url}/how-it-works#step-${index + 1}`,
-    })),
-  };
-
   return (
     <div className="pb-20 pt-8 lg:pt-10">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-
       <div className="container-page">
         <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "How it works" }]} />
 

@@ -57,18 +57,19 @@ export function LandingHero() {
               the interactive states below. */}
           <motion.div initial={false} className="hero-enter max-w-2xl">
             <h1 className="font-display text-[32px] sm:text-[42px] md:text-[56px] font-medium tracking-tight leading-[1.08] text-[#0a1b33]">
-              Repairing the devices
+              Mobile phone repair
               <br />
-              that run your life
+              at your doorstep
             </h1>
 
             {/* Held to the left third: the spec calls for no overlay on the
                 video, so legibility comes from keeping copy over the calm side
                 of the frame rather than from dimming it. */}
-            <p className="font-sans mt-5 max-w-[26rem] text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">
-              Screen, battery, charging port and water damage repairs by certified technicians — in
-              our store, at your door, or picked up and delivered. Message us on WhatsApp from anywhere
-              and get a warranty on every job.
+            <p className="font-sans mt-5 max-w-[28rem] text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">
+              We repair the devices that run your life: screen, battery and charging repairs for
+              iPhone, Samsung and other Android phones, by certified technicians — at your doorstep,
+              picked up and delivered, or in our store. Every repair carries a warranty. Message us
+              on WhatsApp for a quote.
             </p>
 
             <MotionLink

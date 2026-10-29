@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 
 import { LegalList, LegalPage, LegalSection } from "@/components/site/LegalPage";
 import { contactConfig, siteConfig } from "@/lib/config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms & Conditions",
   description:
     "The terms that apply when you book a mobile phone repair with MyMobiFix: quotes, your device and data, payment, cancellation, liability and warranty.",
-  alternates: { canonical: "/terms" },
-};
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

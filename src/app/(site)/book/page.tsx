@@ -5,15 +5,16 @@ import { BookingWizard } from "@/components/booking/BookingWizard";
 import { Icon } from "@/components/icons";
 import { LoadingBlock } from "@/components/ui/primitives";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Book a Repair",
+export const metadata: Metadata = pageMetadata({
+  title: "Book a Phone Repair",
   description:
     "Book a phone repair in six steps: choose your device and fault, pick how you want it repaired, and confirm your slot.",
-  alternates: { canonical: "/book" },
+  path: "/book",
   // A booking form has no search value and its URLs are user-specific.
-  robots: { index: false, follow: true },
-};
+  noindex: true,
+});
 
 export default function BookPage() {
   return (

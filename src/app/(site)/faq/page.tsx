@@ -7,21 +7,20 @@ import { whatsappChatHref } from "@/lib/config";
 import { Card } from "@/components/ui/primitives";
 import { Icon } from "@/components/icons";
 import { FAQS, FAQ_CATEGORIES, faqStructuredData } from "@/lib/faq";
+import { JsonLd } from "@/components/site/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Frequently Asked Questions",
+export const metadata: Metadata = pageMetadata({
+  title: "Phone Repair FAQs — Warranty, Timing & Doorstep Service",
   description:
-    "Answers about repair times, warranty cover, appointments, pickup and delivery, what happens if a phone cannot be repaired, part grades, tracking and payment methods.",
-  alternates: { canonical: "/faq" },
-};
+    "Answers about phone repair times, warranty cover, doorstep and pickup repairs, part grades, what happens if a phone cannot be fixed, tracking and payment.",
+  path: "/faq",
+});
 
 export default function FaqPage() {
   return (
     <div className="pb-20 pt-8 lg:pt-10">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData()) }}
-      />
+      <JsonLd data={faqStructuredData()} />
 
       <div className="container-page">
         <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "FAQ" }]} />

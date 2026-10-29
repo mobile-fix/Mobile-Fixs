@@ -3,7 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 
 import { ToastProvider } from "@/components/ui/Toast";
 import { ThemeScript } from "@/components/site/ThemeToggle";
-import { siteConfig } from "@/lib/config";
+import { siteConfig, trackingConfig } from "@/lib/config";
 import "./globals.css";
 
 /**
@@ -38,33 +38,18 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  keywords: [
-    "mobile repair",
-    "phone repair",
-    "iPhone repair",
-    "Samsung repair",
-    "screen replacement",
-    "battery replacement",
-    "charging port repair",
-    "doorstep phone repair",
-  ],
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
-  alternates: { canonical: "/" },
+  // No canonical or og:url here: a default inherited by every page would mark
+  // each one as a copy of the homepage. Public pages set their own through
+  // pageMetadata() in src/lib/seo.ts.
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: siteConfig.url,
     siteName: siteConfig.name,
-    title: "MyMobiFix — Mobile Phone Repair with Warranty",
-    description: siteConfig.description,
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "MyMobiFix — Mobile Phone Repair",
-    description: siteConfig.description,
-  },
+  twitter: { card: "summary_large_image" },
   robots: {
     index: true,
     follow: true,
@@ -72,6 +57,14 @@ export const metadata: Metadata = {
   },
   formatDetection: { telephone: true, email: true, address: false },
   category: "Mobile Phone Repair Services",
+  // Ownership proofs for Google Search Console and Meta Business Manager;
+  // each tag is omitted while its token is unset.
+  verification: {
+    google: trackingConfig.googleSiteVerification || undefined,
+    other: trackingConfig.metaDomainVerification
+      ? { "facebook-domain-verification": trackingConfig.metaDomainVerification }
+      : undefined,
+  },
 };
 
 export const viewport: Viewport = {

@@ -4,6 +4,7 @@ import { Icon } from "@/components/icons";
 import { Logo } from "./Logo";
 import {
   contactConfig,
+  displayAddress,
   siteConfig,
   telHref,
   whatsappChatHref,
@@ -28,14 +29,15 @@ const SERVICE_LINKS = [
   { href: "/services", label: "All Services" },
 ];
 
-// Each opens a WhatsApp chat already naming the device, so the customer only
-// has to describe the fault.
+// Brand hubs are real pages; "Any Other Phone" opens a WhatsApp chat so the
+// customer only has to name the device.
 const BRAND_LINKS = [
-  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my iPhone."), label: "iPhone Repair" },
-  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my Samsung phone."), label: "Samsung Repair" },
-  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my Google Pixel."), label: "Google Pixel Repair" },
-  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my OnePlus phone."), label: "OnePlus Repair" },
-  { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my Xiaomi phone."), label: "Xiaomi Repair" },
+  { href: "/repair/apple", label: "iPhone Repair" },
+  { href: "/repair/samsung", label: "Samsung Repair" },
+  { href: "/repair/google", label: "Google Pixel Repair" },
+  { href: "/repair/oneplus", label: "OnePlus Repair" },
+  { href: "/repair/xiaomi", label: "Xiaomi Repair" },
+  { href: "/repair", label: "All brands" },
   { href: whatsappChatHref("Hi MyMobiFix, I need a repair for my phone."), label: "Any Other Phone" },
 ];
 
@@ -86,10 +88,12 @@ export function Footer() {
                 <Icon name="clock" size={16} className="mt-0.5 text-brand-600 dark:text-accent-400" />
                 {contactConfig.hours}
               </li>
-              <li className="flex items-start gap-2.5 text-ink-muted">
-                <Icon name="map-pin" size={16} className="mt-0.5 shrink-0 text-brand-600 dark:text-accent-400" />
-                <span className="measure-tight">{contactConfig.address}</span>
-              </li>
+              {displayAddress ? (
+                <li className="flex items-start gap-2.5 text-ink-muted">
+                  <Icon name="map-pin" size={16} className="mt-0.5 shrink-0 text-brand-600 dark:text-accent-400" />
+                  <span className="measure-tight">{displayAddress}</span>
+                </li>
+              ) : null}
             </ul>
 
             {whatsappHref ? (
@@ -107,7 +111,7 @@ export function Footer() {
           </div>
 
           <FooterColumn title="Repairs" links={SERVICE_LINKS} className="lg:col-span-3" />
-          <FooterColumn title="Repair on WhatsApp" links={BRAND_LINKS} className="lg:col-span-2" />
+          <FooterColumn title="Repair by brand" links={BRAND_LINKS} className="lg:col-span-2" />
           <FooterColumn title="Company" links={COMPANY_LINKS} className="lg:col-span-3" />
         </div>
       </div>
@@ -135,6 +139,14 @@ export function Footer() {
               Staff Login
             </Link>
           </div>
+        </div>
+
+        <div className="container-page pb-6">
+          <p className="text-xs leading-relaxed text-ink-subtle">
+            Apple, Samsung, Google, OnePlus, Xiaomi and other brand names and logos are trademarks
+            of their respective owners. {siteConfig.name} is an independent repair service and is
+            not affiliated with them.
+          </p>
         </div>
 
         {USES_DEMO_DATA ? (

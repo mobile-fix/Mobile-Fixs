@@ -9,7 +9,10 @@ import { Badge, Card } from "@/components/ui/primitives";
 import { PART_GRADES, PART_GRADE_META, SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
 import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { siteConfig, whatsappChatHref } from "@/lib/config";
+import { pageMetadata, truncate } from "@/lib/seo";
+import { areaServed, businessRef } from "@/lib/structured-data";
 import { getServiceBySlug, listServices } from "@/server/services/catalog.service";
+import { JsonLd } from "@/components/site/JsonLd";
 import { NotFoundError } from "@/lib/errors";
 
 
@@ -29,16 +32,13 @@ export async function generateMetadata({
   const { slug } = await params;
   try {
     const service = await getServiceBySlug(slug);
-    return {
-      title: `${service.name} — Repair Time & Warranty`,
-      description: `${service.shortDescription} ${service.description.slice(0, 110)}…`.slice(0, 158),
-      alternates: { canonical: `/services/${service.slug}` },
-      openGraph: {
-        title: `${service.name} | MyMobiFix`,
-        description: service.shortDescription,
-        url: `${siteConfig.url}/services/${service.slug}`,
-      },
-    };
+    return pageMetadata({
+      title: `${service.name} for iPhone, Samsung & Android Phones`,
+      description: truncate(
+        `${service.shortDescription} Doorstep, pickup or in-store, with warranty. Message us on WhatsApp for a quote.`,
+      ),
+      path: `/services/${service.slug}`,
+    });
   } catch {
     return { title: "Service not found" };
   }
@@ -68,22 +68,18 @@ export default async function ServiceDetailPage({
   const whatsappHref = whatsappChatHref(`Hi MyMobiFix, I need ${service.name.toLowerCase()} for my phone. My phone model is: `);
 
   const structuredData = {
-    "@context": "https://schema.org",
     "@type": "Service",
     name: service.name,
     description: service.description,
     serviceType: "Mobile Phone Repair",
     url: `${siteConfig.url}/services/${service.slug}`,
-    provider: { "@type": "LocalBusiness", name: siteConfig.name, url: siteConfig.url },
-    areaServed: { "@type": "Country", name: "India" },
+    provider: businessRef,
+    areaServed: areaServed(),
   };
 
   return (
     <div className="pb-20 pt-8 lg:pt-10">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
 
       <div className="container-page">
         <Breadcrumbs

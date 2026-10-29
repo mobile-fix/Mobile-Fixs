@@ -7,6 +7,7 @@ import { Button, ButtonLink } from "@/components/ui/Button";
 import { Alert, Card } from "@/components/ui/primitives";
 import { Field, Input, Select, Textarea, describedBy } from "@/components/ui/form";
 import { useToast } from "@/components/ui/Toast";
+import { track } from "@/lib/analytics";
 import { api, ApiClientError } from "@/lib/api-client";
 import type { FieldErrors } from "@/lib/errors";
 
@@ -82,6 +83,7 @@ export function ContactForm() {
       });
 
       setSent(true);
+      track({ name: "contact_form_submitted", subject: values.subject });
       toast.success("Message sent", "We reply within one business day.");
     } catch (cause) {
       const message =

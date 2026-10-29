@@ -17,16 +17,18 @@ import { Icon } from "@/components/icons";
 import { SectionHeading } from "@/components/ui/primitives";
 import { contactConfig, telHref, whatsappChatHref, whatsappDisplay } from "@/lib/config";
 import { FAQS, faqStructuredData } from "@/lib/faq";
+import { JsonLd } from "@/components/site/JsonLd";
 import { listServices } from "@/server/services/catalog.service";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { listPublishedReviews } from "@/server/services/content.service";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Mobile Phone Repair with Warranty — Chat on WhatsApp",
+export const metadata: Metadata = pageMetadata({
+  title: "Doorstep Mobile Phone Repair — iPhone, Samsung & Android",
   description:
-    "Screen, battery, charging port and camera repairs by certified technicians, in store or at your door. Message us on WhatsApp from anywhere to get your phone fixed.",
-  alternates: { canonical: "/" },
-};
+    "Doorstep repair for iPhone, Samsung, OnePlus and all Android phones — screen, battery, charging port and camera. Warranty on every repair. Quote on WhatsApp.",
+  path: "/",
+});
 
 /**
  * Homepage.
@@ -48,10 +50,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData(homeFaqs)) }}
-      />
+      <JsonLd data={faqStructuredData(homeFaqs)} />
 
       <LandingHero />
 

@@ -7,19 +7,17 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Card, SectionHeading } from "@/components/ui/primitives";
 import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { siteConfig, whatsappChatHref } from "@/lib/config";
+import { pageMetadata } from "@/lib/seo";
+import { areaServed, businessRef } from "@/lib/structured-data";
 import { listServices } from "@/server/services/catalog.service";
+import { JsonLd } from "@/components/site/JsonLd";
 
-export const metadata: Metadata = {
-  title: "Mobile Repair Services — Screen, Battery, Charging & More",
+export const metadata: Metadata = pageMetadata({
+  title: "Phone Repair Services — Screen, Battery, Charging & More",
   description:
-    "Every repair we offer, with repair times and warranty: screen, battery, charging port, camera, speaker, water damage and software repair. Ask for a quote on WhatsApp.",
-  alternates: { canonical: "/services" },
-  openGraph: {
-    title: "Mobile Repair Services | MyMobiFix",
-    description:
-      "Screen, battery, charging port, camera, speaker and water damage repair — with repair times and warranty shown up front.",
-  },
-};
+    "Every phone repair we do — screen, battery, charging port, camera, speaker, water damage and software — with repair times and warranty. Quote on WhatsApp.",
+  path: "/services",
+});
 
 export const revalidate = 300;
 
@@ -27,7 +25,6 @@ export default async function ServicesPage() {
   const services = await listServices();
 
   const structuredData = {
-    "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Mobile phone repair services",
     itemListElement: services.map((service, index) => ({
@@ -39,17 +36,15 @@ export default async function ServicesPage() {
         description: service.shortDescription,
         url: `${siteConfig.url}/services/${service.slug}`,
         serviceType: "Mobile Phone Repair",
-        provider: { "@type": "LocalBusiness", name: siteConfig.name },
+        provider: businessRef,
+        areaServed: areaServed(),
       },
     })),
   };
 
   return (
     <div className="pb-20 pt-8 lg:pt-10">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
 
       <div className="container-page">
         <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "Services" }]} />

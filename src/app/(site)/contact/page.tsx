@@ -5,14 +5,22 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Alert, Card } from "@/components/ui/primitives";
-import { contactConfig, integrations, telHref, whatsappHref } from "@/lib/config";
+import {
+  contactConfig,
+  displayAddress,
+  integrations,
+  telHref,
+  whatsappChatHref,
+  whatsappHref,
+} from "@/lib/config";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
+export const metadata: Metadata = pageMetadata({
+  title: "Contact Us — WhatsApp, Call or Email for a Repair Quote",
   description:
-    "Get in touch with MyMobiFix. Call or message us on WhatsApp from anywhere about a repair quote, an unlisted device, or a warranty claim.",
-  alternates: { canonical: "/contact" },
-};
+    "Get in touch with MyMobiFix. Call or message us on WhatsApp about a phone repair quote, an unlisted device, or a warranty claim.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
@@ -126,17 +134,20 @@ export default function ContactPage() {
                   </span>
                 </li>
 
-                <li className="flex items-start gap-3.5 p-2 -m-2">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300">
-                    <Icon name="map-pin" size={18} />
-                  </span>
-                  <span>
-                    <span className="block text-xs font-bold uppercase tracking-wide text-ink-subtle">
-                      Service centre
+                {/* Only shown once a real address is configured. */}
+                {displayAddress ? (
+                  <li className="flex items-start gap-3.5 p-2 -m-2">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300">
+                      <Icon name="map-pin" size={18} />
                     </span>
-                    <span className="block font-semibold text-ink">{contactConfig.address}</span>
-                  </span>
-                </li>
+                    <span>
+                      <span className="block text-xs font-bold uppercase tracking-wide text-ink-subtle">
+                        Service centre
+                      </span>
+                      <span className="block font-semibold text-ink">{displayAddress}</span>
+                    </span>
+                  </li>
+                ) : null}
               </ul>
             </Card>
 
@@ -170,37 +181,52 @@ export default function ContactPage() {
               </div>
             </Card>
 
-            {/* Map */}
-            <Card className="overflow-hidden">
-              <div className="border-b border-line px-5 py-3.5">
-                <h2 className="font-display text-sm font-bold uppercase tracking-wide text-ink">
-                  Find us
-                </h2>
-              </div>
-
-              {integrations.maps ? (
+            {/* Map — a live embed when configured, otherwise a pointer to WhatsApp. */}
+            {integrations.maps ? (
+              <Card className="overflow-hidden">
+                <div className="border-b border-line px-5 py-3.5">
+                  <h2 className="font-display text-sm font-bold uppercase tracking-wide text-ink">
+                    Find us
+                  </h2>
+                </div>
                 <iframe
                   src={contactConfig.mapsEmbedUrl}
-                  title={`Map showing the ${contactConfig.address} service centre`}
+                  title={
+                    displayAddress
+                      ? `Map showing the ${displayAddress} service centre`
+                      : "Map showing the service centre"
+                  }
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="aspect-[4/3] w-full border-0"
                 />
-              ) : (
-                /* No key configured — say so plainly rather than showing a fake map. */
-                <div className="flex aspect-[4/3] flex-col items-center justify-center gap-3 bg-sunken p-6 text-center">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-surface text-ink-subtle">
-                    <Icon name="map-pin" size={23} />
+              </Card>
+            ) : whatsappHref ? (
+              <Card className="p-6">
+                <div className="flex items-start gap-3.5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success-50 text-success-700 dark:bg-success-900/40 dark:text-success-300">
+                    <Icon name="map-pin" size={18} />
                   </span>
-                  <p className="text-sm font-semibold text-ink">Map not configured</p>
-                  <p className="measure-tight text-xs leading-relaxed text-ink-subtle">
-                    Set <code className="font-mono">NEXT_PUBLIC_GOOGLE_MAPS_EMBED_URL</code> in the
-                    environment to embed a live map here. The address above is the authoritative
-                    location.
-                  </p>
+                  <div>
+                    <h2 className="font-display text-base font-bold text-ink">Need directions?</h2>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+                      Message us on WhatsApp for directions to us, or to arrange a pickup or
+                      at-home visit instead.
+                    </p>
+                    <div className="mt-4">
+                      <ButtonLink
+                        href={whatsappChatHref("Hi MyMobiFix, can you share directions to your store?")}
+                        external
+                        size="sm"
+                        iconLeft="whatsapp"
+                      >
+                        Message us on WhatsApp
+                      </ButtonLink>
+                    </div>
+                  </div>
                 </div>
-              )}
-            </Card>
+              </Card>
+            ) : null}
 
             <Alert tone="info">
               Tracking an existing repair? You do not need to contact us —{" "}

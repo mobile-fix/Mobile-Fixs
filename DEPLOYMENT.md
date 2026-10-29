@@ -219,6 +219,102 @@ TLS certificates are issued automatically by Render once DNS verifies.
 
 ---
 
+## Step 6 — Search and ads setup
+
+Every value below is a Render environment variable (web service →
+**Environment**). They are `NEXT_PUBLIC_*`, so they are baked in at build time:
+after adding or changing any of them, use **Manual Deploy → Deploy latest
+commit**. Each one is optional — the site leaves out whatever is unset.
+
+### 6a. Business location (local SEO)
+
+Google ranks repair shops for "near me" searches largely on location signals.
+Set the ones that are true; leave the rest blank rather than guessing.
+
+| Variable | Example |
+| --- | --- |
+| `NEXT_PUBLIC_BUSINESS_ADDRESS` | Shop 12, Galleria Market, DLF Phase 4 |
+| `NEXT_PUBLIC_BUSINESS_CITY` | Gurugram |
+| `NEXT_PUBLIC_BUSINESS_REGION` | Haryana |
+| `NEXT_PUBLIC_BUSINESS_POSTAL_CODE` | 122009 |
+| `NEXT_PUBLIC_BUSINESS_LATITUDE` / `_LONGITUDE` | Right-click the pin in Google Maps |
+| `NEXT_PUBLIC_SERVICE_AREAS` | Gurugram, South Delhi, Noida |
+| `NEXT_PUBLIC_BUSINESS_PROFILES` | Google Business Profile, Instagram and Facebook URLs, comma-separated |
+
+Doorstep-only, no walk-in shop? Leave the street address blank and set the
+city and service areas. The address placeholder is never published.
+
+Then create a **Google Business Profile** (business.google.com) with exactly the
+same name, phone number and address/service areas. It is the biggest single
+lever for the map results. Ask every happy customer for a Google review.
+
+### 6b. Google Search Console
+
+1. search.google.com/search-console → **Add property** → **Domain** →
+   `mymobifix.com`.
+2. Google shows a `google-site-verification=…` TXT record. In GoDaddy →
+   **My Products → mymobifix.com → DNS → Add New Record**: Type `TXT`, Name `@`,
+   Value = that string. Save, wait ~10 minutes, click **Verify**.
+3. **Sitemaps** → submit `https://www.mymobifix.com/sitemap.xml`.
+4. **URL Inspection** → request indexing for `/`, `/services` and `/repair`.
+
+(The `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` variable is an alternative to the
+DNS record, for the "HTML tag" method. One or the other is enough.)
+
+### 6c. Google Analytics 4 + Google Ads
+
+1. analytics.google.com → create a GA4 property and a **Web** data stream for
+   `https://www.mymobifix.com` → copy the Measurement ID (`G-…`) into
+   `NEXT_PUBLIC_GA4_ID`.
+2. Google Ads → **Goals → Conversions → New conversion action → Website →
+   set up manually**. Create one action per row below, category as shown,
+   "Count: One". For each, open **Tag setup → Install the tag yourself** and
+   copy from the event snippet: the `AW-…` ID (same for all) into
+   `NEXT_PUBLIC_GOOGLE_ADS_ID`, and the label after the slash into the
+   variable for that action.
+
+   | Conversion action | Category | Variable |
+   | --- | --- | --- |
+   | Booking submitted (make this **Primary**) | Book appointment | `NEXT_PUBLIC_GOOGLE_ADS_BOOKING_LABEL` |
+   | WhatsApp chat click | Contact | `NEXT_PUBLIC_GOOGLE_ADS_WHATSAPP_LABEL` |
+   | Call click | Phone call lead | `NEXT_PUBLIC_GOOGLE_ADS_CALL_LABEL` |
+   | Contact form | Submit lead form | `NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL` |
+
+3. Link GA4 and Google Ads (GA4 Admin → **Product links → Google Ads**).
+
+### 6d. Meta Pixel
+
+1. Meta Events Manager → **Connect data sources → Web → Meta Pixel** → copy
+   the Pixel ID into `NEXT_PUBLIC_META_PIXEL_ID`.
+2. Business Settings → **Brand safety → Domains → Add** `mymobifix.com` → choose
+   **DNS TXT** and add that record in GoDaddy the same way as 6b (or choose
+   the meta-tag method and put its `content` value in
+   `NEXT_PUBLIC_META_DOMAIN_VERIFICATION`).
+3. Events Manager → **Aggregated Event Measurement**: rank `Schedule` (bookings)
+   first, then `Contact` (WhatsApp/calls), then `Lead` (contact form).
+
+### What the site reports
+
+| What happened | GA4 | Google Ads | Meta |
+| --- | --- | --- | --- |
+| Booking submitted | `generate_lead` (method `booking`) | booking label | `Schedule` |
+| WhatsApp link clicked, anywhere | `generate_lead` (method `whatsapp`) | WhatsApp label | `Contact` |
+| Phone number tapped | `generate_lead` (method `phone`) | call label | `Contact` |
+| Contact form sent | `generate_lead` (method `contact_form`) | contact label | `Lead` |
+
+No names, phone numbers, emails or form contents are sent to Google or Meta.
+Check it is working with Google Tag Assistant (tagassistant.google.com) and
+Meta's **Test events** tab.
+
+### Before spending on ads
+
+- Upgrade the Render web service off the free plan. A sleeping instance takes
+  30–60 seconds to answer the first click, and that click is paid for.
+- Send each ad group to the most specific page: an iPhone ad to
+  `/repair/apple`, a battery ad to `/services/battery-replacement`.
+
+---
+
 ## Known limitation on multi-instance scaling
 
 Rate limiting is an in-process `Map` (`src/lib/rate-limit.ts`). It is correct for

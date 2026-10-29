@@ -18,7 +18,7 @@ export const FAQS: FaqEntry[] = [
     category: "Repairs",
     question: "How long does a repair take?",
     answer:
-      "Most common repairs — screens, batteries, charging ports, speakers — take 45 to 90 minutes and are done while you wait or while our technician is at your address. Back glass replacement takes around 90 minutes because of the adhesive cure. Water damage is the exception: it needs a full teardown and ultrasonic clean, so allow up to 4 hours plus drying time. Every repair page and every quote shows the specific estimate for that job.",
+      "Most common repairs — screens, batteries, charging ports, speakers — take 45 to 90 minutes and are done while you wait or while our technician is at your address. Back glass replacement takes around 90 minutes because of the adhesive cure. Water damage is the exception: it needs a full teardown and ultrasonic clean, so allow up to 4 hours plus drying time. Message us on WhatsApp with your model and we will confirm the exact time for your job.",
   },
   {
     id: "warranty",
@@ -39,7 +39,7 @@ export const FAQS: FaqEntry[] = [
     category: "Booking",
     question: "Do you offer pickup and delivery?",
     answer:
-      "Yes. Pickup and delivery collects your device, repairs it at our lab and returns it to the same address, for a flat convenience fee. At-home repair sends a technician with the parts and tools to fix it in front of you, which is the better choice if you do not want to be without your phone at all. Both are chosen at step 3 of booking, and the fee is shown in your quote before you confirm.",
+      "Yes. Pickup and delivery collects your device, repairs it at our lab and returns it to the same address, for a flat convenience fee. At-home repair sends a technician with the parts and tools to fix it in front of you, which is the better choice if you do not want to be without your phone at all. Both are chosen when you book, and any pickup fee is confirmed in your quote on WhatsApp before you agree.",
   },
   {
     id: "cannot-repair",
@@ -67,7 +67,7 @@ export const FAQS: FaqEntry[] = [
     category: "Payment",
     question: "What payment methods are supported?",
     answer:
-      "You pay after the repair is complete and you are happy with it — never up front. We accept UPI, credit and debit cards, and cash at the point of handover. Online prepayment can be enabled per deployment through the configured payment provider; where it is not configured, the checkout simply does not offer it rather than pretending to take a payment.",
+      "You pay after the repair is complete and you are happy with it — never up front. We accept UPI, credit and debit cards, and cash at the point of handover. We do not ask for any payment before the work is done.",
   },
   {
     id: "data",
@@ -81,7 +81,7 @@ export const FAQS: FaqEntry[] = [
     category: "Repairs",
     question: "What is the difference between original, premium and standard parts?",
     answer:
-      "Original (OEM) parts are manufacturer components with identical specification to what left the factory — the highest cost and the longest warranty. Premium parts are high-grade equivalents, colour and brightness matched, and are what most customers choose. Standard parts restore full function at the lowest price with a shorter warranty. Every price on the site is shown per grade, so you can compare the actual difference rather than guess.",
+      "Original (OEM) parts are manufacturer components with identical specification to what left the factory — the highest cost and the longest warranty. Premium parts are high-grade equivalents, colour and brightness matched, and are what most customers choose. Standard parts restore full function at the lowest cost with a shorter warranty. Ask for a quote on WhatsApp and we will give you the price for each grade side by side, so you can compare the real difference rather than guess.",
   },
   {
     id: "cancel",
@@ -95,7 +95,7 @@ export const FAQS: FaqEntry[] = [
     category: "Booking",
     question: "Which areas do you cover for doorstep repairs?",
     answer:
-      "Doorstep coverage depends on the service areas configured for your location. When you enter your PIN code during booking we confirm whether at-home and pickup options are available there; if they are not, store visit is still offered. Contact us if your area is not covered yet — we use those requests to decide where to expand.",
+      "Doorstep coverage depends on your location. When you enter your PIN code during booking we confirm whether at-home and pickup options are available there; if they are not, a store visit is still offered. Message us on WhatsApp to check your area — we use those requests to decide where to expand.",
   },
 ];
 
@@ -104,7 +104,6 @@ export const FAQ_CATEGORIES = ["Repairs", "Booking", "Warranty", "Payment", "Tra
 /** Google-compatible FAQPage structured data built from the same source. */
 export function faqStructuredData(entries: FaqEntry[] = FAQS) {
   return {
-    "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: entries.map((entry) => ({
       "@type": "Question",

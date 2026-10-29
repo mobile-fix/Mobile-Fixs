@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
+import { JsonLd } from "@/components/site/JsonLd";
 import { siteConfig } from "@/lib/config";
 
 /**
@@ -17,7 +18,6 @@ export function Breadcrumbs({
   className?: string;
 }) {
   const structuredData = {
-    "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
       "@type": "ListItem",
@@ -29,10 +29,7 @@ export function Breadcrumbs({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={structuredData} />
       <nav aria-label="Breadcrumb" className={className}>
         <ol className="flex flex-wrap items-center gap-1 text-sm">
           {items.map((item, index) => {

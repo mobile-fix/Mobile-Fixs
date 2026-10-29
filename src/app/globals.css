@@ -339,6 +339,10 @@
 
   /* Layout-stable hover: shadow and border change, geometry does not. */
   .card-interactive {
+    /* Interactive cards make their whole area clickable with a stretched link
+       (`after:absolute after:inset-0`). Without a positioned card, that overlay
+       grows to the page and swallows clicks meant for links elsewhere. */
+    position: relative;
     transition:
       box-shadow 200ms var(--ease-out-soft),
       border-color 200ms var(--ease-out-soft),

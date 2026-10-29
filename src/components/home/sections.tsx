@@ -15,30 +15,54 @@ import type { PublicReview } from "@/server/services/content.service";
 
 // ── Stats band ──────────────────────────────────────────────────────────────
 
+type StatItem = { value: string; label: string; icon: IconName };
+
+// Static lookup so Tailwind can see every class name.
+const STAT_COLUMNS: Record<number, string> = {
+  2: "lg:grid-cols-2",
+  3: "lg:grid-cols-3",
+  4: "lg:grid-cols-4",
+};
+
 export function StatsBand({ stats }: { stats: PublicStats }) {
-  const items = [
-    {
+  // A tile is only shown when it has something real to say: a fresh database
+  // has no completed repairs or reviews, and "0 repairs" is worse than nothing.
+  const items: StatItem[] = [];
+
+  if (stats.repairsCompleted > 0) {
+    items.push({
       value: stats.repairsCompleted.toLocaleString("en-IN"),
       label: "Repairs completed",
-      icon: "wrench" as IconName,
-    },
-    {
-      value: stats.averageRating ? `${stats.averageRating}/5` : "—",
-      label: `Average rating${stats.reviewCount ? ` · ${stats.reviewCount} reviews` : ""}`,
-      icon: "star" as IconName,
-    },
-    {
+      icon: "wrench",
+    });
+  }
+  if (stats.averageRating && stats.reviewCount > 0) {
+    items.push({
+      value: `${stats.averageRating}/5`,
+      label: `Average rating · ${stats.reviewCount} reviews`,
+      icon: "star",
+    });
+  }
+  if (stats.modelsSupported > 0) {
+    items.push({
       value: `${stats.modelsSupported}+`,
-      label: `Devices supported across ${stats.brandsSupported} brands`,
-      icon: "device" as IconName,
-    },
-    { value: "6–12 mo", label: "Warranty on every repair", icon: "shield-check" as IconName },
-  ];
+      label:
+        stats.brandsSupported > 0
+          ? `Devices supported across ${stats.brandsSupported} brands`
+          : "Devices supported",
+      icon: "device",
+    });
+  }
+  // Matches the grades in PART_GRADE_META: 12 / 6 / 3 months.
+  items.push({ value: "3–12 mo", label: "Warranty on every repair", icon: "shield-check" });
+
+  // A lone warranty tile is not a stats band — hide the whole thing.
+  if (items.length < 2) return null;
 
   return (
     <section className="border-y border-line bg-surface py-8">
       <div className="container-page">
-        <dl className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+        <dl className={`grid grid-cols-2 gap-6 ${STAT_COLUMNS[Math.min(items.length, 4)]}`}>
           {items.map((item) => (
             <div key={item.label} className="flex items-center gap-3.5">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300">
@@ -126,7 +150,7 @@ const STEPS = [
     number: "01",
     title: "Choose your device",
     description:
-      "Search 57+ models across 11 brands, or pick your brand and browse. Cannot find it? Choose “Other” and we identify it during diagnosis.",
+      "Search by model, or pick your brand and browse. Cannot find it? Choose “Other” and we identify it during diagnosis.",
     icon: "device" as IconName,
   },
   {
@@ -255,7 +279,7 @@ const DIFFERENTIATORS = [
   {
     icon: "shield-check" as IconName,
     title: "Warranty that is easy to claim",
-    body: "Six to twelve months depending on the part grade you choose. Claims are handled at the same speed as the original repair — bring it in and we sort it.",
+    body: "Twelve months on original parts, six on premium and three on standard — you choose the grade. Claims are handled at the same speed as the original repair — bring it in and we sort it.",
   },
   {
     icon: "diagnostic" as IconName,

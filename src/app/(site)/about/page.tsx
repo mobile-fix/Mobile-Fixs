@@ -6,13 +6,14 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Alert, Card, SectionHeading } from "@/components/ui/primitives";
 import { USES_DEMO_DATA, siteConfig, whatsappChatHref } from "@/lib/config";
 import { getPublicStats } from "@/server/services/analytics.service";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us — Repair Done Transparently",
+export const metadata: Metadata = pageMetadata({
+  title: "About Us — Independent Phone Repair, Done Transparently",
   description:
     "Why MyMobiFix exists: certified technicians, graded parts you choose yourself, a repair you can track end to end, and a real person on WhatsApp.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 export const revalidate = 600;
 
@@ -52,6 +53,26 @@ const VALUES: Array<{ icon: IconName; title: string; body: string }> = [
 export default async function AboutPage() {
   const stats = await getPublicStats();
 
+  const statItems: Array<{ value: string; label: string }> = [];
+  if (stats.repairsCompleted > 0) {
+    statItems.push({
+      value: stats.repairsCompleted.toLocaleString("en-IN"),
+      label: "Repairs completed",
+    });
+  }
+  if (stats.averageRating && stats.reviewCount > 0) {
+    statItems.push({
+      value: `${stats.averageRating}/5`,
+      label: `Average rating from ${stats.reviewCount} reviews`,
+    });
+  }
+  if (stats.modelsSupported > 0) {
+    statItems.push({ value: `${stats.modelsSupported}`, label: "Device models supported" });
+  }
+  if (stats.brandsSupported > 0) {
+    statItems.push({ value: `${stats.brandsSupported}`, label: "Brands supported" });
+  }
+
   return (
     <div className="pb-20 pt-8 lg:pt-10">
       <div className="container-page">
@@ -70,24 +91,19 @@ export default async function AboutPage() {
         </header>
 
         {/* Numbers */}
-        <dl className="mt-12 grid grid-cols-2 gap-5 lg:grid-cols-4">
-          {[
-            { value: stats.repairsCompleted.toLocaleString("en-IN"), label: "Repairs completed" },
-            {
-              value: stats.averageRating ? `${stats.averageRating}/5` : "—",
-              label: `Average rating from ${stats.reviewCount} reviews`,
-            },
-            { value: `${stats.modelsSupported}`, label: "Device models supported" },
-            { value: `${stats.brandsSupported}`, label: "Brands supported" },
-          ].map((item) => (
-            <Card key={item.label} className="p-5">
-              <dd className="tabular font-display text-3xl font-bold text-ink">{item.value}</dd>
-              <dt className="mt-1 text-sm leading-snug text-ink-muted">{item.label}</dt>
-            </Card>
-          ))}
-        </dl>
+        {/* Tiles with nothing real to report (a fresh database) are left out. */}
+        {statItems.length > 0 ? (
+          <dl className="mt-12 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            {statItems.map((item) => (
+              <Card key={item.label} className="p-5">
+                <dd className="tabular font-display text-3xl font-bold text-ink">{item.value}</dd>
+                <dt className="mt-1 text-sm leading-snug text-ink-muted">{item.label}</dt>
+              </Card>
+            ))}
+          </dl>
+        ) : null}
 
-        {USES_DEMO_DATA ? (
+        {USES_DEMO_DATA && statItems.length > 0 ? (
           <Alert tone="warning" title="Demonstration data" className="mt-6">
             The figures above are drawn from the seeded sample database that ships with this
             deployment, not from a trading business. On a live installation they update

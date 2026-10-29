@@ -50,10 +50,10 @@ services:
 
       # Next.js inlines NEXT_PUBLIC_* at build time, so these must be present
       # during the build, not just at runtime.
-      # Replace with the custom domain once DNS is verified — it backs canonical
-      # URLs, the sitemap and Open Graph tags.
+      # The custom domain — it backs canonical URLs, the sitemap and Open Graph
+      # tags, and mymobifix.onrender.com 301-redirects to it.
       - key: NEXT_PUBLIC_SITE_URL
-        value: https://mymobifix.onrender.com
+        value: https://www.mymobifix.com
 
       - key: NEXT_PUBLIC_BRAND_NAME
         value: MyMobiFix
@@ -68,6 +68,42 @@ services:
       - key: NEXT_PUBLIC_BUSINESS_HOURS
         sync: false
       - key: NEXT_PUBLIC_BUSINESS_ADDRESS
+        sync: false
+
+      # Local SEO and ad tracking — all optional; see .env.example for formats.
+      # Like every NEXT_PUBLIC_ value they are baked in at build time, so
+      # redeploy after changing one.
+      - key: NEXT_PUBLIC_BUSINESS_CITY
+        sync: false
+      - key: NEXT_PUBLIC_BUSINESS_REGION
+        sync: false
+      - key: NEXT_PUBLIC_BUSINESS_POSTAL_CODE
+        sync: false
+      - key: NEXT_PUBLIC_BUSINESS_LATITUDE
+        sync: false
+      - key: NEXT_PUBLIC_BUSINESS_LONGITUDE
+        sync: false
+      - key: NEXT_PUBLIC_SERVICE_AREAS
+        sync: false
+      - key: NEXT_PUBLIC_BUSINESS_PROFILES
+        sync: false
+      - key: NEXT_PUBLIC_GA4_ID
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_ADS_ID
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_ADS_BOOKING_LABEL
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_ADS_WHATSAPP_LABEL
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_ADS_CALL_LABEL
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_ADS_CONTACT_LABEL
+        sync: false
+      - key: NEXT_PUBLIC_META_PIXEL_ID
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+        sync: false
+      - key: NEXT_PUBLIC_META_DOMAIN_VERIFICATION
         sync: false
 
       # Owner account created by `npm run db:seed`. Set a strong password in the

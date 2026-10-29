@@ -5,13 +5,14 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { TrackForm } from "@/components/track/TrackForm";
 import { LoadingBlock } from "@/components/ui/primitives";
 import { STATUS_FLOW, STATUS_META } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Track Your Repair",
+export const metadata: Metadata = pageMetadata({
+  title: "Track Your Phone Repair",
   description:
     "Check your repair status live. Enter your repair ID and phone number to see every stage from booking received through diagnosis to ready for collection.",
-  alternates: { canonical: "/track" },
-};
+  path: "/track",
+});
 
 export default function TrackPage() {
   return (
