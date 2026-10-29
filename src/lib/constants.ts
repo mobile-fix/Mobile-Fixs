@@ -127,12 +127,20 @@ export const ACTIVE_STATUSES: RepairStatus[] = [
 export const SERVICE_TYPES = ["STORE_VISIT", "PICKUP_DELIVERY", "AT_HOME"] as const;
 export type ServiceType = (typeof SERVICE_TYPES)[number];
 
+/**
+ * What customers can choose today. There is no walk-in shop, so STORE_VISIT is
+ * kept only so old bookings and admin views keep working; it is never offered
+ * on the booking form and is rejected for new customer bookings and quotes.
+ */
+export const CUSTOMER_SERVICE_TYPES = ["PICKUP_DELIVERY", "AT_HOME"] as const;
+export type CustomerServiceType = (typeof CUSTOMER_SERVICE_TYPES)[number];
+
 export const SERVICE_TYPE_META: Record<
   ServiceType,
   {
     label: string;
     description: string;
-    /** Default convenience fee in whole rupees; overridable via the settings table. */
+    /** Default visit fee in whole rupees; overridable via the settings table. */
     defaultFee: number;
     iconKey: string;
     requiresAddress: boolean;
@@ -141,27 +149,29 @@ export const SERVICE_TYPE_META: Record<
 > = {
   STORE_VISIT: {
     label: "Store Visit",
-    description: "Walk into your nearest MyMobiFix service centre. Most repairs done while you wait.",
+    description: "No longer offered. Kept so earlier bookings still display correctly.",
     defaultFee: 0,
     iconKey: "store",
     requiresAddress: false,
-    highlight: "No extra fee",
+    highlight: "No longer offered",
   },
   PICKUP_DELIVERY: {
     label: "Pickup & Delivery",
-    description: "We collect your device, repair it at our lab and deliver it back to your door.",
-    defaultFee: 199,
+    description:
+      "We collect your device, repair it and deliver it back to your door. No pickup or delivery fee.",
+    defaultFee: 0,
     iconKey: "truck",
     requiresAddress: true,
-    highlight: "Zero travel for you",
+    highlight: "Free pickup & drop",
   },
   AT_HOME: {
     label: "At-Home Repair",
-    description: "A certified technician repairs your device in front of you, at your address.",
-    defaultFee: 299,
+    description:
+      "A technician repairs your device at your home or office. No visit fee.",
+    defaultFee: 0,
     iconKey: "home",
     requiresAddress: true,
-    highlight: "Watch the repair happen",
+    highlight: "Free doorstep visit",
   },
 };
 

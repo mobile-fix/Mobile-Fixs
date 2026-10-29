@@ -67,9 +67,9 @@ export function LandingHero() {
                 of the frame rather than from dimming it. */}
             <p className="font-sans mt-5 max-w-[28rem] text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">
               We repair the devices that run your life: screen, battery and charging repairs for
-              iPhone, Samsung and other Android phones, by certified technicians — at your doorstep,
-              picked up and delivered, or in our store. Every repair carries a warranty. Message us
-              on WhatsApp for a quote.
+              iPhone, Samsung and other Android phones — repaired at your home or office, or picked up
+              and dropped back, both free. Every repair carries a warranty. Message us on WhatsApp
+              for a quote.
             </p>
 
             <MotionLink

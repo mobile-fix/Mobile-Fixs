@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   CONTACT_METHODS,
+  CUSTOMER_SERVICE_TYPES,
   MESSAGE_STATUSES,
   PART_GRADES,
   PAYMENT_METHODS,
@@ -120,6 +121,18 @@ const slotIds = TIME_SLOTS.map((slot) => slot.id) as [string, ...string[]];
 
 // ── Public booking ──────────────────────────────────────────────────────────
 
+/**
+ * Service types a customer may choose. STORE_VISIT still exists in the database
+ * for old bookings, but there is no shop to visit, so new customer bookings and
+ * quotes must use one of the free doorstep options. Admin schemas below keep
+ * the full SERVICE_TYPES list.
+ */
+const customerServiceTypeSchema = z.enum(CUSTOMER_SERVICE_TYPES, {
+  errorMap: () => ({
+    message: "Choose free pickup & drop or a free at-home repair.",
+  }),
+});
+
 export const bookingItemInputSchema = z.object({
   serviceId: cuidSchema,
   partGrade: z.enum(PART_GRADES),
@@ -136,7 +149,7 @@ export const createBookingSchema = z
         (items) => new Set(items.map((item) => item.serviceId)).size === items.length,
         "That repair is already in your booking.",
       ),
-    serviceType: z.enum(SERVICE_TYPES),
+    serviceType: customerServiceTypeSchema,
     scheduledDate: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, "Choose an appointment date."),
@@ -154,10 +167,8 @@ export const createBookingSchema = z
     problemDescription: sanitisedString(1000).optional(),
   })
   .superRefine((value, ctx) => {
-    // Doorstep options cannot be fulfilled without somewhere to go.
-    const needsAddress = value.serviceType !== "STORE_VISIT";
-    if (!needsAddress) return;
-
+    // Both customer options are doorstep options, so they cannot be fulfilled
+    // without somewhere to go.
     if (!value.customer.addressLine || value.customer.addressLine.length < 8) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -188,7 +199,7 @@ export type CreateBookingInput = z.infer<typeof createBookingSchema>;
 export const quoteSchema = z.object({
   modelId: cuidSchema,
   items: z.array(bookingItemInputSchema).min(1).max(4),
-  serviceType: z.enum(SERVICE_TYPES).default("STORE_VISIT"),
+  serviceType: customerServiceTypeSchema.default("PICKUP_DELIVERY"),
 });
 
 export type QuoteInput = z.infer<typeof quoteSchema>;

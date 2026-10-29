@@ -142,7 +142,7 @@ export default function ContactPage() {
                     </span>
                     <span>
                       <span className="block text-xs font-bold uppercase tracking-wide text-ink-subtle">
-                        Service centre
+                        Office address
                       </span>
                       <span className="block font-semibold text-ink">{displayAddress}</span>
                     </span>
@@ -162,8 +162,8 @@ export default function ContactPage() {
                     Need it fixed today?
                   </h2>
                   <p className="mt-1 text-sm leading-relaxed text-ink-muted">
-                    Same-day slots are usually available with 90 minutes notice. Book online for the
-                    fastest confirmation, or call and we will find you the earliest window.
+                    Most repairs are done the same day. Book online for the fastest confirmation, or
+                    call and we will find you the earliest window.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2.5">
                     <ButtonLink href="/book" size="sm" iconRight="arrow-right">
@@ -186,15 +186,15 @@ export default function ContactPage() {
               <Card className="overflow-hidden">
                 <div className="border-b border-line px-5 py-3.5">
                   <h2 className="font-display text-sm font-bold uppercase tracking-wide text-ink">
-                    Find us
+                    Our office
                   </h2>
                 </div>
                 <iframe
                   src={contactConfig.mapsEmbedUrl}
                   title={
                     displayAddress
-                      ? `Map showing the ${displayAddress} service centre`
-                      : "Map showing the service centre"
+                      ? `Map showing our office at ${displayAddress}`
+                      : "Map showing our office"
                   }
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -208,14 +208,16 @@ export default function ContactPage() {
                     <Icon name="map-pin" size={18} />
                   </span>
                   <div>
-                    <h2 className="font-display text-base font-bold text-ink">Need directions?</h2>
+                    <h2 className="font-display text-base font-bold text-ink">
+                      Where do you cover?
+                    </h2>
                     <p className="mt-1 text-sm leading-relaxed text-ink-muted">
-                      Message us on WhatsApp for directions to us, or to arrange a pickup or
-                      at-home visit instead.
+                      We cover all of Delhi, at your home or office or by free pickup and drop.
+                      Message us on WhatsApp to book a repair or check your address.
                     </p>
                     <div className="mt-4">
                       <ButtonLink
-                        href={whatsappChatHref("Hi MyMobiFix, can you share directions to your store?")}
+                        href={whatsappChatHref("Hi MyMobiFix, can you repair my phone at my address?")}
                         external
                         size="sm"
                         iconLeft="whatsapp"

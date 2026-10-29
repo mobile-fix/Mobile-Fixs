@@ -4,13 +4,13 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Icon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card, SectionHeading } from "@/components/ui/primitives";
-import { SERVICE_TYPES, SERVICE_TYPE_META, STATUS_FLOW, STATUS_META } from "@/lib/constants";
+import { CUSTOMER_SERVICE_TYPES, SERVICE_TYPE_META, STATUS_FLOW, STATUS_META } from "@/lib/constants";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "How Doorstep Phone Repair Works — Book, Repair, Track",
   description:
-    "How a MyMobiFix repair works: choose your phone and fault, book a store visit, pickup or at-home slot, then track every stage until your phone is back.",
+    "How a MyMobiFix repair works: choose your phone and fault, book a free pickup and drop or at-home slot, then track every stage until your phone is back.",
   path: "/how-it-works",
 });
 
@@ -47,10 +47,10 @@ const STEPS: Array<{
     number: "03",
     title: "Book your appointment",
     icon: "calendar",
-    body: "Choose a store visit, doorstep pickup or an at-home repair, then pick a two-hour window up to three weeks ahead. Slots show live availability, so you never book a time that is already full.",
+    body: "Choose free pickup and drop or a free at-home repair, then pick a two-hour window up to three weeks ahead. Slots show live availability, so you never book a time that is already full.",
     detail: [
       "Live slot capacity — no double bookings",
-      "Same-day slots available with 90 minutes notice",
+      "Same-day for most repairs",
       "Free to reschedule or cancel at any point",
     ],
   },
@@ -58,7 +58,7 @@ const STEPS: Array<{
     number: "04",
     title: "Get your phone fixed",
     icon: "check-circle",
-    body: "A certified technician does the work and runs a 30-point quality check. Track each stage online with your repair ID, then pay only once the device is back in your hands and working.",
+    body: "A technician does the work and runs a 30-point quality check. Track each stage online with your repair ID, then pay only once the device is back in your hands and working.",
     detail: [
       "Free diagnosis and a firm quote before anything is opened",
       "30-point functional check before handover",
@@ -129,12 +129,12 @@ export default function HowItWorksPage() {
         <section className="mt-20" aria-labelledby="options-heading">
           <SectionHeading
             eyebrow="Your options"
-            title={<span id="options-heading">Three ways to have it repaired</span>}
-            description="Same technicians, same parts, same warranty. Only the convenience changes."
+            title={<span id="options-heading">Two free ways to have it repaired</span>}
+            description="Same technicians, same warranty, no visit fee. Only the convenience changes."
           />
 
-          <ul className="mt-10 grid gap-5 lg:grid-cols-3">
-            {SERVICE_TYPES.map((type) => {
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2">
+            {CUSTOMER_SERVICE_TYPES.map((type) => {
               const meta = SERVICE_TYPE_META[type];
               return (
                 <Card as="li" key={type} className="flex flex-col p-6">

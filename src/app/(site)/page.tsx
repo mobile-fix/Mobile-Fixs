@@ -18,6 +18,7 @@ import { SectionHeading } from "@/components/ui/primitives";
 import { contactConfig, telHref, whatsappChatHref, whatsappDisplay } from "@/lib/config";
 import { FAQS, faqStructuredData } from "@/lib/faq";
 import { JsonLd } from "@/components/site/JsonLd";
+import { ServicePromises } from "@/components/site/ServicePromises";
 import { listServices } from "@/server/services/catalog.service";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { listPublishedReviews } from "@/server/services/content.service";
@@ -26,7 +27,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Doorstep Mobile Phone Repair — iPhone, Samsung & Android",
   description:
-    "Doorstep repair for iPhone, Samsung, OnePlus and all Android phones — screen, battery, charging port and camera. Warranty on every repair. Quote on WhatsApp.",
+    "Doorstep repair for iPhone, Samsung, OnePlus and all Android phones across Delhi. Free pickup and drop, same-day for most repairs, warranty on every repair.",
   path: "/",
 });
 
@@ -53,6 +54,10 @@ export default async function HomePage() {
       <JsonLd data={faqStructuredData(homeFaqs)} />
 
       <LandingHero />
+
+      <div className="container-page mt-8">
+        <ServicePromises />
+      </div>
 
       <StatsBand stats={stats} />
 

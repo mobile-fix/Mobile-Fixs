@@ -6,6 +6,7 @@ import { cache } from "react";
 import { Icon, serviceIcon } from "@/components/icons";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { JsonLd } from "@/components/site/JsonLd";
+import { ServicePromises } from "@/components/site/ServicePromises";
 import { ButtonLink } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Disclosure";
 import { Card } from "@/components/ui/primitives";
@@ -54,7 +55,7 @@ export async function generateMetadata({
   return pageMetadata({
     title: brandTitle(content),
     description: truncate(
-      `${content.displayName} repair at your doorstep with pickup and drop, or in store. Screen, battery, charging port and water damage fixes. Get a quote on WhatsApp.`,
+      `${content.displayName} repair at your home or office, or by free pickup and drop, across Delhi. Screen, battery, charging port and water damage. Quote on WhatsApp.`,
     ),
     path: `/repair/${brand.slug}`,
   });
@@ -132,7 +133,7 @@ export default async function BrandRepairPage({
             </span>
           ) : null}
           <h1 className="mt-5 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
-            {content.displayName} repair, at your door or in store
+            {content.displayName} repair at your door or by free pickup &amp; drop
           </h1>
 
           <div className="measure mt-4 space-y-3 text-lg leading-relaxed text-ink-muted">
@@ -150,10 +151,12 @@ export default async function BrandRepairPage({
             </ButtonLink>
           </div>
           <p className="mt-3 text-sm text-ink-subtle">
-            Visit our store, or have us collect and return your phone. Send your model and the
-            problem and we reply with a quote.
+            We repair it at your home or office, or collect and return your phone, both free. Send
+            your model and the problem and we reply with a quote.
           </p>
         </header>
+
+        <ServicePromises className="mt-8" />
 
         {/* Models */}
         {models.length > 0 ? (

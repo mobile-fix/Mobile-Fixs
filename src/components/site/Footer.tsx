@@ -61,8 +61,8 @@ export function Footer() {
           <div className="lg:col-span-4">
             <Logo />
             <p className="measure-tight mt-4 text-sm leading-relaxed text-ink-muted">
-              Warranty-backed mobile phone repair. Choose a store visit, doorstep
-              pickup or an at-home repair you can watch happen.
+              Warranty-backed mobile phone repair across Delhi. Choose free pickup and drop or a
+              free at-home repair you can watch happen.
             </p>
 
             <ul className="mt-6 space-y-3 text-sm">

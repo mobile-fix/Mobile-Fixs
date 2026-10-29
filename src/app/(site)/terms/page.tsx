@@ -28,7 +28,7 @@ export default function TermsPage() {
             "Diagnostics are free, whether or not you proceed with a repair.",
             "If diagnosis shows the fault differs from what was booked, we tell you the revised quote and wait for your approval before any work begins.",
             "You are never charged for work you did not approve.",
-            "Quotes include the part, labour and applicable taxes. Any doorstep or pickup convenience fee is included in the quote you are given.",
+            "Quotes include the part, labour and applicable taxes. There is no fee for the doorstep visit or for pickup and drop; the quote covers the repair only.",
           ]}
         />
       </LegalSection>
@@ -71,7 +71,7 @@ export default function TermsPage() {
         <LegalList
           items={[
             "Rescheduling and cancellation are free at any point before work begins.",
-            "If nobody is available at a doorstep appointment, we will attempt to contact you and rebook. Repeated missed appointments may require a store visit instead.",
+            "If nobody is available at a doorstep appointment, we will attempt to contact you and rebook. We may ask you to choose a firmer time if appointments are repeatedly missed.",
             "If we cannot attend as scheduled, we will tell you as early as possible and offer the next available slot.",
           ]}
         />
@@ -95,7 +95,7 @@ export default function TermsPage() {
         <p>
           We offer original, premium and standard parts and describe the difference plainly. You
           choose the grade; we fit what you chose. Removed components remain with us for
-          certified recycling unless you ask for them back at the time of booking.
+          recycling unless you ask for them back at the time of booking.
         </p>
         <p>
           Fitting a non-manufacturer part may affect any remaining manufacturer warranty on your

@@ -285,7 +285,8 @@ async function seedCatalogue(services: Awaited<ReturnType<typeof seedServices>>)
 
 async function seedSettings() {
   const entries: Array<[string, unknown]> = [
-    ["service_fees", { STORE_VISIT: 0, PICKUP_DELIVERY: 199, AT_HOME: 299 }],
+    // Pickup & drop and at-home visits are free; store visits no longer exist.
+    ["service_fees", { STORE_VISIT: 0, PICKUP_DELIVERY: 0, AT_HOME: 0 }],
     ["booking_window_days", 21],
     ["max_bookings_per_slot", 8],
   ];
@@ -395,10 +396,9 @@ async function seedDemoBookings(
 
     const serviceType = weightedPick([
       ["AT_HOME", 5],
-      ["STORE_VISIT", 4],
       ["PICKUP_DELIVERY", 3],
     ]);
-    const serviceFee = serviceType === "STORE_VISIT" ? 0 : serviceType === "AT_HOME" ? 299 : 199;
+    const serviceFee = 0;
     const subtotal = chosen.reduce((sum, price) => sum + price.price, 0);
     const discount = random() < 0.15 ? Math.round((subtotal * 0.1) / 10) * 10 : 0;
     const total = Math.max(0, subtotal + serviceFee - discount);
@@ -412,7 +412,7 @@ async function seedDemoBookings(
     scheduledFor.setDate(scheduledFor.getDate() + randomInt(0, 2));
     scheduledFor.setHours(slot.startHour, 0, 0, 0);
 
-    const requiresAddress = serviceType !== "STORE_VISIT";
+    const requiresAddress = true;
     const completed = status === "COMPLETED";
     const cancelled = status === "CANCELLED";
     const completedAt = completed ? addDays(createdAt, randomInt(0, 2)) : null;

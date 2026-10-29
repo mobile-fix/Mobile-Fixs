@@ -18,7 +18,7 @@ export const siteConfig = {
   url: fallback(process.env.NEXT_PUBLIC_SITE_URL, "http://localhost:3000"),
   tagline: "Your Phone Broken? We Will Fix It.",
   description:
-    "Fast mobile phone repair by certified technicians, with quality parts and a warranty on every repair — in store or at your door. Chat with us on WhatsApp from anywhere.",
+    "Mobile phone repair across Delhi with free pickup and drop or a free at-home visit, same-day for most repairs and a warranty on every repair. Quote on WhatsApp.",
   currency: fallback(process.env.NEXT_PUBLIC_CURRENCY, "INR"),
   locale: "en-IN",
 } as const;

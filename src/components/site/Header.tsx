@@ -85,7 +85,7 @@ export function Header() {
         <div className="container-page flex h-9 items-center justify-between text-xs">
           <p className="flex items-center gap-2 font-medium text-white/85">
             <Icon name="shield-check" size={14} className="text-accent-400" />
-            Certified technicians · Quality parts · Warranty on every repair
+            Free pickup &amp; drop · Same-day for most repairs · Warranty on every repair
           </p>
           <div className="flex items-center gap-5">
             <a

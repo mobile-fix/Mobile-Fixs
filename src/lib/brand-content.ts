@@ -109,7 +109,7 @@ const BRAND_CONTENT: Record<string, BrandContent> = {
       {
         question: "My Samsung battery looks swollen. Is that dangerous?",
         answer:
-          "A swollen battery can push the screen or back panel out of shape, and you should stop charging the phone and avoid pressing on it. Bring it to us or message us on WhatsApp so the battery can be replaced.",
+          "A swollen battery can push the screen or back panel out of shape, and you should stop charging the phone and avoid pressing on it. Message us on WhatsApp so the battery can be replaced.",
       },
     ],
   },
@@ -209,7 +209,7 @@ const BRAND_CONTENT: Record<string, BrandContent> = {
       {
         question: "Is a water-repellent Motorola protected from water damage?",
         answer:
-          "A water-repellent coating helps against splashes. It is not the same as being waterproof, and a phone that has been dropped in water can still be damaged. If yours got wet, switch it off and do not charge it. Bring it in as soon as you can.",
+          "A water-repellent coating helps against splashes. It is not the same as being waterproof, and a phone that has been dropped in water can still be damaged. If yours got wet, switch it off and do not charge it. Message us on WhatsApp as soon as you can.",
       },
       {
         question: "My Motorola battery gets hot and drains quickly. What should I do?",
@@ -331,7 +331,7 @@ function genericBrandContent(brandName: string): BrandContent {
     displayName: brandName,
     trademarkName: brandName,
     intro: [
-      `${brandName} phones come to us with the same handful of problems: cracked screens, batteries that no longer last the day, charging ports that stop working and water damage. We repair all of these, in store or at your door.`,
+      `${brandName} phones come to us with the same handful of problems: cracked screens, batteries that no longer last the day, charging ports that stop working and water damage. We repair all of these, at your home or office or by free pickup and drop.`,
       `Choose your ${brandName} model below and send us the problem on WhatsApp, and we will tell you what the repair involves.`,
     ],
     faqs: [

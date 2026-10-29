@@ -3,10 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { ServicePromises } from "@/components/site/ServicePromises";
 import { Icon, serviceIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Badge, Card } from "@/components/ui/primitives";
-import { PART_GRADES, PART_GRADE_META, SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
+import { PART_GRADES, PART_GRADE_META, CUSTOMER_SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
 import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { siteConfig, whatsappChatHref } from "@/lib/config";
 import { pageMetadata, truncate } from "@/lib/seo";
@@ -35,7 +36,7 @@ export async function generateMetadata({
     return pageMetadata({
       title: `${service.name} for iPhone, Samsung & Android Phones`,
       description: truncate(
-        `${service.shortDescription} Doorstep, pickup or in-store, with warranty. Message us on WhatsApp for a quote.`,
+        `${service.shortDescription} Free at-home visit or free pickup and drop, with warranty. Message us on WhatsApp for a quote.`,
       ),
       path: `/services/${service.slug}`,
     });
@@ -103,6 +104,8 @@ export default async function ServiceDetailPage({
               <p className="measure mt-3 text-lg text-ink-muted">{service.shortDescription}</p>
             </header>
 
+            <ServicePromises narrow className="mt-6" />
+
             <div className="measure mt-8 text-base leading-relaxed text-ink-muted">
               <p>{service.description}</p>
             </div>
@@ -167,8 +170,8 @@ export default async function ServiceDetailPage({
               <h2 id="options-heading" className="font-display text-xl font-bold text-ink">
                 How you can have it done
               </h2>
-              <ul className="mt-5 grid gap-4 sm:grid-cols-3">
-                {SERVICE_TYPES.map((type) => {
+              <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+                {CUSTOMER_SERVICE_TYPES.map((type) => {
                   const meta = SERVICE_TYPE_META[type];
                   return (
                     <li key={type} className="rounded-xl border border-line bg-surface p-4">

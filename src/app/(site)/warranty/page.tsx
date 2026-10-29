@@ -102,7 +102,7 @@ export default function WarrantyPage() {
         <ol className="ml-5 list-decimal space-y-2">
           <li>Contact us with your repair ID and a description of the fault.</li>
           <li>
-            We book you into the next available slot, in-store or at your address, at no charge.
+            We book you into the next available slot, at your address or by free pickup and drop, at no charge.
           </li>
           <li>
             We verify the fault is covered. If it is, we repair or replace it free. If it is not, we

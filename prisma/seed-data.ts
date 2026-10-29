@@ -49,7 +49,7 @@ export const SERVICES: ServiceSeed[] = [
     name: "Battery Replacement",
     shortDescription: "Fast drain, sudden shutdowns or a battery health warning.",
     description:
-      "We fit a new cell with a fresh battery management chip, then run a calibrated charge cycle so your phone reports accurate health and percentage from day one. Old cells are collected for certified e-waste recycling.",
+      "We fit a new cell with a fresh battery management chip, then run a calibrated charge cycle so your phone reports accurate health and percentage from day one. Old cells are collected for e-waste recycling.",
     symptoms: [
       "Battery drops several percent at a time",
       "Phone shuts down above 20%",

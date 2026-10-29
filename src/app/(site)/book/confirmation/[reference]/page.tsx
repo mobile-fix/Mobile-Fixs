@@ -43,15 +43,18 @@ export default async function ConfirmationPage({
     {
       icon: "message" as const,
       title: "We confirm your slot",
-      body: `We will contact you by ${booking.customer.preferredContact.toLowerCase()} within a couple of hours to confirm the exact arrival time.`,
+      body: `We will contact you by ${booking.customer.preferredContact.toLowerCase()} to confirm the exact time.`,
     },
     {
       icon: serviceMeta.iconKey as never,
       title: serviceMeta.label,
       body:
         booking.serviceType === "STORE_VISIT"
-          ? "Bring your device to the service centre during your slot. Bring the charger if the fault is charging-related."
-          : "Have the device charged if possible, and back up anything important before we arrive.",
+          ? // Legacy bookings only; customers can no longer choose this option.
+            "We will confirm the details of your visit with you directly."
+          : booking.serviceType === "PICKUP_DELIVERY"
+            ? "Pickup and drop are free. Back up anything important before we collect your device."
+            : "The visit is free. Have the device charged if possible, and back up anything important before our technician arrives.",
     },
     {
       icon: "diagnostic" as const,
@@ -132,7 +135,7 @@ export default async function ConfirmationPage({
                 hint={[booking.address.city, booking.address.postalCode].filter(Boolean).join(" ")}
               />
             ) : (
-              <Detail label="Location" value="Our service centre" hint={contactConfig.address} />
+              <Detail label="Location" value="To be confirmed with you" />
             )}
           </dl>
 

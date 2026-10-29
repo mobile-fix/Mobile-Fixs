@@ -245,7 +245,7 @@ Set the ones that are true; leave the rest blank rather than guessing.
 | `NEXT_PUBLIC_BUSINESS_REGION` | Haryana |
 | `NEXT_PUBLIC_BUSINESS_POSTAL_CODE` | 122009 |
 | `NEXT_PUBLIC_BUSINESS_LATITUDE` / `_LONGITUDE` | Right-click the pin in Google Maps |
-| `NEXT_PUBLIC_SERVICE_AREAS` | Gurugram, South Delhi, Noida |
+| `NEXT_PUBLIC_SERVICE_AREAS` | Delhi |
 | `NEXT_PUBLIC_BUSINESS_PROFILES` | Google Business Profile, Instagram and Facebook URLs, comma-separated |
 
 Doorstep-only, no walk-in shop? Leave the street address blank and set the

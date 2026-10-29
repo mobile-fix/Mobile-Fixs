@@ -18,7 +18,7 @@ export const FAQS: FaqEntry[] = [
     category: "Repairs",
     question: "How long does a repair take?",
     answer:
-      "Most common repairs — screens, batteries, charging ports, speakers — take 45 to 90 minutes and are done while you wait or while our technician is at your address. Back glass replacement takes around 90 minutes because of the adhesive cure. Water damage is the exception: it needs a full teardown and ultrasonic clean, so allow up to 4 hours plus drying time. Message us on WhatsApp with your model and we will confirm the exact time for your job.",
+      "Most common repairs — screens, batteries, charging ports, speakers — take 45 to 90 minutes and are done while our technician is at your address, and most repairs are completed the same day. Back glass replacement takes around 90 minutes because of the adhesive cure. Water damage is the exception: it needs a full teardown and ultrasonic clean, so allow up to 4 hours plus drying time. Message us on WhatsApp with your model and we will confirm the exact time for your job.",
   },
   {
     id: "warranty",
@@ -32,14 +32,14 @@ export const FAQS: FaqEntry[] = [
     category: "Booking",
     question: "Do I need an appointment?",
     answer:
-      "For a store visit you can walk in during opening hours, but booking a slot means the part is reserved and a technician is free when you arrive, so you are not waiting. For pickup and at-home repairs an appointment is required — we need to know where to send someone and when. Same-day slots are usually available if you book at least 90 minutes ahead.",
+      "Yes. We do not have a shop to walk into, so every repair is booked as either an at-home visit or a pickup and drop. We need to know where to send someone and when, so choose a slot when you book. Same-day slots are usually available.",
   },
   {
     id: "pickup",
     category: "Booking",
     question: "Do you offer pickup and delivery?",
     answer:
-      "Yes. Pickup and delivery collects your device, repairs it at our lab and returns it to the same address, for a flat convenience fee. At-home repair sends a technician with the parts and tools to fix it in front of you, which is the better choice if you do not want to be without your phone at all. Both are chosen when you book, and any pickup fee is confirmed in your quote on WhatsApp before you agree.",
+      "Yes, and it is free. Pickup and drop collects your device, repairs it and returns it to the same address at no extra charge. At-home repair sends a technician with the parts and tools to fix it at your home or office, which is the better choice if you do not want to be without your phone at all. Both are free, there is no visit fee, and you choose one when you book. Your quote on WhatsApp covers the repair only.",
   },
   {
     id: "cannot-repair",
@@ -53,7 +53,7 @@ export const FAQS: FaqEntry[] = [
     category: "Warranty",
     question: "Are replacement parts covered by warranty?",
     answer:
-      "Yes — the part and the labour are both covered for the full warranty period of the grade you chose. If a replaced screen develops dead pixels, a new battery degrades abnormally fast, or a fitted charging port stops working, bring it back and we replace it again at no cost. Claims are handled with the same turnaround as an original repair, not sent away for weeks.",
+      "Yes — the part and the labour are both covered for the full warranty period of the grade you chose. If a replaced screen develops dead pixels, a new battery degrades abnormally fast, or a fitted charging port stops working, message us and we replace it again at no cost. Claims are handled with the same turnaround as an original repair, not sent away for weeks.",
   },
   {
     id: "tracking",
@@ -95,7 +95,7 @@ export const FAQS: FaqEntry[] = [
     category: "Booking",
     question: "Which areas do you cover for doorstep repairs?",
     answer:
-      "Doorstep coverage depends on your location. When you enter your PIN code during booking we confirm whether at-home and pickup options are available there; if they are not, a store visit is still offered. Message us on WhatsApp to check your area — we use those requests to decide where to expand.",
+      "We cover all of Delhi, either at your home or office or by pickup and drop. If your address is outside Delhi, message us on WhatsApp and we will check whether we can reach you.",
   },
 ];
 

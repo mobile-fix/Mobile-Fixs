@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "About Us — Independent Phone Repair, Done Transparently",
   description:
-    "Why MyMobiFix exists: certified technicians, graded parts you choose yourself, a repair you can track end to end, and a real person on WhatsApp.",
+    "Why MyMobiFix exists: free pickup and drop or at-home repair, graded parts you choose yourself, a repair you can track end to end, and a real person on WhatsApp.",
   path: "/about",
 });
 
@@ -145,16 +145,15 @@ export default async function AboutPage() {
 
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <Card className="p-6">
-              <h3 className="font-display text-lg font-bold text-ink">Certification and training</h3>
+              <h3 className="font-display text-lg font-bold text-ink">Training and process</h3>
               <p className="mt-2 leading-relaxed text-ink-muted">
-                Every technician completes an internal certification covering micro-soldering,
-                display assembly handling, adhesive and water-resistance re-sealing, battery safety
-                and electrostatic discharge control before they work unsupervised. Certification is
-                re-assessed annually and after any new device family is added to the catalogue.
+                Every technician is trained in micro-soldering, display assembly handling, adhesive
+                and water-resistance re-sealing, battery safety and electrostatic discharge control
+                before they work unsupervised.
               </p>
               <ul className="mt-4 space-y-2">
                 {[
-                  "Supervised probation on live repairs before certification",
+                  "Supervised probation on live repairs before working alone",
                   "Anti-static workstations and calibrated torque tools",
                   "Documented procedure per device family, not improvised",
                 ].map((entry) => (
@@ -218,7 +217,7 @@ export default async function AboutPage() {
                 Manufacturing a new smartphone accounts for the large majority of its lifetime carbon
                 footprint. Replacing a worn battery instead of a whole new handset is the single
                 biggest thing most people can do about their device footprint. Every cell, display
-                and board we remove goes to a certified e-waste processor rather than to landfill.
+                and board we remove goes to an e-waste processor rather than to landfill.
               </p>
             </div>
             <div className="lg:col-span-4">

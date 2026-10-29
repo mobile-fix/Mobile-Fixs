@@ -13,10 +13,10 @@ import { api, ApiClientError } from "@/lib/api-client";
 import {
   CONTACT_METHODS,
   CONTACT_METHOD_LABEL,
-  SERVICE_TYPES,
+  CUSTOMER_SERVICE_TYPES,
   SERVICE_TYPE_META,
   type ContactMethod,
-  type ServiceType,
+  type CustomerServiceType,
 } from "@/lib/constants";
 import { createBookingSchema } from "@/lib/validation";
 import { cn, formatDate } from "@/lib/utils";
@@ -47,7 +47,7 @@ type Step = 1 | 2 | 3 | 4 | 5 | 6;
 const STEP_META: Record<Step, { title: string; description: string }> = {
   1: { title: "Your device", description: "Tell us what needs fixing." },
   2: { title: "The repair", description: "Pick the fault and the part quality you want." },
-  3: { title: "Service type", description: "Come to us, or we come to you." },
+  3: { title: "Service type", description: "Free pickup & drop, or a technician at your door." },
   4: { title: "Date & time", description: "Choose a slot that suits you." },
   5: { title: "Your details", description: "How we reach you and where we go." },
   6: { title: "Review", description: "Check everything, then confirm." },
@@ -84,7 +84,8 @@ export function BookingWizard() {
   const [step, setStep] = useState<Step>(1);
   const [model, setModel] = useState<ModelOption | null>(null);
   const [basket, setBasket] = useState<BasketItem[]>([]);
-  const [serviceType, setServiceType] = useState<ServiceType>("STORE_VISIT");
+  // Pickup & drop works for every repair, so it is the safe preselection.
+  const [serviceType, setServiceType] = useState<CustomerServiceType>("PICKUP_DELIVERY");
   const [date, setDate] = useState<string | null>(null);
   const [slotId, setSlotId] = useState<string | null>(null);
   const [customer, setCustomer] = useState<CustomerForm>(EMPTY_CUSTOMER);
@@ -109,9 +110,10 @@ export function BookingWizard() {
 
     const modelId = searchParams.get("model");
     const repairs = decodeBasket(searchParams.get("repairs"));
-    const type = searchParams.get("serviceType") as ServiceType | null;
+    const type = searchParams.get("serviceType") as CustomerServiceType | null;
 
-    if (type && SERVICE_TYPES.includes(type)) setServiceType(type);
+    // Old links may still carry serviceType=STORE_VISIT; those keep the default.
+    if (type && CUSTOMER_SERVICE_TYPES.includes(type)) setServiceType(type);
     if (repairs.length > 0) setBasket(repairs);
 
     if (!modelId) {
@@ -289,6 +291,7 @@ export function BookingWizard() {
         // Jump to the earliest step that has a problem.
         const keys = Object.keys(cause.fieldErrors);
         if (keys.some((key) => key.startsWith("customer") || key === "imei")) setStep(5);
+        else if (keys.includes("serviceType")) setStep(3);
         else if (keys.some((key) => key === "slotId" || key === "scheduledDate")) setStep(4);
         else if (keys.some((key) => key === "items")) setStep(2);
         else if (keys.some((key) => key === "modelId")) setStep(1);
@@ -361,7 +364,7 @@ export function BookingWizard() {
           {step === 3 ? (
             <fieldset className="space-y-3">
               <legend className="sr-only">Choose how you want the repair done</legend>
-              {SERVICE_TYPES.map((type) => {
+              {CUSTOMER_SERVICE_TYPES.map((type) => {
                 const meta = SERVICE_TYPE_META[type];
                 return (
                   <OptionCard
@@ -369,7 +372,7 @@ export function BookingWizard() {
                     name="serviceType"
                     value={type}
                     checked={serviceType === type}
-                    onChange={(value) => setServiceType(value as ServiceType)}
+                    onChange={(value) => setServiceType(value as CustomerServiceType)}
                     icon={meta.iconKey as never}
                     title={meta.label}
                     description={meta.description}
@@ -527,7 +530,7 @@ export function BookingWizard() {
                         onChange={(event) => setField("postalCode", event.target.value)}
                         hasError={Boolean(errors["customer.postalCode"])}
                         aria-describedby={describedBy("postalCode", errors["customer.postalCode"])}
-                        placeholder="122003"
+                        placeholder="110001"
                       />
                     </Field>
                   </div>
@@ -750,6 +753,7 @@ export function BookingWizard() {
           <div className="mt-4 space-y-2 rounded-xl border border-line bg-surface p-4 text-sm">
             {[
               "Free diagnostics — always",
+              "Free pickup & drop or doorstep visit",
               "No fix, no fee",
               "Pay only after the repair",
               "Warranty on every job",

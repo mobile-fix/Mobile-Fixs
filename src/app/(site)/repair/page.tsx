@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { JsonLd } from "@/components/site/JsonLd";
+import { ServicePromises } from "@/components/site/ServicePromises";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/primitives";
 import { BRANDS_WITH_LOGO, getBrandContent, hasBrandLandingPage } from "@/lib/brand-content";
@@ -16,7 +17,7 @@ export const revalidate = 600;
 export const metadata: Metadata = pageMetadata({
   title: "Mobile Phone Repair by Brand — iPhone, Samsung, OnePlus & More",
   description:
-    "Find your phone brand for repair: iPhone, Samsung, Google Pixel, OnePlus, Xiaomi, Vivo, Oppo, Realme and more. Doorstep pickup or in store. Quote on WhatsApp.",
+    "Find your phone brand for repair: iPhone, Samsung, Google Pixel, OnePlus, Xiaomi, Vivo, Oppo, Realme and more. Free pickup and drop or at-home repair across Delhi. Quote on WhatsApp.",
   path: "/repair",
 });
 
@@ -47,8 +48,8 @@ export default async function RepairHubPage() {
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
             Choose your phone&apos;s brand to see the models we repair and the faults we see most.
-            We repair in store or collect your phone from your door. Message us on WhatsApp with
-            your model and the problem and we will send you a quote.
+            We repair at your home or office, or collect your phone and bring it back, both free.
+            Message us on WhatsApp with your model and the problem and we will send you a quote.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <ButtonLink href={whatsappChatHref()} external size="lg" iconLeft="whatsapp">
@@ -59,6 +60,8 @@ export default async function RepairHubPage() {
             </ButtonLink>
           </div>
         </header>
+
+        <ServicePromises className="mt-8" />
 
         <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {brands.map((brand) => {

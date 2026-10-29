@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Icon, serviceIcon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Badge, Card, SectionHeading, StarRating } from "@/components/ui/primitives";
-import { SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
+import { CUSTOMER_SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
 import { whatsappChatHref, whatsappDisplay } from "@/lib/config";
 import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { formatRelative, pluralise } from "@/lib/utils";
@@ -164,14 +164,14 @@ const STEPS = [
     number: "03",
     title: "Book your appointment",
     description:
-      "Pick a store visit, doorstep pickup or an at-home repair, choose a two-hour window, and confirm. No payment up front.",
+      "Pick free pickup and drop or a free at-home repair, choose a two-hour window, and confirm. No payment up front.",
     icon: "calendar" as IconName,
   },
   {
     number: "04",
     title: "Get your phone fixed",
     description:
-      "A certified technician does the work and runs a 30-point check. Track every stage online and pay once you have your device back.",
+      "A technician does the work and runs a 30-point check. Track every stage online and pay once you have your device back.",
     icon: "check-circle" as IconName,
   },
 ];
@@ -229,13 +229,13 @@ export function ServiceOptions() {
     <section className="py-20 lg:py-24" aria-labelledby="options-heading">
       <div className="container-page">
         <SectionHeading
-          eyebrow="Three ways to get fixed"
-          title={<span id="options-heading">Come to us, or we come to you</span>}
-          description="Same technicians, same parts, same warranty. Pick whichever suits you."
+          eyebrow="Two free ways to get fixed"
+          title={<span id="options-heading">We come to you, or we collect your phone</span>}
+          description="Same technicians, same warranty, no visit fee. Pick whichever suits you."
         />
 
-        <ul className="mt-12 grid gap-5 lg:grid-cols-3">
-          {SERVICE_TYPES.map((type) => {
+        <ul className="mt-12 grid gap-5 sm:grid-cols-2">
+          {CUSTOMER_SERVICE_TYPES.map((type) => {
             const meta = SERVICE_TYPE_META[type];
             return (
               <Card as="li" key={type} interactive className="flex flex-col p-6">
@@ -279,7 +279,7 @@ const DIFFERENTIATORS = [
   {
     icon: "shield-check" as IconName,
     title: "Warranty that is easy to claim",
-    body: "Twelve months on original parts, six on premium and three on standard — you choose the grade. Claims are handled at the same speed as the original repair — bring it in and we sort it.",
+    body: "Twelve months on original parts, six on premium and three on standard — you choose the grade. Claims are handled at the same speed as the original repair — message us and we sort it.",
   },
   {
     icon: "diagnostic" as IconName,
