@@ -28,6 +28,9 @@ const TRACKING_ORIGINS = {
   ].join(" "),
   connect: [
     "https://*.google-analytics.com",
+    // A wildcard does not match the bare host, and GA4 also posts hits to
+    // analytics.google.com itself; without it page views are silently dropped.
+    "https://analytics.google.com",
     "https://*.analytics.google.com",
     "https://*.googletagmanager.com",
     "https://*.doubleclick.net",
@@ -40,6 +43,8 @@ const TRACKING_ORIGINS = {
   ].join(" "),
   img: [
     "https://*.google-analytics.com",
+    "https://analytics.google.com",
+    "https://*.analytics.google.com",
     "https://*.googletagmanager.com",
     "https://*.doubleclick.net",
     "https://www.google.com",
