@@ -32,8 +32,11 @@ export function cityMetadata(partKey: PartKey, citySlug: string): Metadata {
   const part = PARTS[partKey];
   if (!city) return { title: "Not found", robots: { index: false, follow: false } };
 
+  // "Phone part" → "Phone Part" in the title; the H1 keeps sentence case.
+  const titlePart = part.part.replace(/\b\w/g, (letter) => letter.toUpperCase());
+
   return pageMetadata({
-    title: `${part.part} Replacement in ${city.name} | Doorstep, Same Day | ${siteConfig.name}`,
+    title: `${titlePart} Replacement in ${city.name} | Doorstep, Same Day | ${siteConfig.name}`,
     absoluteTitle: true,
     description: part.metaDescription,
     path: `/${part.routeSegment}/${city.slug}`,

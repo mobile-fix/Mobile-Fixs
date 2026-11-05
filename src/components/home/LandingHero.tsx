@@ -76,7 +76,7 @@ export function LandingHero() {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
-              className="mt-8 inline-flex items-center gap-2 bg-[#0a152d] text-white rounded-full px-7 py-3.5 text-[13px] font-semibold shadow-lg shadow-slate-900/10 hover:bg-[#12203f] transition-colors"
+              className="mt-6 md:mt-8 inline-flex items-center gap-2 bg-[#0a152d] text-white rounded-full px-7 py-3.5 text-[13px] font-semibold shadow-lg shadow-slate-900/10 hover:bg-[#12203f] transition-colors"
             >
               Book a repair
               <ChevronRight size={15} strokeWidth={2.5} aria-hidden="true" />

@@ -84,8 +84,8 @@ export function Header() {
           when, and the no-fix-no-fee promise. Contact links join it on desktop. */}
       <div className="border-b border-line/70 bg-brand-950 text-white">
         <div className="container-page flex h-9 items-center justify-center text-xs lg:justify-between">
-          <p className="flex items-center gap-2 truncate font-medium text-white/85">
-            <Icon name="map-pin" size={14} className="shrink-0 text-accent-400" />
+          <p className="flex items-center gap-2 truncate text-[11px] font-medium text-white/85 sm:text-xs">
+            <Icon name="map-pin" size={14} className="hidden shrink-0 text-accent-400 sm:block" />
             Delhi NCR doorstep service · Mon–Sat 9–8 · No fix, no fee
           </p>
           <div className="hidden items-center gap-5 lg:flex">
