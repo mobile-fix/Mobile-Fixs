@@ -74,7 +74,7 @@ export default async function HomePage() {
             <div>
               <SectionHeading
                 align="left"
-                eyebrow="Delhi NCR only — we turn up in person"
+                eyebrow="West Delhi only — we turn up in person"
                 title={<span id="whatsapp-heading">Tell us the model and the fault</span>}
                 description="Tell us your phone model and what is wrong, and add a photo if you can. A technician replies with a firm price and a time. You agree it before anything is opened."
               />
