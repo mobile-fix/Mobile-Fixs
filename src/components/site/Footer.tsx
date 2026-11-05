@@ -47,6 +47,7 @@ const COMPANY_LINKS = [
   { href: "/how-it-works", label: "How It Works" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
+  { href: "/service-area", label: "Service Area" },
   { href: "/track", label: "Track Your Repair" },
   { href: "/warranty", label: "Warranty Policy" },
 ];
