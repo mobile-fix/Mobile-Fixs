@@ -4,7 +4,7 @@ import { Header } from "@/components/site/Header";
 import { JsonLd } from "@/components/site/JsonLd";
 import { StickyBookBar } from "@/components/site/StickyBookBar";
 import { WhatsAppButton } from "@/components/site/WhatsAppButton";
-import { businessSchema, websiteSchema } from "@/lib/structured-data";
+import { businessSchema, serviceSchema, websiteSchema } from "@/lib/structured-data";
 
 /**
  * Public site shell.
@@ -20,7 +20,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         Skip to main content
       </a>
 
-      <JsonLd data={{ "@graph": [businessSchema(), websiteSchema()] }} />
+      <JsonLd data={{ "@graph": [businessSchema(), serviceSchema(), websiteSchema()] }} />
 
       <div className="flex min-h-dvh flex-col">
         <Header />

@@ -11,23 +11,30 @@ import { contactConfig, locationConfig, siteConfig } from "@/lib/config";
 
 export const businessId = `${siteConfig.url}/#business`;
 export const websiteId = `${siteConfig.url}/#website`;
+export const serviceId = `${siteConfig.url}/#service`;
 
 /** A reference to the business entity, for `provider`, `publisher` and the like. */
 export const businessRef = { "@id": businessId } as const;
 
 /**
- * Where the business works: the named localities once the owner fills them in
- * (src/config/business.ts), always followed by Delhi NCR as the overall area.
+ * Where the business works: the named areas from src/config/business.ts plus
+ * the overall region (West Delhi), each as a Place. Delhi only, matching the
+ * ad targeting.
  */
 export function areaServed() {
-  const named = BUSINESS.serviceAreas.map(filled).filter((name): name is string => Boolean(name));
-  const fromEnv = named.length > 0 ? named : locationConfig.serviceAreas;
-  return [
-    ...fromEnv.map((name) => ({ "@type": "Place", name })),
-    { "@type": "City", name: "Delhi" },
-    { "@type": "AdministrativeArea", name: "Delhi NCR" },
-  ];
+  return [...BUSINESS.serviceAreas, BUSINESS.region].map((name) => ({
+    "@type": "Place",
+    name: `${name}, ${BUSINESS.city}`,
+  }));
 }
+
+const OPENING_HOURS = {
+  "@type": "OpeningHoursSpecification",
+  // Matches BUSINESS.hours: Mon–Sat, 9:00 AM – 8:00 PM.
+  dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  opens: "09:00",
+  closes: "20:00",
+} as const;
 
 /**
  * The full business entity. Emitted once per page by the public site layout,
@@ -38,15 +45,11 @@ export function areaServed() {
  */
 export function businessSchema() {
   const { latitude, longitude, profiles } = locationConfig;
-  const streetAddress = [filled(BUSINESS.addressLine1), BUSINESS.addressLine2]
-    .filter(Boolean)
-    .join(", ");
   const sameAs = [filled(BUSINESS.googleBusinessProfileUrl), ...profiles].filter(
     (url): url is string => Boolean(url),
   );
   const legalName = filled(BUSINESS.legalName);
   const priceRange = filled(BUSINESS.priceRange);
-  const gstin = filled(BUSINESS.gstin);
   const foundingDate = filled(BUSINESS.founded);
 
   return {
@@ -55,7 +58,6 @@ export function businessSchema() {
     "@id": businessId,
     name: BUSINESS.tradingName,
     ...(legalName ? { legalName } : {}),
-    ...(gstin ? { taxID: gstin } : {}),
     ...(foundingDate ? { foundingDate } : {}),
     description: siteConfig.description,
     url: siteConfig.url,
@@ -66,10 +68,10 @@ export function businessSchema() {
     currenciesAccepted: "INR",
     paymentAccepted: "Cash, UPI, Credit Card, Debit Card",
     ...(priceRange ? { priceRange } : {}),
+    // Locality only: there is no shop, so no street address is published.
     address: {
       "@type": "PostalAddress",
-      ...(streetAddress ? { streetAddress } : {}),
-      addressLocality: BUSINESS.city,
+      addressLocality: `${BUSINESS.locality}, ${BUSINESS.city}`,
       addressRegion: BUSINESS.state,
       postalCode: BUSINESS.pin,
       addressCountry: "IN",
@@ -77,15 +79,27 @@ export function businessSchema() {
     ...(latitude && longitude
       ? { geo: { "@type": "GeoCoordinates", latitude, longitude } }
       : {}),
-    // Matches BUSINESS.hours: Mon–Sat, 9:00 AM – 8:00 PM.
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      opens: "09:00",
-      closes: "20:00",
-    },
+    openingHoursSpecification: OPENING_HOURS,
     areaServed: areaServed(),
     ...(sameAs.length > 0 ? { sameAs } : {}),
+  };
+}
+
+/**
+ * The service itself: doorstep phone part replacement, provided by the
+ * business, in the areas it covers, during its hours.
+ */
+export function serviceSchema() {
+  return {
+    "@type": "Service",
+    "@id": serviceId,
+    name: "Doorstep phone part replacement",
+    serviceType: "Mobile phone component replacement",
+    description:
+      "Screen, battery, charging port, back glass and camera replacement done in person at the customer's address, or after a free pickup. No walk-in shop.",
+    provider: businessRef,
+    areaServed: areaServed(),
+    hoursAvailable: OPENING_HOURS,
   };
 }
 
