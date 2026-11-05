@@ -16,22 +16,25 @@ export function pageMetadata({
   description,
   path,
   noindex = false,
+  absoluteTitle = false,
 }: {
   /** Page title without the "| MyMobiFix" suffix — the root template adds it. */
   title: string;
+  /** Use `title` exactly as given, with no "| MyMobiFix" suffix added. */
+  absoluteTitle?: boolean;
   description: string;
   /** Canonical path, starting with "/". */
   path: string;
   noindex?: boolean;
 }): Metadata {
   const url = `${siteConfig.url}${path === "/" ? "" : path}`;
-  const socialTitle = `${title} | ${siteConfig.name}`;
+  const socialTitle = absoluteTitle ? title : `${title} | ${siteConfig.name}`;
   // Named explicitly: a page-level openGraph object also drops the image that
   // src/app/opengraph-image.tsx would otherwise contribute.
   const image = { url: "/opengraph-image", width: 1200, height: 630, alt: socialTitle };
 
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description,
     alternates: { canonical: path },
     openGraph: {

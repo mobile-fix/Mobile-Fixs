@@ -7,11 +7,13 @@ import { Alert, Card, SectionHeading } from "@/components/ui/primitives";
 import { USES_DEMO_DATA, siteConfig, whatsappChatHref } from "@/lib/config";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { pageMetadata } from "@/lib/seo";
+import { BUSINESS, NON_AFFILIATION, fullAddress } from "@/config/business";
 
 export const metadata: Metadata = pageMetadata({
-  title: "About Us — Independent Phone Repair, Done Transparently",
+  title: "About MyMobiFix — Independent Phone Repair Company in Delhi",
+  absoluteTitle: true,
   description:
-    "Why MyMobiFix exists: free pickup and drop or at-home repair, graded parts you choose yourself, a repair you can track end to end, and a real person on WhatsApp.",
+    "MyMobiFix is an independent phone repair company in Paschim Vihar, Delhi. Screens, batteries, ports and cameras replaced in person. Not affiliated with any phone brand.",
   path: "/about",
 });
 
@@ -78,10 +80,45 @@ export default async function AboutPage() {
       <div className="container-page">
         <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: "About us" }]} />
 
-        <header className="mt-6 max-w-3xl">
-          <h1 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
-            Repair, done transparently
+        {/* Who we are — first on the page: the entity, what it does and does
+            not do, and the non-affiliation statement. */}
+        <section className="mt-6 max-w-3xl" aria-labelledby="who-heading">
+          <h1
+            id="who-heading"
+            className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl"
+          >
+            Who we are
           </h1>
+          <div className="mt-4 space-y-4 text-lg leading-relaxed text-ink-muted">
+            <p>
+              {BUSINESS.tradingName} is an independent phone repair company based in{" "}
+              {BUSINESS.addressLine2}, {BUSINESS.city}, and running since {BUSINESS.founded}. We are
+              not Apple, we are not Samsung, and we are not a call centre.
+            </p>
+            <p>
+              Our work is physical component replacement, done in person by our own technician — at
+              the customer&rsquo;s address, on their table, or after a free pickup. We do not sell
+              remote support, device unlocking or data recovery. If your problem is hardware —
+              cracked glass, a worn cell, a dead port, a failed camera — we can fix it in person
+              today. If it is an account or activation-lock problem, we will tell you honestly that
+              we are not the right service.
+            </p>
+            <p>
+              Registered as {BUSINESS.legalName}, GSTIN {BUSINESS.gstin}, operating from{" "}
+              {fullAddress}.
+            </p>
+            <p>
+              <strong className="font-semibold text-ink">Not affiliated.</strong> {NON_AFFILIATION}{" "}
+              We buy parts on the open market, we are not an authorised service partner of any
+              brand, and we say so before you book.
+            </p>
+          </div>
+        </section>
+
+        <header className="mt-16 max-w-3xl">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+            Repair, done transparently
+          </h2>
           <p className="mt-4 text-lg leading-relaxed text-ink-muted">
             {siteConfig.name} exists because phone repair has a trust problem, not a technical one.
             The skills are widely available. What is rare is agreeing the cost before work starts, seeing
