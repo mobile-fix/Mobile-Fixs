@@ -9,7 +9,9 @@ import { NotASupportLine } from "@/components/site/NotASupportLine";
 import { ServicePromises } from "@/components/site/ServicePromises";
 import { ButtonLink } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Disclosure";
-import { BUSINESS, businessTelHref, distinctLegalName, fullAddress } from "@/config/business";
+import { BUSINESS, businessTelHref, distinctLegalName } from "@/config/business";
+import { AreaBlock } from "@/components/site/AreaBlock";
+import { AreaMap } from "@/components/site/AreaMap";
 import { CITIES, CITY_SLUGS, DEVICE_GRID, PARTS, type PartKey } from "@/lib/city-pages";
 import { siteConfig } from "@/lib/config";
 import { pageMetadata } from "@/lib/seo";
@@ -177,7 +179,7 @@ export function CityPartPage({ partKey, citySlug }: { partKey: PartKey; citySlug
                 </li>
               ))}
               <li className="rounded-full border border-line px-3.5 py-1.5 text-sm font-semibold text-ink-muted">
-                Rest of Delhi NCR
+                Rest of {BUSINESS.region}
               </li>
             </ul>
           </div>
@@ -186,14 +188,8 @@ export function CityPartPage({ partKey, citySlug }: { partKey: PartKey; citySlug
             <h2 className="font-display text-xl font-bold text-ink">{BUSINESS.tradingName}</h2>
             <address className="mt-3 space-y-1.5 text-sm not-italic leading-relaxed text-ink-muted">
               {distinctLegalName ? <span className="block">{distinctLegalName}</span> : null}
-              <span className="block">{fullAddress}</span>
-              <span className="block">{BUSINESS.hours}</span>
-              <span className="block">
-                <a href={businessTelHref} className="font-semibold text-ink hover:underline">
-                  {BUSINESS.phone}
-                </a>
-              </span>
             </address>
+            <AreaBlock className="mt-1 space-y-1.5 text-sm leading-relaxed text-ink-muted" />
             <div className="mt-5 flex flex-wrap gap-3">
               <ButtonLink href="/book" size="md" iconRight="arrow-right">
                 Book a repair

@@ -10,29 +10,31 @@
  * rather than quietly invented, and they are left OUT of structured data
  * (a placeholder in JSON-LD would be read by Google as a real value).
  *
- * An empty string means "deliberately not published" (no street line, GSTIN
- * withheld by the owner): the line is simply left off the page.
+ * Address policy (owner decision, 2026-11-05): a locality only — no street line,
+ * no tax registration number. There is no walk-in shop; every job is an
+ * at-home visit or a free pickup, and the site says so wherever the area shows.
  *
- * Owner-supplied on 2026-11-05: legal name, address, founding year, areas.
+ * Owner-supplied on 2026-11-05: legal name, locality, PIN, founding year,
+ * areas and the PIN codes served.
  */
 export const BUSINESS = {
   legalName: "MyMobiFix",
   tradingName: "MyMobiFix",
-  /** No street line published. */
-  addressLine1: "",
-  addressLine2: "Paschim Vihar",
-  city: "New Delhi",
+  locality: "Paschim Vihar",
+  city: "Delhi",
   state: "Delhi",
   pin: "110045",
-  /** Withheld by the owner — never shown. */
-  gstin: "",
+  region: "West Delhi",
   phone: "+91 93156 02220",
   phoneE164: "+919315602220",
   hours: "Mon–Sat, 9:00 AM – 8:00 PM",
+  /** Named areas served. Shown as their own list — not grouped by PIN. */
   serviceAreas: ["Paschim Vihar", "Peera Garhi", "Meera Bagh"],
+  /** PIN codes served, in the owner's order. */
+  servicePins: ["110045", "110041", "110063", "110087"],
   founded: "2022",
   /** Google Business Profile URL, for schema.org `sameAs`. */
-  googleBusinessProfileUrl: "{{GOOGLE_BUSINESS_PROFILE_URL}}",
+  googleBusinessProfileUrl: "{{GBP_URL}}",
   /** schema.org `priceRange`, e.g. "₹₹". Not published until the owner sets it. */
   priceRange: "{{PRICE_RANGE}}",
 } as const;
@@ -60,10 +62,17 @@ export function filled(value: string): string | undefined {
   return value.trim() === "" || isPlaceholder(value) ? undefined : value;
 }
 
-/** "Paschim Vihar, New Delhi 110045" — only the parts that are published. */
-export const fullAddress = [BUSINESS.addressLine1, BUSINESS.addressLine2, `${BUSINESS.city} ${BUSINESS.pin}`]
-  .filter((part) => part.trim() !== "")
-  .join(", ");
+/** "Paschim Vihar, Delhi 110045" — the published area. There is no street line. */
+export const areaAddress = `${BUSINESS.locality}, ${BUSINESS.city} ${BUSINESS.pin}`;
+
+/** The three lines shown wherever the address appears (footer, homepage, /about, city pages). */
+export const AREA_LINE = `Based in ${areaAddress} — no walk-in shop, we come to you.`;
+export const HOURS_LINE = `${BUSINESS.hours} · ${BUSINESS.phone}`;
+export const COVERAGE_LINE = `Serving ${BUSINESS.servicePins.join(", ")} and the rest of ${BUSINESS.region}.`;
+
+/** Why the site publishes an area rather than a shop address. */
+export const NO_COUNTER_LINE =
+  "We have no walk-in counter. Every job is booked as an at-home visit or a free pickup, which is why we publish an area rather than a shop address.";
 
 /** The legal name, only when it differs from the trading name (else it reads twice). */
 export const distinctLegalName =

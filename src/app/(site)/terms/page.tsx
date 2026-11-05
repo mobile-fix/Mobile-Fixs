@@ -1,3 +1,4 @@
+import { areaAddress } from "@/config/business";
 import type { Metadata } from "next";
 
 import { LegalList, LegalPage, LegalSection } from "@/components/site/LegalPage";
@@ -138,8 +139,8 @@ export default function TermsPage() {
 
       <LegalSection heading="10. Contact">
         <p>
-          Questions about these terms: {contactConfig.email} or {contactConfig.phone}. Registered
-          address: {contactConfig.address}.
+          Questions about these terms: {contactConfig.email} or {contactConfig.phone}. We work from{" "}
+          {areaAddress} and have no walk-in shop.
         </p>
       </LegalSection>
     </LegalPage>

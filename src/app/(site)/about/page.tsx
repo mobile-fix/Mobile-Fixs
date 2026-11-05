@@ -7,7 +7,9 @@ import { Alert, Card, SectionHeading } from "@/components/ui/primitives";
 import { USES_DEMO_DATA, siteConfig, whatsappChatHref } from "@/lib/config";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { pageMetadata } from "@/lib/seo";
-import { BUSINESS, NON_AFFILIATION, distinctLegalName, filled, fullAddress } from "@/config/business";
+import { BUSINESS, NON_AFFILIATION, NO_COUNTER_LINE, distinctLegalName } from "@/config/business";
+import { AreaBlock } from "@/components/site/AreaBlock";
+import { AreaMap } from "@/components/site/AreaMap";
 
 export const metadata: Metadata = pageMetadata({
   title: "About MyMobiFix — Independent Phone Repair Company in Delhi",
@@ -91,9 +93,8 @@ export default async function AboutPage() {
           </h1>
           <div className="mt-4 space-y-4 text-lg leading-relaxed text-ink-muted">
             <p>
-              {BUSINESS.tradingName} is an independent phone repair company based in{" "}
-              {BUSINESS.addressLine2}, {BUSINESS.city}, and running since {BUSINESS.founded}. We are
-              not Apple, we are not Samsung, and we are not a call centre.
+              {`${BUSINESS.tradingName} is an independent phone repair company based in ${BUSINESS.locality}, ${BUSINESS.city}, and running since ${BUSINESS.founded}.`}{" "}
+              We are not Apple, we are not Samsung, and we are not a call centre.
             </p>
             <p>
               Our work is physical component replacement, done in person by our own technician — at
@@ -104,11 +105,11 @@ export default async function AboutPage() {
               we are not the right service.
             </p>
             <p>
-              {distinctLegalName ? <>Registered as {distinctLegalName}, trading as </> : null}
-              {BUSINESS.tradingName}
-              {filled(BUSINESS.gstin) ? <>, GSTIN {BUSINESS.gstin},</> : null} operates from{" "}
-              {fullAddress}.
+              {distinctLegalName ? `Registered as ${distinctLegalName}, trading as ` : ""}
+              {`${BUSINESS.tradingName} operates from ${BUSINESS.locality}, ${BUSINESS.city} ${BUSINESS.pin}.`}{" "}
+              {NO_COUNTER_LINE}
             </p>
+            <AreaBlock className="space-y-1 rounded-2xl border border-line bg-surface p-5 text-base" />
             <p>
               <strong className="font-semibold text-ink">Not affiliated.</strong> {NON_AFFILIATION}{" "}
               We buy parts on the open market, we are not an authorised service partner of any

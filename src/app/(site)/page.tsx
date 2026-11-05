@@ -20,7 +20,7 @@ import { FAQS, faqStructuredData } from "@/lib/faq";
 import { JsonLd } from "@/components/site/JsonLd";
 import { NotASupportLine } from "@/components/site/NotASupportLine";
 import { ServicePromises } from "@/components/site/ServicePromises";
-import { BUSINESS, fullAddress } from "@/config/business";
+import { AREA_LINE, BUSINESS, COVERAGE_LINE } from "@/config/business";
 import { listServices } from "@/server/services/catalog.service";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { listPublishedReviews } from "@/server/services/content.service";
@@ -93,7 +93,7 @@ export default async function HomePage() {
                 { icon: "whatsapp" as const, title: "WhatsApp", body: whatsappDisplay, href: whatsappChatHref(), external: true },
                 { icon: "phone" as const, title: "Call us", body: contactConfig.phone, href: telHref, external: false },
                 { icon: "clock" as const, title: "Hours", body: BUSINESS.hours, href: null, external: false },
-                { icon: "map-pin" as const, title: "Address", body: fullAddress, href: null, external: false },
+                { icon: "map-pin" as const, title: "Where we are", body: AREA_LINE, href: null, external: false },
               ].map((item) => {
                 const content = (
                   <>
@@ -127,7 +127,7 @@ export default async function HomePage() {
                 );
               })}
               <li className="px-1 text-sm leading-relaxed text-ink-muted">
-                Serving {BUSINESS.serviceAreas.join(", ")} and the rest of Delhi NCR.
+                {COVERAGE_LINE}
               </li>
             </ul>
           </div>

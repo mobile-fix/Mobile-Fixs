@@ -1,3 +1,4 @@
+import { AREA_LINE, areaAddress } from "@/config/business";
 import type { Metadata } from "next";
 
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -7,7 +8,6 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Alert, Card } from "@/components/ui/primitives";
 import {
   contactConfig,
-  displayAddress,
   integrations,
   telHref,
   whatsappChatHref,
@@ -134,17 +134,17 @@ export default function ContactPage() {
                   </span>
                 </li>
 
-                {/* Only shown once a real address is configured. */}
-                {displayAddress ? (
+                {/* The published area: there is no walk-in shop. */}
+                {AREA_LINE ? (
                   <li className="flex items-start gap-3.5 p-2 -m-2">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300">
                       <Icon name="map-pin" size={18} />
                     </span>
                     <span>
                       <span className="block text-xs font-bold uppercase tracking-wide text-ink-subtle">
-                        Office address
+                        Where we are
                       </span>
-                      <span className="block font-semibold text-ink">{displayAddress}</span>
+                      <span className="block font-semibold text-ink">{AREA_LINE}</span>
                     </span>
                   </li>
                 ) : null}
@@ -186,16 +186,12 @@ export default function ContactPage() {
               <Card className="overflow-hidden">
                 <div className="border-b border-line px-5 py-3.5">
                   <h2 className="font-display text-sm font-bold uppercase tracking-wide text-ink">
-                    Our office
+                    Where we&rsquo;re based
                   </h2>
                 </div>
                 <iframe
                   src={contactConfig.mapsEmbedUrl}
-                  title={
-                    displayAddress
-                      ? `Map showing our office at ${displayAddress}`
-                      : "Map showing our office"
-                  }
+                  title={`Map of ${areaAddress}, the area we work from (no walk-in shop)`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="aspect-[4/3] w-full border-0"

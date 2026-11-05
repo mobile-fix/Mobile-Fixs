@@ -1,18 +1,11 @@
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
-import {
-  BUSINESS,
-  NON_AFFILIATION,
-  businessTelHref,
-  distinctLegalName,
-  filled,
-  fullAddress,
-} from "@/config/business";
+import { AREA_LINE, BUSINESS, NON_AFFILIATION } from "@/config/business";
+import { AreaBlock } from "./AreaBlock";
 import { Logo } from "./Logo";
 import {
   contactConfig,
-  displayAddress,
   siteConfig,
   telHref,
   whatsappChatHref,
@@ -98,12 +91,10 @@ export function Footer() {
                 <Icon name="clock" size={16} className="mt-0.5 text-brand-600 dark:text-accent-400" />
                 {contactConfig.hours}
               </li>
-              {displayAddress ? (
-                <li className="flex items-start gap-2.5 text-ink-muted">
-                  <Icon name="map-pin" size={16} className="mt-0.5 shrink-0 text-brand-600 dark:text-accent-400" />
-                  <span className="measure-tight">{displayAddress}</span>
-                </li>
-              ) : null}
+              <li className="flex items-start gap-2.5 text-ink-muted">
+                <Icon name="map-pin" size={16} className="mt-0.5 shrink-0 text-brand-600 dark:text-accent-400" />
+                <span className="measure-tight">{AREA_LINE}</span>
+              </li>
             </ul>
 
             {whatsappHref ? (
@@ -167,8 +158,8 @@ export function Footer() {
 }
 
 /**
- * Who the business is, on every page: legal entity, address, GSTIN, hours and
- * the non-affiliation line. Ad reviewers and customers both look for this, so
+ * Who the business is, on every page: name, area (no shopfront), hours, PIN
+ * codes covered and the non-affiliation line. Ad reviewers and customers both look for this, so
  * it sits above the link columns rather than in the small print.
  */
 function BusinessStatement() {
@@ -176,22 +167,12 @@ function BusinessStatement() {
     <section aria-label="About this business" className="border-b border-line bg-sunken">
       <div className="container-page space-y-3 py-8 text-sm leading-relaxed text-ink-muted">
         <p className="measure">
-          {BUSINESS.tradingName} is an independent phone repair company based in{" "}
-          {BUSINESS.addressLine2}, {BUSINESS.city}, operating since {BUSINESS.founded}. We replace
-          physical components in person — at the customer&rsquo;s address, or after a free pickup —
-          across Delhi NCR, and do not provide remote or online support, device unlocking or data
-          recovery.
+          {`${BUSINESS.tradingName} is an independent phone repair company based in ${BUSINESS.locality}, ${BUSINESS.city}, operating since ${BUSINESS.founded}.`}{" "}
+          We replace physical components in person — at the customer&rsquo;s address, or after a
+          free pickup — across {BUSINESS.region}, and do not provide remote or online support,
+          device unlocking or data recovery.
         </p>
-        <p>
-          <span className="font-semibold text-ink">{distinctLegalName ?? BUSINESS.tradingName}</span> ·{" "}
-          {fullAddress}
-          {filled(BUSINESS.gstin) ? <> · GSTIN {BUSINESS.gstin}</> : null}
-          <br />
-          {BUSINESS.hours} ·{" "}
-          <a href={businessTelHref} className="font-semibold text-ink hover:underline">
-            {BUSINESS.phone}
-          </a>
-        </p>
+        <AreaBlock className="space-y-0.5" />
         <p className="measure text-xs text-ink-subtle">
           {NON_AFFILIATION} {BUSINESS.tradingName} is not affiliated with, authorised by or endorsed
           by any of them.

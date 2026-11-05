@@ -95,7 +95,14 @@ export const FAQS: FaqEntry[] = [
     category: "Booking",
     question: "Which areas do you cover for doorstep repairs?",
     answer:
-      "We cover all of Delhi, either at your home or office or by pickup and drop. If your address is outside Delhi, message us on WhatsApp and we will check whether we can reach you.",
+      "We cover West Delhi (PIN codes 110045, 110041, 110063 and 110087) and the rest of Delhi, either at your home or office or by free pickup and drop. If your address is outside Delhi, message us on WhatsApp and we will check whether we can reach you.",
+  },
+  {
+    id: "no-shop",
+    category: "Booking",
+    question: "Do you have a shop I can walk in to?",
+    answer:
+      "We have no walk-in counter. Every job is booked as an at-home visit or a free pickup, which is why we publish an area rather than a shop address. We are based in Paschim Vihar, Delhi 110045.",
   },
 ];
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { LegalList, LegalPage, LegalSection } from "@/components/site/LegalPage";
-import { contactConfig, displayAddress, siteConfig } from "@/lib/config";
+import { contactConfig, siteConfig } from "@/lib/config";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -174,8 +174,7 @@ export default function PrivacyPage() {
 
       <LegalSection heading="Contact">
         <p>
-          Privacy questions or complaints: {contactConfig.email}
-          {displayAddress ? <>, or write to us at {displayAddress}</> : null}.
+          Privacy questions or complaints: {contactConfig.email}.
         </p>
       </LegalSection>
     </LegalPage>
