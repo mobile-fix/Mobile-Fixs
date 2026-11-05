@@ -128,7 +128,7 @@ export const SERVICES: ServiceSeed[] = [
     symptoms: [
       "Front camera shows a black screen",
       "Selfies are blurry or hazy",
-      "Face unlock stopped working",
+      "Face recognition stopped working",
       "Screen does not dim during calls",
     ],
     iconKey: "selfie",
@@ -232,7 +232,7 @@ export const SERVICES: ServiceSeed[] = [
   },
   {
     name: "Full Diagnostic",
-    shortDescription: "Free 30-point hardware and software health check.",
+    shortDescription: "Free 30-point hardware check.",
     description:
       "A complete 30-point inspection covering battery health, charging, all cameras, every microphone and speaker, sensors, connectivity, storage health and frame integrity. You get a written report and a firm quote before anything is opened — and it is free whether or not you proceed.",
     symptoms: [

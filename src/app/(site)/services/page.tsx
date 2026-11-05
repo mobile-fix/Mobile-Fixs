@@ -59,11 +59,11 @@ export default async function ServicesPage() {
             you.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink href={whatsappChatHref()} external size="lg" iconLeft="whatsapp">
-              Get a quote on WhatsApp
+            <ButtonLink href="/book" size="lg" iconRight="arrow-right">
+              Book a repair
             </ButtonLink>
-            <ButtonLink href="/book" variant="outline" size="lg" iconRight="arrow-right">
-              Book a Repair
+            <ButtonLink href={whatsappChatHref()} external variant="outline" size="md" iconLeft="whatsapp">
+              WhatsApp
             </ButtonLink>
           </div>
         </header>

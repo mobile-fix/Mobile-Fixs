@@ -102,6 +102,11 @@ export default async function ServiceDetailPage({
                 {service.name}
               </h1>
               <p className="measure mt-3 text-lg text-ink-muted">{service.shortDescription}</p>
+              {service.slug === "software-os-repair" ? (
+                <p className="measure mt-4 rounded-xl border border-line bg-sunken px-4 py-3 text-sm font-semibold text-ink">
+                  Software only, handled in person. Not remote support.
+                </p>
+              ) : null}
             </header>
 
             <ServicePromises narrow className="mt-6" />
@@ -235,18 +240,19 @@ export default async function ServiceDetailPage({
                 </dl>
 
                 <div className="border-t border-line p-5">
-                  <ButtonLink href={whatsappHref} external size="lg" fullWidth iconLeft="whatsapp">
-                    Chat on WhatsApp
+                  <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
+                    Book a repair
                   </ButtonLink>
                   <ButtonLink
-                    href="/book"
+                    href={whatsappHref}
+                    external
                     variant="outline"
-                    size="lg"
+                    size="md"
                     fullWidth
-                    iconRight="arrow-right"
+                    iconLeft="whatsapp"
                     className="mt-2.5"
                   >
-                    Book a Repair
+                    WhatsApp
                   </ButtonLink>
                   <p className="mt-2.5 text-center text-xs text-ink-subtle">
                     Free diagnostics · Pay after the repair

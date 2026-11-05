@@ -53,7 +53,7 @@ export const FAQS: FaqEntry[] = [
     category: "Warranty",
     question: "Are replacement parts covered by warranty?",
     answer:
-      "Yes — the part and the labour are both covered for the full warranty period of the grade you chose. If a replaced screen develops dead pixels, a new battery degrades abnormally fast, or a fitted charging port stops working, message us and we replace it again at no cost. Claims are handled with the same turnaround as an original repair, not sent away for weeks.",
+      "Yes — the part and the labour are both covered for the full warranty period of the grade you chose. If a replaced screen develops dead pixels, a new battery degrades abnormally fast, or a fitted charging port stops working, we replace it again at no cost. Warranty claims are handled at the same speed as the original job, not sent away for weeks.",
   },
   {
     id: "tracking",

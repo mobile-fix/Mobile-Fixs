@@ -52,11 +52,11 @@ export default async function RepairHubPage() {
             Message us on WhatsApp with your model and the problem and we will send you a quote.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink href={whatsappChatHref()} external size="lg" iconLeft="whatsapp">
-              Get a quote on WhatsApp
-            </ButtonLink>
-            <ButtonLink href="/book" variant="outline" size="lg" iconRight="arrow-right">
+            <ButtonLink href="/book" size="lg" iconRight="arrow-right">
               Book a repair
+            </ButtonLink>
+            <ButtonLink href={whatsappChatHref()} external variant="outline" size="md" iconLeft="whatsapp">
+              WhatsApp
             </ButtonLink>
           </div>
         </header>

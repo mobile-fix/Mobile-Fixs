@@ -166,7 +166,7 @@ export const PARTS: Record<PartKey, PartContent> = {
           "No. If the part cannot be replaced, or the replacement would cost more than the phone is worth, the technician puts it back together, explains what they found and charges nothing. There is no visit fee either way.",
       },
       {
-        question: "Do you handle phone unlocking or fixes over the phone?",
+        question: "Can you fix my phone over a call or a chat?",
         answer:
           "Unlocking and remote fixes are not what we do; we replace hardware. Everything we do is done in person, by a technician holding your phone.",
       },

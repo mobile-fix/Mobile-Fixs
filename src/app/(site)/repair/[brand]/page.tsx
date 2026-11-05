@@ -143,11 +143,11 @@ export default async function BrandRepairPage({
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink href={whatsappHref} external size="lg" iconLeft="whatsapp">
-              Get a quote on WhatsApp
-            </ButtonLink>
-            <ButtonLink href="/book" variant="outline" size="lg" iconRight="arrow-right">
+            <ButtonLink href="/book" size="lg" iconRight="arrow-right">
               Book a repair
+            </ButtonLink>
+            <ButtonLink href={whatsappHref} external variant="outline" size="md" iconLeft="whatsapp">
+              WhatsApp
             </ButtonLink>
           </div>
           <p className="mt-3 text-sm text-ink-subtle">

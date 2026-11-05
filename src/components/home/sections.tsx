@@ -279,12 +279,12 @@ const DIFFERENTIATORS = [
   {
     icon: "shield-check" as IconName,
     title: "Warranty that is easy to claim",
-    body: "Twelve months on original parts, six on premium and three on standard — you choose the grade. Claims are handled at the same speed as the original repair — message us and we sort it.",
+    body: "Twelve months on original parts, six on premium and three on standard — you choose the grade. Warranty claims are handled at the same speed as the original job.",
   },
   {
     icon: "diagnostic" as IconName,
     title: "Free 30-point diagnostic",
-    body: "Not sure what is wrong? We run a full hardware and software check and give you a written report and a firm quote — free, whether or not you go ahead.",
+    body: "Not sure what is wrong? We run a 30-point hardware check and give you a written report and a firm quote — free, whether or not you go ahead.",
   },
   {
     icon: "package" as IconName,
