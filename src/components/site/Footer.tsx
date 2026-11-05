@@ -1,7 +1,14 @@
 import Link from "next/link";
 
 import { Icon } from "@/components/icons";
-import { BUSINESS, NON_AFFILIATION, businessTelHref, fullAddress } from "@/config/business";
+import {
+  BUSINESS,
+  NON_AFFILIATION,
+  businessTelHref,
+  distinctLegalName,
+  filled,
+  fullAddress,
+} from "@/config/business";
 import { Logo } from "./Logo";
 import {
   contactConfig,
@@ -176,8 +183,9 @@ function BusinessStatement() {
           recovery.
         </p>
         <p>
-          <span className="font-semibold text-ink">{BUSINESS.legalName}</span> · {fullAddress} ·
-          GSTIN {BUSINESS.gstin}
+          <span className="font-semibold text-ink">{distinctLegalName ?? BUSINESS.tradingName}</span> ·{" "}
+          {fullAddress}
+          {filled(BUSINESS.gstin) ? <> · GSTIN {BUSINESS.gstin}</> : null}
           <br />
           {BUSINESS.hours} ·{" "}
           <a href={businessTelHref} className="font-semibold text-ink hover:underline">

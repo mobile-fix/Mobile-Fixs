@@ -10,23 +10,27 @@
  * rather than quietly invented, and they are left OUT of structured data
  * (a placeholder in JSON-LD would be read by Google as a real value).
  *
- * Already filled from what the owner gave on 2026-10-29: area "Paschim Vihar",
- * PIN "110045".
+ * An empty string means "deliberately not published" (no street line, GSTIN
+ * withheld by the owner): the line is simply left off the page.
+ *
+ * Owner-supplied on 2026-11-05: legal name, address, founding year, areas.
  */
 export const BUSINESS = {
-  legalName: "{{LEGAL_ENTITY_NAME}}",
+  legalName: "MyMobiFix",
   tradingName: "MyMobiFix",
-  addressLine1: "{{STREET_ADDRESS}}",
+  /** No street line published. */
+  addressLine1: "",
   addressLine2: "Paschim Vihar",
-  city: "Delhi",
+  city: "New Delhi",
   state: "Delhi",
   pin: "110045",
-  gstin: "{{GSTIN}}",
+  /** Withheld by the owner — never shown. */
+  gstin: "",
   phone: "+91 93156 02220",
   phoneE164: "+919315602220",
   hours: "Mon–Sat, 9:00 AM – 8:00 PM",
-  serviceAreas: ["{{AREA_1}}", "{{AREA_2}}", "{{AREA_3}}"],
-  founded: "{{YEAR}}",
+  serviceAreas: ["Paschim Vihar", "Peera Garhi", "Meera Bagh"],
+  founded: "2022",
   /** Google Business Profile URL, for schema.org `sameAs`. */
   googleBusinessProfileUrl: "{{GOOGLE_BUSINESS_PROFILE_URL}}",
   /** schema.org `priceRange`, e.g. "₹₹". Not published until the owner sets it. */
@@ -51,13 +55,19 @@ export function isPlaceholder(value: string): boolean {
   return /\{\{[A-Z0-9_]+\}\}/.test(value);
 }
 
-/** The value, or undefined while it is still a placeholder — for structured data. */
+/** The value, or undefined while it is empty or still a placeholder. */
 export function filled(value: string): string | undefined {
-  return isPlaceholder(value) ? undefined : value;
+  return value.trim() === "" || isPlaceholder(value) ? undefined : value;
 }
 
-/** "{{STREET_ADDRESS}}, Paschim Vihar, Delhi 110045" */
-export const fullAddress = `${BUSINESS.addressLine1}, ${BUSINESS.addressLine2}, ${BUSINESS.city} ${BUSINESS.pin}`;
+/** "Paschim Vihar, New Delhi 110045" — only the parts that are published. */
+export const fullAddress = [BUSINESS.addressLine1, BUSINESS.addressLine2, `${BUSINESS.city} ${BUSINESS.pin}`]
+  .filter((part) => part.trim() !== "")
+  .join(", ");
+
+/** The legal name, only when it differs from the trading name (else it reads twice). */
+export const distinctLegalName =
+  filled(BUSINESS.legalName) && BUSINESS.legalName !== BUSINESS.tradingName ? BUSINESS.legalName : undefined;
 
 export const businessTelHref = `tel:${BUSINESS.phoneE164}`;
 

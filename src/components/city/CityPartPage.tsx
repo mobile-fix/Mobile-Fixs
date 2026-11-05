@@ -9,7 +9,7 @@ import { NotASupportLine } from "@/components/site/NotASupportLine";
 import { ServicePromises } from "@/components/site/ServicePromises";
 import { ButtonLink } from "@/components/ui/Button";
 import { Accordion } from "@/components/ui/Disclosure";
-import { BUSINESS, businessTelHref, fullAddress } from "@/config/business";
+import { BUSINESS, businessTelHref, distinctLegalName, fullAddress } from "@/config/business";
 import { CITIES, CITY_SLUGS, DEVICE_GRID, PARTS, type PartKey } from "@/lib/city-pages";
 import { siteConfig } from "@/lib/config";
 import { pageMetadata } from "@/lib/seo";
@@ -185,7 +185,7 @@ export function CityPartPage({ partKey, citySlug }: { partKey: PartKey; citySlug
           <div className="rounded-2xl border border-line bg-surface p-6">
             <h2 className="font-display text-xl font-bold text-ink">{BUSINESS.tradingName}</h2>
             <address className="mt-3 space-y-1.5 text-sm not-italic leading-relaxed text-ink-muted">
-              <span className="block">{BUSINESS.legalName}</span>
+              {distinctLegalName ? <span className="block">{distinctLegalName}</span> : null}
               <span className="block">{fullAddress}</span>
               <span className="block">{BUSINESS.hours}</span>
               <span className="block">

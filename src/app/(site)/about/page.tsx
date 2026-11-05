@@ -7,7 +7,7 @@ import { Alert, Card, SectionHeading } from "@/components/ui/primitives";
 import { USES_DEMO_DATA, siteConfig, whatsappChatHref } from "@/lib/config";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { pageMetadata } from "@/lib/seo";
-import { BUSINESS, NON_AFFILIATION, fullAddress } from "@/config/business";
+import { BUSINESS, NON_AFFILIATION, distinctLegalName, filled, fullAddress } from "@/config/business";
 
 export const metadata: Metadata = pageMetadata({
   title: "About MyMobiFix — Independent Phone Repair Company in Delhi",
@@ -104,7 +104,9 @@ export default async function AboutPage() {
               we are not the right service.
             </p>
             <p>
-              Registered as {BUSINESS.legalName}, GSTIN {BUSINESS.gstin}, operating from{" "}
+              {distinctLegalName ? <>Registered as {distinctLegalName}, trading as </> : null}
+              {BUSINESS.tradingName}
+              {filled(BUSINESS.gstin) ? <>, GSTIN {BUSINESS.gstin},</> : null} operates from{" "}
               {fullAddress}.
             </p>
             <p>
