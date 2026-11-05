@@ -1,4 +1,5 @@
-import { DEFAULT_HOURS, contactConfig, locationConfig, siteConfig } from "@/lib/config";
+import { BUSINESS, filled } from "@/config/business";
+import { contactConfig, locationConfig, siteConfig } from "@/lib/config";
 
 /**
  * Shared schema.org building blocks.
@@ -14,64 +15,77 @@ export const websiteId = `${siteConfig.url}/#website`;
 /** A reference to the business entity, for `provider`, `publisher` and the like. */
 export const businessRef = { "@id": businessId } as const;
 
-/** Where the business works: listed areas, else its city, else India. */
+/**
+ * Where the business works: the named localities once the owner fills them in
+ * (src/config/business.ts), always followed by Delhi NCR as the overall area.
+ */
 export function areaServed() {
-  if (locationConfig.serviceAreas.length > 0) {
-    return locationConfig.serviceAreas.map((name) => ({ "@type": "City", name }));
-  }
-  if (locationConfig.city) return { "@type": "City", name: locationConfig.city };
-  return { "@type": "Country", name: "India" };
+  const named = BUSINESS.serviceAreas.map(filled).filter((name): name is string => Boolean(name));
+  const fromEnv = named.length > 0 ? named : locationConfig.serviceAreas;
+  return [
+    ...fromEnv.map((name) => ({ "@type": "Place", name })),
+    { "@type": "City", name: "Delhi" },
+    { "@type": "AdministrativeArea", name: "Delhi NCR" },
+  ];
 }
 
-/** The full business entity. Emitted once per page by the public site layout. */
+/**
+ * The full business entity. Emitted once per page by the public site layout,
+ * so every page — including the city landing pages — carries it under one @id.
+ *
+ * Facts come from src/config/business.ts. Any value still a `{{PLACEHOLDER}}`
+ * is left out: a placeholder in JSON-LD would be read as a real value.
+ */
 export function businessSchema() {
-  const { streetAddress, city, region, postalCode, latitude, longitude, profiles } = locationConfig;
-  const hasAddress = Boolean(streetAddress || city || postalCode);
+  const { latitude, longitude, profiles } = locationConfig;
+  const streetAddress = [filled(BUSINESS.addressLine1), BUSINESS.addressLine2]
+    .filter(Boolean)
+    .join(", ");
+  const sameAs = [filled(BUSINESS.googleBusinessProfileUrl), ...profiles].filter(
+    (url): url is string => Boolean(url),
+  );
+  const legalName = filled(BUSINESS.legalName);
+  const priceRange = filled(BUSINESS.priceRange);
+  const gstin = filled(BUSINESS.gstin);
+  const foundingDate = filled(BUSINESS.founded);
 
   return {
-    // Plain LocalBusiness: schema.org has no phone-repair type, and
-    // MobilePhoneStore would describe a shop that sells phones.
-    "@type": "LocalBusiness",
+    // MobilePhoneStore is a LocalBusiness subtype; chosen by the owner.
+    "@type": "MobilePhoneStore",
     "@id": businessId,
-    name: siteConfig.name,
+    name: BUSINESS.tradingName,
+    ...(legalName ? { legalName } : {}),
+    ...(gstin ? { taxID: gstin } : {}),
+    ...(foundingDate ? { foundingDate } : {}),
     description: siteConfig.description,
     url: siteConfig.url,
     logo: `${siteConfig.url}/icon.svg`,
     image: `${siteConfig.url}/opengraph-image`,
-    telephone: contactConfig.phone,
+    telephone: BUSINESS.phoneE164,
     email: contactConfig.email,
     currenciesAccepted: "INR",
     paymentAccepted: "Cash, UPI, Credit Card, Debit Card",
-    ...(hasAddress
-      ? {
-          address: {
-            "@type": "PostalAddress",
-            ...(streetAddress ? { streetAddress } : {}),
-            ...(city ? { addressLocality: city } : {}),
-            ...(region ? { addressRegion: region } : {}),
-            ...(postalCode ? { postalCode } : {}),
-            addressCountry: "IN",
-          },
-        }
-      : {}),
+    ...(priceRange ? { priceRange } : {}),
+    address: {
+      "@type": "PostalAddress",
+      ...(streetAddress ? { streetAddress } : {}),
+      addressLocality: BUSINESS.city,
+      addressRegion: BUSINESS.state,
+      postalCode: BUSINESS.pin,
+      addressCountry: "IN",
+    },
     ...(latitude && longitude
       ? { geo: { "@type": "GeoCoordinates", latitude, longitude } }
       : {}),
-    // Machine-readable hours exist only for the default schedule. Custom hours
-    // in NEXT_PUBLIC_BUSINESS_HOURS are free text, and Google penalises schema
-    // that contradicts what the page shows, so they are shown but not marked up.
-    ...(contactConfig.hours === DEFAULT_HOURS
-      ? {
-          openingHoursSpecification: {
-            "@type": "OpeningHoursSpecification",
-            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            opens: "09:00",
-            closes: "20:00",
-          },
-        }
-      : {}),
+    // Matches BUSINESS.hours: Mon–Sat, 9:00 AM – 8:00 PM.
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "09:00",
+      closes: "20:00",
+    },
     areaServed: areaServed(),
-    ...(profiles.length > 0 ? { sameAs: profiles } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
   };
 }
 

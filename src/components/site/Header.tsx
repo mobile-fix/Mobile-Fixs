@@ -80,14 +80,15 @@ export function Header() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      {/* Utility strip — the trust and contact line above the main nav. */}
-      <div className="hidden border-b border-line/70 bg-brand-950 text-white lg:block">
-        <div className="container-page flex h-9 items-center justify-between text-xs">
-          <p className="flex items-center gap-2 font-medium text-white/85">
-            <Icon name="shield-check" size={14} className="text-accent-400" />
-            Free pickup &amp; drop · Same-day for most repairs · Warranty on every repair
+      {/* Utility strip — on every page and every screen size: where we work,
+          when, and the no-fix-no-fee promise. Contact links join it on desktop. */}
+      <div className="border-b border-line/70 bg-brand-950 text-white">
+        <div className="container-page flex h-9 items-center justify-center text-xs lg:justify-between">
+          <p className="flex items-center gap-2 truncate font-medium text-white/85">
+            <Icon name="map-pin" size={14} className="shrink-0 text-accent-400" />
+            Delhi NCR doorstep service · Mon–Sat 9–8 · No fix, no fee
           </p>
-          <div className="flex items-center gap-5">
+          <div className="hidden items-center gap-5 lg:flex">
             <a
               href={telHref}
               className="flex items-center gap-1.5 font-medium text-white/85 transition-colors hover:text-accent-300"
@@ -151,8 +152,18 @@ export function Header() {
           >
             Track Repair
           </Link>
+          <ButtonLink
+            href={whatsappChatHref()}
+            external
+            size="sm"
+            variant="ghost"
+            iconLeft="whatsapp"
+            className="hidden sm:inline-flex"
+          >
+            WhatsApp
+          </ButtonLink>
           <ButtonLink href="/book" size="md" className="hidden sm:inline-flex" iconRight="arrow-right">
-            Book a Repair
+            Book a repair
           </ButtonLink>
 
           <button
@@ -171,7 +182,7 @@ export function Header() {
 
       {/* Mobile panel */}
       {menuOpen ? (
-        <div className="fixed inset-0 top-16 z-30 lg:hidden">
+        <div className="fixed inset-0 top-[6.25rem] z-30 lg:hidden">
           <button
             type="button"
             className="absolute inset-0 bg-overlay backdrop-blur-sm"
@@ -181,7 +192,7 @@ export function Header() {
           <div
             ref={panelRef}
             id="mobile-menu"
-            className="animate-fade-in relative flex h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-t border-line bg-surface"
+            className="animate-fade-in relative flex h-[calc(100dvh-6.25rem)] flex-col overflow-y-auto border-t border-line bg-surface"
           >
             <ul className="flex flex-col gap-1 p-4">
               {NAV_LINKS.map((link) => (
@@ -223,18 +234,18 @@ export function Header() {
                 </a>
                 <ThemeToggle />
               </div>
+              <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
+                Book a repair
+              </ButtonLink>
               <ButtonLink
                 href={whatsappChatHref()}
                 external
-                size="lg"
+                size="md"
                 variant="outline"
                 fullWidth
                 iconLeft="whatsapp"
               >
-                Chat on WhatsApp
-              </ButtonLink>
-              <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
-                Book a Repair
+                WhatsApp
               </ButtonLink>
             </div>
           </div>

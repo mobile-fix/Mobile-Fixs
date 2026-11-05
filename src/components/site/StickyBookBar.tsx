@@ -58,7 +58,7 @@ export function StickyBookBar() {
         <ButtonLink
           href={whatsappChatHref()}
           external
-          size="lg"
+          size="md"
           variant="outline"
           iconLeft="whatsapp"
           className="shrink-0"
@@ -67,7 +67,7 @@ export function StickyBookBar() {
           WhatsApp
         </ButtonLink>
         <ButtonLink href="/book" size="lg" fullWidth iconRight="arrow-right">
-          Book a Repair
+          Book a repair
         </ButtonLink>
       </div>
     </div>

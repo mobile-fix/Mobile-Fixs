@@ -260,10 +260,7 @@ export default async function BrandRepairPage({
           </nav>
         ) : null}
 
-        <p className="mt-12 max-w-3xl border-t border-line pt-5 text-xs leading-relaxed text-ink-subtle">
-          {content.trademarkName} is a trademark of its owner. MyMobiFix is an independent repair
-          service and is not affiliated with or authorised by {content.trademarkName}.
-        </p>
+        {/* The non-affiliation line lives in the sitewide footer. */}
       </div>
     </div>
   );

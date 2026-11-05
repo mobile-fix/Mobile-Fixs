@@ -120,11 +120,6 @@ export default async function RepairHubPage() {
           </Link>
           .
         </p>
-
-        <p className="mt-6 max-w-3xl border-t border-line pt-5 text-xs leading-relaxed text-ink-subtle">
-          All brand names are trademarks of their respective owners. MyMobiFix is an independent
-          repair service and is not affiliated with or authorised by any of these brands.
-        </p>
       </div>
     </div>
   );
