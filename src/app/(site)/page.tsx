@@ -18,16 +18,18 @@ import { SectionHeading } from "@/components/ui/primitives";
 import { contactConfig, telHref, whatsappChatHref, whatsappDisplay } from "@/lib/config";
 import { FAQS, faqStructuredData } from "@/lib/faq";
 import { JsonLd } from "@/components/site/JsonLd";
+import { NotASupportLine } from "@/components/site/NotASupportLine";
 import { ServicePromises } from "@/components/site/ServicePromises";
+import { BUSINESS, fullAddress } from "@/config/business";
 import { listServices } from "@/server/services/catalog.service";
 import { getPublicStats } from "@/server/services/analytics.service";
 import { listPublishedReviews } from "@/server/services/content.service";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Doorstep Mobile Phone Repair — iPhone, Samsung & Android",
+  title: "Phone Screen & Battery Replacement at Your Door in Delhi",
   description:
-    "Doorstep repair for iPhone, Samsung, OnePlus and all Android phones across Delhi. Free pickup and drop, same-day for most repairs, warranty on every repair.",
+    "Screen, battery and charging port replacement for iPhone, Samsung and Android, done in person at your Delhi address. Free pickup and drop, 3–12 month warranty.",
   path: "/",
 });
 
@@ -55,29 +57,33 @@ export default async function HomePage() {
 
       <LandingHero />
 
+      <div className="container-page mt-12">
+        <NotASupportLine />
+      </div>
+
       <div className="container-page mt-8">
         <ServicePromises />
       </div>
 
       <StatsBand stats={stats} />
 
-      {/* WhatsApp — how customers get a quote, from anywhere. */}
+      {/* Contact — model and fault in, firm price and time out. */}
       <section id="whatsapp" className="scroll-mt-24 py-20 lg:py-24" aria-labelledby="whatsapp-heading">
         <div className="container-page">
           <div className="grid items-center gap-10 rounded-3xl border border-line bg-surface p-8 shadow-sm sm:p-12 lg:grid-cols-2">
             <div>
               <SectionHeading
                 align="left"
-                eyebrow="Repair from anywhere"
-                title={<span id="whatsapp-heading">Send us your phone problem on WhatsApp</span>}
-                description="Tell us your phone model and what is wrong, and add a photo if you can. A technician replies with the cost, how long it takes and the easiest way to get it fixed near you."
+                eyebrow="Delhi NCR only — we turn up in person"
+                title={<span id="whatsapp-heading">Tell us the model and the fault</span>}
+                description="Tell us your phone model and what is wrong, and add a photo if you can. A technician replies with a firm price and a time. You agree it before anything is opened."
               />
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href={whatsappChatHref()} external size="xl" iconLeft="whatsapp">
-                  Chat on WhatsApp
+                <ButtonLink href="/book" size="xl" iconRight="arrow-right">
+                  Book a repair
                 </ButtonLink>
-                <ButtonLink href="/book" variant="outline" size="xl" iconRight="arrow-right">
-                  Book a Repair
+                <ButtonLink href={whatsappChatHref()} external variant="outline" size="lg" iconLeft="whatsapp">
+                  WhatsApp
                 </ButtonLink>
               </div>
             </div>
@@ -86,7 +92,8 @@ export default async function HomePage() {
               {[
                 { icon: "whatsapp" as const, title: "WhatsApp", body: whatsappDisplay, href: whatsappChatHref(), external: true },
                 { icon: "phone" as const, title: "Call us", body: contactConfig.phone, href: telHref, external: false },
-                { icon: "clock" as const, title: "Hours", body: contactConfig.hours, href: null, external: false },
+                { icon: "clock" as const, title: "Hours", body: BUSINESS.hours, href: null, external: false },
+                { icon: "map-pin" as const, title: "Address", body: fullAddress, href: null, external: false },
               ].map((item) => {
                 const content = (
                   <>
@@ -119,6 +126,9 @@ export default async function HomePage() {
                   </li>
                 );
               })}
+              <li className="px-1 text-sm leading-relaxed text-ink-muted">
+                Serving {BUSINESS.serviceAreas.join(", ")} and the rest of Delhi NCR.
+              </li>
             </ul>
           </div>
         </div>

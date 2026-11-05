@@ -57,19 +57,18 @@ export function LandingHero() {
               the interactive states below. */}
           <motion.div initial={false} className="hero-enter max-w-2xl">
             <h1 className="font-display text-[32px] sm:text-[42px] md:text-[56px] font-medium tracking-tight leading-[1.08] text-[#0a1b33]">
-              Mobile phone repair
-              <br />
-              at your doorstep
+              Phone screen and battery replacement at your door in Delhi
             </h1>
 
             {/* Held to the left third: the spec calls for no overlay on the
                 video, so legibility comes from keeping copy over the calm side
                 of the frame rather than from dimming it. */}
             <p className="font-sans mt-5 max-w-[28rem] text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">
-              We repair the devices that run your life: screen, battery and charging repairs for
-              iPhone, Samsung and other Android phones — repaired at your home or office, or picked up
-              and dropped back, both free. Every repair carries a warranty. Message us on WhatsApp
-              for a quote.
+              Cracked screen, dead battery or a port that won&rsquo;t charge. An independent technician
+              replaces the part at your home, office or on your own table — usually inside 90
+              minutes. Free pickup and drop if you&rsquo;d rather not wait with us. Every replacement
+              carries a 3 to 12 month warranty on the part and the labour. Book a slot, pay when the
+              phone works.
             </p>
 
             <MotionLink
@@ -79,7 +78,7 @@ export function LandingHero() {
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
               className="mt-8 inline-flex items-center gap-2 bg-[#0a152d] text-white rounded-full px-7 py-3.5 text-[13px] font-semibold shadow-lg shadow-slate-900/10 hover:bg-[#12203f] transition-colors"
             >
-              Book a Repair
+              Book a repair
               <ChevronRight size={15} strokeWidth={2.5} aria-hidden="true" />
             </MotionLink>
           </motion.div>

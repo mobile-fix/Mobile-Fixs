@@ -4,7 +4,7 @@ import { Icon, serviceIcon, type IconName } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Badge, Card, SectionHeading, StarRating } from "@/components/ui/primitives";
 import { CUSTOMER_SERVICE_TYPES, SERVICE_TYPE_META } from "@/lib/constants";
-import { whatsappChatHref, whatsappDisplay } from "@/lib/config";
+import { whatsappChatHref } from "@/lib/config";
 import { formatDurationRange, formatWarranty } from "@/lib/money";
 import { formatRelative, pluralise } from "@/lib/utils";
 import type { CatalogService } from "@/server/services/catalog.service";
@@ -89,8 +89,8 @@ export function ServicesGrid({ services }: { services: CatalogService[] }) {
     <section className="py-20 lg:py-24" aria-labelledby="services-heading">
       <div className="container-page">
         <SectionHeading
-          eyebrow="Repairs we do"
-          title={<span id="services-heading">Every common fault, fixed properly</span>}
+          eyebrow="Parts we replace"
+          title={<span id="services-heading">Every common fault, part replaced on site</span>}
           description="Every repair below shows how long it takes and how long it is covered. For the cost on your exact phone, send us a message on WhatsApp."
         />
 
@@ -132,7 +132,7 @@ export function ServicesGrid({ services }: { services: CatalogService[] }) {
 
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/services" variant="outline" size="lg" iconRight="arrow-right">
-            View all {services.length} services
+            See all {services.length} replacements
           </ButtonLink>
           <ButtonLink href={whatsappChatHref()} external variant="ghost" size="lg" iconLeft="whatsapp">
             Ask on WhatsApp
@@ -403,26 +403,25 @@ export function CtaBand() {
 
           <div className="relative">
             <h2 className="mx-auto max-w-2xl font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Need a repair? Message us on WhatsApp
+              Need a part replaced? Book a slot
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/75">
-              Send your phone model and the problem to {whatsappDisplay}. We reply with the cost and
-              the time it takes, or book a repair slot online right now.
+              Firm price, two-hour window, no visit fee, pay on handover.
             </p>
 
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <ButtonLink href="/book" size="xl" iconRight="arrow-right">
-                Book a Repair
+                Book a repair
               </ButtonLink>
               <ButtonLink
                 href={whatsappChatHref()}
                 external
-                size="xl"
+                size="lg"
                 variant="outline"
                 iconLeft="whatsapp"
                 className="border-white/25 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
               >
-                Chat on WhatsApp
+                WhatsApp
               </ButtonLink>
             </div>
           </div>
