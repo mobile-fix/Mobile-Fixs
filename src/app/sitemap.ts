@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { hasBrandLandingPage } from "@/lib/brand-content";
+import { CITY_SLUGS, PARTS } from "@/lib/city-pages";
 import { siteConfig } from "@/lib/config";
 import { listBrands, listServices } from "@/server/services/catalog.service";
 
@@ -16,6 +17,7 @@ export const revalidate = 3600;
  * to ignore the field. Bump this when those pages are edited.
  */
 const CONTENT_LAST_MODIFIED = new Date("2026-10-29");
+const CITY_PAGES_LAST_MODIFIED = new Date("2026-11-05");
 
 /**
  * Sitemap.
@@ -42,6 +44,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/warranty`, lastModified: CONTENT_LAST_MODIFIED, changeFrequency: "yearly", priority: 0.4 },
     { url: `${base}/terms`, lastModified: CONTENT_LAST_MODIFIED, changeFrequency: "yearly", priority: 0.2 },
     { url: `${base}/privacy`, lastModified: CONTENT_LAST_MODIFIED, changeFrequency: "yearly", priority: 0.2 },
+
+    // City landing pages: one per part per city served.
+    ...CITY_SLUGS.flatMap((city) =>
+      Object.values(PARTS).map((part) => ({
+        url: `${base}/${part.routeSegment}/${city}`,
+        lastModified: CITY_PAGES_LAST_MODIFIED,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      })),
+    ),
   ];
 
   try {
