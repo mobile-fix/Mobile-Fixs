@@ -4,7 +4,7 @@ Public prices were taken off the site on purpose (commit 5a43e1d, "Remove public
 pricing"). The only rupee figures in the codebase are the seed formula's
 base prices in `prisma/seed-data.ts`, which are generated from tier
 multipliers and have never been confirmed by the owner. So no price is
-published, and these pages show `₹—` until real figures are supplied.
+published. The three city pages show "Firm quote in 10 minutes" in the price slot until real figures are supplied.
 
 | Where it shows | File | What's needed |
 |---|---|---|

@@ -9,7 +9,7 @@
  * Turnaround and warranty figures come from the catalogue defaults in
  * prisma/seed-data.ts and the grade rules in src/lib/constants.ts
  * (screen 60 min, battery 45 min; 6-month base warranty, +6 for original
- * parts, −3 for standard). Prices are deliberately "₹—" — see TODO_PRICES.md.
+ * parts, −3 for standard). The price slot reads "Firm quote in 10 minutes" until real prices exist (TODO_PRICES.md).
  */
 
 export type CityFaq = { question: string; answer: string };
@@ -51,7 +51,7 @@ export const PARTS: Record<PartKey, PartContent> = {
       "Cracked glass, lines across the display, touch that stops responding in one corner, or a screen that stays black while the phone still vibrates. A technician brings the replacement display assembly to your home or office and fits it there, usually within the hour.",
       "You choose the part grade before anything is opened, see the firm price for your exact model, and pay only once the new screen is working in your hand.",
     ],
-    priceBand: "₹—",
+    priceBand: "Firm quote in 10 minutes",
     turnaround: "About 60 minutes at your address; allow up to 90 minutes.",
     warranty: "3 to 12 months on the part and labour — 3 standard, 6 premium, 12 original.",
     serviceLinks: [{ href: "/services/screen-replacement", label: "Screen replacement in detail" }],
@@ -94,7 +94,7 @@ export const PARTS: Record<PartKey, PartContent> = {
       "Battery dropping several percent at a time, shutting down at 20%, running hot on the charger, or a health reading below 80%. A technician brings a new cell to your home or office and fits it there in about 45 minutes.",
       "The new battery is run through a calibration charge so the percentage and health reading are accurate from day one, and battery health is checked before and after the swap.",
     ],
-    priceBand: "₹—",
+    priceBand: "Firm quote in 10 minutes",
     turnaround: "About 45 minutes at your address; allow up to 75 minutes.",
     warranty: "3 to 12 months on the cell and labour — 3 standard, 6 premium, 12 original.",
     serviceLinks: [{ href: "/services/battery-replacement", label: "Battery replacement in detail" }],
@@ -137,7 +137,7 @@ export const PARTS: Record<PartKey, PartContent> = {
       "Most phone faults come down to one worn or broken part: the screen, the battery, the charging port, the back glass, a camera, a speaker or a microphone. A technician brings that part to your home or office, replaces it in front of you and tests the phone before you pay.",
       "Prefer not to wait? Choose free pickup and drop instead — same technicians, same parts, same warranty.",
     ],
-    priceBand: "₹—",
+    priceBand: "Firm quote in 10 minutes",
     turnaround: "45 to 90 minutes for most parts at your address; back glass takes around 90.",
     warranty: "Up to 12 months on the part and labour, depending on the part and grade you choose.",
     serviceLinks: [
