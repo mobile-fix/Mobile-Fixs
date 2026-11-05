@@ -102,7 +102,7 @@ export function CityPartPage({ partKey, citySlug }: { partKey: PartKey; citySlug
         {/* Price, time, warranty */}
         <dl className="mt-10 grid gap-4 sm:grid-cols-3">
           {[
-            { icon: "tag" as const, label: "Price", value: part.priceBand, note: "Firm price for your exact model, agreed before anything is opened." },
+            { icon: "tag" as const, label: "Quote", value: part.priceBand, note: "For your exact model, agreed before anything is opened." },
             { icon: "clock" as const, label: "Turnaround", value: part.turnaround, note: null },
             { icon: "shield-check" as const, label: "Warranty", value: part.warranty, note: null },
           ].map((item) => (
