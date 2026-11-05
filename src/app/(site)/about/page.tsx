@@ -110,6 +110,7 @@ export default async function AboutPage() {
               {NO_COUNTER_LINE}
             </p>
             <AreaBlock className="space-y-1 rounded-2xl border border-line bg-surface p-5 text-base" />
+            <AreaMap />
             <p>
               <strong className="font-semibold text-ink">Not affiliated.</strong> {NON_AFFILIATION}{" "}
               We buy parts on the open market, we are not an authorised service partner of any

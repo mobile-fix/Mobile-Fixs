@@ -201,6 +201,8 @@ export function CityPartPage({ partKey, citySlug }: { partKey: PartKey; citySlug
           </div>
         </section>
 
+        <AreaMap className="mt-6" />
+
         {/* FAQs */}
         <section className="mt-14 max-w-3xl" aria-labelledby="faq-heading">
           <h2 id="faq-heading" className="font-display text-2xl font-bold text-ink">
