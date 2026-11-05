@@ -27,6 +27,7 @@ export default function PrivacyPage() {
             "Device details: brand, model, the fault, and optionally the IMEI so we can order the correct part.",
             "Your repair history with us, so a warranty claim can be verified.",
             "Contact-form enquiries, so we can reply to them.",
+            "If you reached us from an ad: the ad's click ID and campaign tags from the link you followed, kept in your browser for up to 90 days and saved with your booking, so we can see which ads bring in bookings.",
             "Basic visit and ad-performance data through Google Analytics 4, Google Ads and the Meta Pixel — see “Analytics and advertising” below.",
           ]}
         />

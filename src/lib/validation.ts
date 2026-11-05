@@ -36,6 +36,14 @@ const sanitisedString = (max: number) =>
     )
     .pipe(z.string().max(max));
 
+/** A click ID or UTM value: a short token, rejected (not stored) if malformed. */
+const attributionValue = z
+  .string()
+  .max(200)
+  .regex(/^[A-Za-z0-9._~\-{}|]+$/)
+  .optional()
+  .catch(undefined);
+
 export const nameSchema = sanitisedString(80)
   .pipe(z.string().min(2, "Please enter your full name."))
   .refine((value) => /[\p{L}]/u.test(value), "Name must contain letters.");
@@ -165,6 +173,18 @@ export const createBookingSchema = z
     }),
     imei: imeiSchema,
     problemDescription: sanitisedString(1000).optional(),
+    /** Ad-click attribution from src/lib/attribution.ts; every field optional. */
+    attribution: z
+      .object({
+        gclid: attributionValue,
+        gbraid: attributionValue,
+        wbraid: attributionValue,
+        utmSource: attributionValue,
+        utmMedium: attributionValue,
+        utmCampaign: attributionValue,
+        utmContent: attributionValue,
+      })
+      .optional(),
   })
   .superRefine((value, ctx) => {
     // Both customer options are doorstep options, so they cannot be fulfilled

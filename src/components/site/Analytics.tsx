@@ -5,6 +5,7 @@ import Script from "next/script";
 import { useEffect, useRef } from "react";
 
 import { isPrivatePath, reportablePath, track } from "@/lib/analytics";
+import { captureAttribution } from "@/lib/attribution";
 import { trackingConfig } from "@/lib/config";
 
 /**
@@ -24,6 +25,12 @@ export function Analytics() {
   const pathname = usePathname();
   const tagsLoaded = useRef(false);
   const privatePage = isPrivatePath(pathname);
+
+  // Keep the ad click ID and UTM tags from the landing URL for the booking
+  // form. Runs whether or not any tag is configured: it is first-party only.
+  useEffect(() => {
+    captureAttribution();
+  }, [pathname]);
 
   useEffect(() => {
     if (!gtagId && !metaPixelId) return;

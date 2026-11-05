@@ -217,6 +217,16 @@ model Booking {
 
   imei               String?
   problemDescription String?
+
+  /// Ad-click attribution captured on landing (src/lib/attribution.ts), so a
+  /// booking can be matched to the Google Ads click that produced it.
+  gclid       String?
+  gbraid      String?
+  wbraid      String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
   /// PHONE | EMAIL | WHATSAPP
   preferredContact   String  @default("PHONE")
 

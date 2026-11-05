@@ -451,6 +451,40 @@ export function BookingDetail({
                   </dd>
                 </div>
               ) : null}
+              {booking.attribution.gclid ||
+              booking.attribution.gbraid ||
+              booking.attribution.wbraid ||
+              booking.attribution.utmSource ? (
+                <div>
+                  <dt className="text-xs font-bold uppercase tracking-wide text-ink-subtle">
+                    Ad source
+                  </dt>
+                  <dd className="mt-0.5 space-y-0.5 break-all text-xs text-ink">
+                    {booking.attribution.utmSource ? (
+                      <span className="block">
+                        {[booking.attribution.utmSource, booking.attribution.utmMedium]
+                          .filter(Boolean)
+                          .join(" / ")}
+                        {booking.attribution.utmCampaign
+                          ? ` · campaign ${booking.attribution.utmCampaign}`
+                          : ""}
+                        {booking.attribution.utmContent
+                          ? ` · ad group ${booking.attribution.utmContent}`
+                          : ""}
+                      </span>
+                    ) : null}
+                    {booking.attribution.gclid ? (
+                      <span className="block font-mono">gclid {booking.attribution.gclid}</span>
+                    ) : null}
+                    {booking.attribution.gbraid ? (
+                      <span className="block font-mono">gbraid {booking.attribution.gbraid}</span>
+                    ) : null}
+                    {booking.attribution.wbraid ? (
+                      <span className="block font-mono">wbraid {booking.attribution.wbraid}</span>
+                    ) : null}
+                  </dd>
+                </div>
+              ) : null}
             </dl>
 
             {canWriteCustomers ? (

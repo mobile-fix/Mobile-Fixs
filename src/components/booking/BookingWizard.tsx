@@ -28,6 +28,7 @@ import { DateTimePicker } from "./DateTimePicker";
 import { QuoteSummary } from "./QuoteSummary";
 import { useQuote } from "./useQuote";
 import { decodeBasket, type BasketItem, type ModelOption } from "./types";
+import { getAttribution } from "@/lib/attribution";
 
 /**
  * Six-step booking flow.
@@ -267,6 +268,7 @@ export function BookingWizard() {
         },
         imei: customer.imei || undefined,
         problemDescription: customer.problemDescription || undefined,
+        attribution: getAttribution(),
       };
 
       const data = await api.post<{ booking: { reference: string } }>("/api/bookings", payload);
